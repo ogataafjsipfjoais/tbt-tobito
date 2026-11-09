@@ -25,8 +25,8 @@
     smooth.x+=(pos.x-smooth.x)*.28;
     smooth.y+=(pos.y-smooth.y)*.28;
     cursor.style.transform='translate3d('+(smooth.x-37)+'px,'+(smooth.y-37)+'px,0)';
-    cursor.style.setProperty('--cursor-eye-x',(state.x*.7).toFixed(2));
-    cursor.style.setProperty('--cursor-eye-y',(state.y*.7).toFixed(2));
+    cursor.style.setProperty('--cursor-eye-x',(state.x*3).toFixed(2)+'px');
+    cursor.style.setProperty('--cursor-eye-y',(state.y*3).toFixed(2)+'px');
     document.documentElement.style.setProperty('--look-x',(state.x*4).toFixed(2));
     document.documentElement.style.setProperty('--look-y',(state.y*4).toFixed(2));
     if(Math.abs(pos.x-smooth.x)+Math.abs(pos.y-smooth.y)>0.5)raf=requestAnimationFrame(draw);
