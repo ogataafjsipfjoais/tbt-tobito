@@ -30,7 +30,9 @@
     renderer.setClearColor(0x293d52,1);
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.23;
+    // Preserve material color rather than bleaching out the entire floor and face.
+    renderer.toneMappingExposure = .88;
+    if(window.innerWidth > 870){renderer.shadowMap.enabled = true;renderer.shadowMap.type = THREE.PCFSoftShadowMap;}
   } catch (error) {
     document.documentElement.classList.add('world-fallback');
     return;
@@ -45,13 +47,13 @@
   camera.position.set(1.0,3.3,16);
   const lookAt = new THREE.Vector3(0,1.8,0);
   camera.lookAt(lookAt);
-  const ambient=new THREE.HemisphereLight(0xf6dac3,0x2a354b,1.25);
-  const sun=new THREE.DirectionalLight(0xffd6a6,2.3);
+  const ambient=new THREE.HemisphereLight(0xf7e5d5,0x1c2b3d,.95);
+  const sun=new THREE.DirectionalLight(0xffd6a6,1.35);
   sun.position.set(-14,20,19);
-  const fill=new THREE.DirectionalLight(0xaccff7,.85);
+  const fill=new THREE.DirectionalLight(0xaccff7,.62);
   fill.position.set(12,8,-20);
   scene.add(ambient,sun,fill);
-  const rim = new THREE.DirectionalLight(0xffe7bd,.78);
+  const rim = new THREE.DirectionalLight(0xffe7bd,.55);
   rim.position.set(6,9,-9);
   scene.add(rim);
 
@@ -59,17 +61,17 @@
   const cream=mat(0xfffcf2),blue=mat(0x315ca7,.65),ink=mat(0x203347),red=mat(0xe53634);
   const yellow=mat(0xf5cf45),white=mat(0xfaf4dc),aluminum=mat(0x92aebb,.48,.4);
   const glass=mat(0xa6d7e4,.22,.32);
-  const runwayMat=mat(0x68777f,.94),stripeMat=mat(0xe8e0bc,.93),groundMat=mat(0x82827a,.93);
+  const runwayMat=mat(0x3a4b5e,.94),stripeMat=mat(0xf8dba8,.93),groundMat=mat(0x424b56,.93);
   const ground=new THREE.Mesh(new THREE.PlaneGeometry(400,410),groundMat);
-  ground.rotation.x=-Math.PI/2;ground.position.set(0,-.18,-145);scene.add(ground);
+  ground.rotation.x=-Math.PI/2;ground.position.set(0,-.18,-145);ground.receiveShadow=true;scene.add(ground);
   const road=new THREE.Mesh(new THREE.PlaneGeometry(18,275),runwayMat);
-  road.rotation.x=-Math.PI/2;road.position.set(0,-.15,-111);scene.add(road);
+  road.rotation.x=-Math.PI/2;road.position.set(0,-.15,-111);road.receiveShadow=true;scene.add(road);
   for(let z=22;z>=-236;z-=10){
     const dash=new THREE.Mesh(new THREE.PlaneGeometry(.24,3.7),stripeMat);
     dash.rotation.x=-Math.PI/2;dash.position.set(0,-.12,z);
     scene.add(dash);
   }
-  const sidePaint=mat(0xc5a965,.9);
+  const sidePaint=mat(0xf1b45a,.9);
   [-8.7,8.7].forEach(x=>{
     const edge=new THREE.Mesh(new THREE.BoxGeometry(.12,.028,265),sidePaint);
     edge.position.set(x,-.115,-108);scene.add(edge);
@@ -112,10 +114,29 @@
   }
   const {walker,body,face,comb,arms,legs,guideRing} = sculpture;
   scene.add(walker);
+  // A restrained contact shadow anchors Tobito even on low-end GPUs.
+  const shadowCanvas=document.createElement('canvas');
+  shadowCanvas.width=128;shadowCanvas.height=128;
+  const shadowContext=shadowCanvas.getContext('2d');
+  if(shadowContext){
+    const grad=shadowContext.createRadialGradient(64,64,8,64,64,63);
+    grad.addColorStop(0,'rgba(7,20,32,.55)');grad.addColorStop(.48,'rgba(7,20,32,.20)');grad.addColorStop(1,'rgba(7,20,32,0)');
+    shadowContext.fillStyle=grad;shadowContext.fillRect(0,0,128,128);
+    const shadow=new THREE.Mesh(new THREE.PlaneGeometry(3.3,2.2),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1}));
+    shadow.rotation.x=-Math.PI/2;shadow.position.set(0,.03,0);walker.add(shadow);
+  }
+  if(renderer.shadowMap.enabled){
+    sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);
+    sun.shadow.camera.left=-14;sun.shadow.camera.right=14;
+    sun.shadow.camera.top=14;sun.shadow.camera.bottom=-14;
+    sun.shadow.camera.near=1;sun.shadow.camera.far=55;
+    sun.shadow.bias=-.00035;
+    walker.traverse(mesh=>{if(mesh.isMesh){mesh.castShadow=true;mesh.receiveShadow=true;}});
+  }
 
   // Warm workshop near the START; metal hangar farther along the runway.
   const workshop=new THREE.Group();scene.add(workshop);
-  const wallMat=mat(0x455465,.87),beamMat=mat(0x33404d,.75,.22);
+  const wallMat=mat(0x3c4859,.88),beamMat=mat(0x25394b,.76,.27);
   [-1,1].forEach(side=>{
     box(workshop,3.2,9,32,wallMat,side*13,4.35,1);
     for(let i=0;i<5;i++)box(workshop,.28,10,.35,beamMat,side*11.4,5,-13+i*7);
@@ -126,6 +147,8 @@
   for(let i=0;i<7;i++){
     const z=12-i*6;
     box(roof,30,.28,.35,beamMat,0,9,z);
+    // Warm ceiling strips create depth without adding extra GPU-heavy lights.
+    box(roof,11,.045,.08,mat(0xf2cc91,.35),0,8.91,z);
     if(i===1 || i===4){
       const lamp=new THREE.PointLight(0xffd5a2,1.3,20,2);
       lamp.position.set(0,8.1,z);roof.add(lamp);
@@ -134,6 +157,19 @@
   }
   const sign=textSign('とびとくん基地','#19334b','#ffe4a0');
   sign.position.set(0,5,-23);scene.add(sign);
+  // Low-contrast environmental details break up the empty game-engine runway.
+  const floorStripe=mat(0x8492a0,.9);
+  for(let z=-24;z<16;z+=4){
+    for(const side of [-1,1])box(scene,1.5,.03,.16,floorStripe,side*7.4,-.085,z);
+  }
+  const crates=mat(0x977b65,.94);
+  for(const side of [-1,1])for(let i=0;i<3;i++){
+    const unit=new THREE.Group();unit.position.set(side*10.15,-.01,-10+i*6);
+    box(unit,1.9,1.5,1.75,crates,0,.72,0);
+    box(unit,1.95,.10,1.84,beamMat,0,1.1,0);
+    box(unit,.10,1.52,1.84,beamMat,0,.72,0);
+    scene.add(unit);
+  }
 
   // Several absurd props float over the runway and respond to the camera.
   const props=[];
@@ -266,10 +302,10 @@
     }
     scene.background.copy(bg);scene.fog.color.copy(bg);
     scene.fog.density=smooth(.008,.0045,ease((p-.7)/.3));
-    ambient.intensity=smooth(1.05,2.0,ease((p-.72)/.28));
+    ambient.intensity=smooth(.95,1.6,ease((p-.72)/.28));
     const dusk=ease((p-.18)/.2),day=ease((p-.73)/.27);
     sun.color.set(0xffd6a6).lerp(new THREE.Color(0xeaa4ac),dusk).lerp(new THREE.Color(0xffffff),day);
-    sun.intensity=smooth(2.0,3.2,day);
+    sun.intensity=smooth(1.35,2.3,day);
     lake.material.color.set(0x2679a8).lerp(new THREE.Color(0x349bcc),day);
     // Chase shot initially faces Tobito. The hangar pulls the camera back and up.
     const wingShot=ease((p-.68)/.12);
@@ -279,9 +315,9 @@
     const cursorY = pointer?.active ? pointer.y : 0;
     const desiredCamX=smooth(.35,2.0,turn)+Math.sin(p*11)*.55+cursorX*.62;
     const desiredCamY=smooth(3.25,5.3,turn)+wingShot*5.5+skyShot*10.5;
-    const desiredCamZ=pathZ+smooth(10.8,15.5,turn)+wingShot*15+skyShot*12;
+    const desiredCamZ=pathZ+smooth(7.9,15.5,turn)+wingShot*15+skyShot*12;
     camera.position.lerp(new THREE.Vector3(desiredCamX,desiredCamY,desiredCamZ),Math.min(1,dt*3.4));
-    const desiredLook=new THREE.Vector3(cursorX*.48,1.8+wingShot*5+skyShot*4-cursorY*.26,pathZ-smooth(0,15,turn)-wingShot*7-skyShot*22);
+    const desiredLook=new THREE.Vector3(-1.45*(1-turn)+cursorX*.48,1.75+wingShot*5+skyShot*4-cursorY*.26,pathZ-smooth(0,15,turn)-wingShot*7-skyShot*22);
     body.rotation.y = cursorX*.08;
     face.rotation.y = cursorX*.12;
     face.rotation.x = -cursorY*.09;
