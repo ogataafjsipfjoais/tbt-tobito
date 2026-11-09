@@ -137,7 +137,8 @@
       oval(body,x,-.02,-.48,.21,.34,.23,skin).rotation.z=x*1.3;
     }
 
-    body.position.y=1.65;
+    // Place the shoes on the runway. Previous rig floated noticeably above it.
+    body.position.y=1.28;
     walker.scale.setScalar(1);
     const guideRing=new THREE.Mesh(
       new THREE.TorusGeometry(1.03,.018,6,68),
@@ -159,7 +160,7 @@
         group.rotation.z=side*(flying ? 0.4+Math.sin(phase*1.2)*.24 : .12+Math.abs(Math.sin(phase))*.1*weight);
       });
       body.rotation.z=walking?Math.sin(phase)*.052:Math.sin(elapsed*.001)*.014;
-      body.position.y=1.65+(walking?Math.abs(Math.sin(phase))*.09:Math.sin(elapsed*.0016)*.035);
+      body.position.y=1.28+(walking?Math.abs(Math.sin(phase))*.09:Math.sin(elapsed*.0016)*.035);
       face.rotation.y=cursorX*.085;
       face.rotation.x=-cursorY*.065;
       // A short, infrequent blink. The face stays alive even when idle.
