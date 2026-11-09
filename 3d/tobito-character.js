@@ -162,6 +162,10 @@
       body.position.y=1.65+(walking?Math.abs(Math.sin(phase))*.09:Math.sin(elapsed*.0016)*.035);
       face.rotation.y=cursorX*.085;
       face.rotation.x=-cursorY*.065;
+      // A short, infrequent blink. The face stays alive even when idle.
+      const blinkPhase=(elapsed*.00107+1.9)%5.6;
+      const blink=blinkPhase<.13 ? Math.max(.10,Math.abs(blinkPhase-.065)/.065) : 1;
+      eyes.forEach(eye=>{eye.scale.y=blink;});
       comb.rotation.z=Math.sin(phase*.65)*.05;
     }
     return {walker,body,face,comb,arms,legs,guideRing,gesture,eyes,torso,bib};
