@@ -238,7 +238,7 @@
   const milestones=['prologue-section','about','poses','play','oddities','wind-lab','hangar','goods','takeoff'];
   let targetProgress=0,currentProgress=0;
   let lastPosition=0,lastWalkTime=0,flapUntil=0,extraTurn=0,lastFrame=0;
-  let active=true,stopped=false,arcadePaused=false,raf=0,audioOn=false,audioCtx=null,windAudio=null,windGain=null,lastFootstep=0;
+  let active=true,stopped=false,arcadePaused=false,openingPaused=document.documentElement.classList.contains('opening-at-top'),raf=0,audioOn=false,audioCtx=null,windAudio=null,windGain=null,lastFootstep=0;
   const backgrounds=[
     new THREE.Color(0x293748), new THREE.Color(0x4a5c72),
     new THREE.Color(0xc17c6c), new THREE.Color(0xb67f89),
@@ -338,7 +338,7 @@
     renderer.render(scene,camera);
     raf=requestAnimationFrame(animateScene);
   }
-  function startLoop(){if(!raf && active && !stopped && !arcadePaused){lastFrame=0;raf=requestAnimationFrame(animateScene);}}
+  function startLoop(){if(!raf && active && !stopped && !arcadePaused && !openingPaused && !document.hidden){lastFrame=0;raf=requestAnimationFrame(animateScene);}}
   function stopLoop(){if(raf)cancelAnimationFrame(raf);raf=0;}
   function resize(){
     const w=Math.max(1,window.innerWidth),h=Math.max(1,window.innerHeight);
@@ -392,6 +392,15 @@
     soundButton.setAttribute('aria-pressed',String(audioOn));
     soundButton.textContent=audioOn?'音を消す':'音を鳴らす';
   });
+  // The hero is an illustration on first paint: don't burn GPU frames
+  // rendering a world the visitor cannot yet see.
+  window.addEventListener('tbt:opening:progress',event=>{
+    const next=Number(event.detail?.progress) < .67;
+    if(next===openingPaused)return;
+    openingPaused=next;
+    if(openingPaused){stopLoop();if(audioOn)audioCtx?.suspend();}
+    else if(!stopped && !arcadePaused && !document.hidden){startLoop();if(audioOn)audioCtx?.resume();}
+  });
   window.addEventListener('tbt:arcade:focus',event=>{
     const pause = !!event.detail?.pause;
     if(pause===arcadePaused)return;
@@ -403,10 +412,10 @@
   window.addEventListener('resize',()=>{scrollToProgress();resize();},{passive:true});
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){stopLoop();if(audioOn)audioCtx?.suspend();}
-    else if(!stopped && !arcadePaused){startLoop();if(audioOn)audioCtx?.resume();}
+    else if(!stopped && !arcadePaused && !openingPaused){startLoop();if(audioOn)audioCtx?.resume();}
   });
   window.addEventListener('pagehide',()=>{stopLoop();if(audioCtx)audioCtx.suspend();});
-  window.addEventListener('pageshow',()=>{scrollToProgress();if(!stopped && !arcadePaused)startLoop();});
+  window.addEventListener('pageshow',()=>{scrollToProgress();if(!stopped && !arcadePaused && !openingPaused)startLoop();});
   canvas.addEventListener('webglcontextlost',event=>{
     event.preventDefault();active=false;stopLoop();
     document.documentElement.classList.remove('world-active');
