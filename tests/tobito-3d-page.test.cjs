@@ -69,8 +69,8 @@ test('3D world restores old game entries and includes playable challenge', () =>
   assert.match(page, /id="wind-start"/);
   assert.match(page, /id="wind-result"/);
   assert.match(page, /href="\.\.\/legacy\.html#flight"/);
-  assert.match(page, /href="\.\.\/legacy\.html\?game=yakitori#flight"/);
-  assert.match(page, /href="\.\.\/legacy\.html#aerolab"/);
+  assert.match(page, /data-arcade-mode="yakitori"/);
+  assert.match(page, /data-arcade-host="wind"/);
   assert.match(page, /src="\.\/play\.js"/);
   assert.match(page, /href="\.\/play\.css"/);
   assert.match(js, /const GOAL = 100/);
