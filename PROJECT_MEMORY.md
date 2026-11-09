@@ -60,3 +60,10 @@ GitHub PagesはPHP・POST保存・APIを実行できない。Pagesプレビュ�
 - 画像素材は既存の公式イラストを利用し、新規の造形モデルやゲームエンジンへの大型依存は追加しない。
 - 今後：PC/モバイル実機で徒歩追随・性能・タッチターゲット・ゲーム復元を検証。必要に応じて移動の自然さ、3D視線・表情を改良。
 - GitHub PagesではActionsとJekyllが並走しデプロイ競合の可能性あり。実行履歴で最新の結論を確認する。
+
+## 2026-11-10：Pages公開の競合解消と旧ゲーム静的出力
+- Pagesの設定はmainブランチからのJekyll/Pages自動デプロイが有効な状態。独自のActions Pagesデプロイと競合し400（in progress deployment）を生じたため、独自の直接デプロイを廃止。
+- `.github/workflows/pages.yml` をJS/PHPテストと静的生成だけに変更。生成した `legacy.html` はGitHub Actions botのコミットでmainへ同期。
+- `legacy.html` がリポジトリ内に生成されたこと、フライト/やきとり/風洞の各要素が含まれることを確認。
+- 3Dサイトは `3d/index.html`。元ゲームは `legacy.html#flight`、やきとりは `legacy.html?game=yakitori#flight`。トップの `index.html` は旧サイトに誘導。
+- カスタム公開ワークフローの二重デプロイは停止し、公開状態はPagesブランチの実行履歴で確認する。Github Pages URLへのブラウザ直接疎通は未確認。
