@@ -51,6 +51,9 @@
   const fill=new THREE.DirectionalLight(0xaccff7,.85);
   fill.position.set(12,8,-20);
   scene.add(ambient,sun,fill);
+  const rim = new THREE.DirectionalLight(0xffe7bd,.78);
+  rim.position.set(6,9,-9);
+  scene.add(rim);
 
   const mat=(color,roughness=.75,metalness=0)=>new THREE.MeshStandardMaterial({color,roughness,metalness});
   const cream=mat(0xfffcf2),blue=mat(0x315ca7,.65),ink=mat(0x203347),red=mat(0xe53634);
@@ -99,45 +102,16 @@
     return new THREE.Mesh(new THREE.PlaneGeometry(5.1,1.4),m);
   }
 
-  // Continuous 3D mascot. Every limb is independently rigged and animated.
-  const walker=new THREE.Group();scene.add(walker);
-  const body=new THREE.Group();walker.add(body);
-  const headBack=extrude(body,[[-.77,.49],[.77,.49],[.82,1.7],[-.82,1.7]],ink,.58,-.19);
-  const head=extrude(body,[[-.72,.54],[.72,.54],[.76,1.64],[-.76,1.64]],cream,.58,-.125);
-  const comb=extrude(body,[[-.22,1.69],[-.3,2.05],[-.05,2.45],[.16,2.53],[.42,2.35],[.3,2.18],[.5,2.03],[.28,1.88],[.04,1.84]],red,.25,-.07);
-  const faceFront=.47;
-  [-.35,.35].forEach(x=>{
-    ball(body,x,1.27,faceFront,[.074,.16,.04],ink);
-    ball(body,x-.025,1.31,faceFront+.035,[.025,.045,.015],white);
-    const brow=box(body,.3,.045,.06,ink,x,1.55,.45);
-    brow.rotation.z=x>0?-.2:.2;
-  });
-  ball(body,0,1.03,.5,[.18,.115,.07],ink);
-  ball(body,0,1.045,.55,[.145,.073,.05],yellow);
-  ball(body,.065,.94,.54,[.09,.043,.03],yellow);
-  // Blue engineering suit extends below head.
-  box(body,1.05,.96,.64,ink,0,.05,-.21);
-  box(body,.98,.89,.67,blue,0,.05,-.17);
-  box(body,.035,.72,.05,ink,0,.02,.20);
-  box(body,.28,.16,.055,cream,.29,.19,.24);
-  const collar=box(body,.58,.16,.1,blue,0,.52,.05);collar.rotation.z=.03;
-
-  const arms=[],legs=[];
-  [-1,1].forEach(side=>{
-    const arm=new THREE.Group();arm.position.set(side*.57,.40,-.19);body.add(arm);
-    const sleeve=box(arm,.9,.26,.34,blue,side*.45,0,0);sleeve.rotation.z=-side*.04;
-    ball(arm,side*.99,-.005,.05,[.22,.12,.15],cream);arms.push({group:arm,side});
-    const leg=new THREE.Group();leg.position.set(side*.3,-.43,-.13);body.add(leg);
-    box(leg,.31,.67,.36,blue,0,-.33,0);
-    box(leg,.45,.20,.42,ink,side*.05,-.69,.13);legs.push({group:leg,side});
-  });
-  body.position.y=1.64;
-  const originalX=0;
-  walker.scale.setScalar(1.0);
-  // An energetic pilot scarf makes turns visible from behind.
-  extrude(body,[[-.26,.35],[.24,.34],[.08,.22],[-.11,.19]],red,.09,-.57);
-  const guideRing=new THREE.Mesh(new THREE.TorusGeometry(1.28,.017,6,65),new THREE.MeshBasicMaterial({color:0xffc85e,transparent:true,opacity:.48}));
-  guideRing.rotation.x=Math.PI/2;guideRing.position.set(0,.02,0);walker.add(guideRing);
+  // Sculpted, smoothly beveled official-shape companion with an animation rig.
+  const sculpture = window.TobitoCharacter?.create(THREE);
+  if (!sculpture) {
+    renderer.dispose();
+    host.removeChild(canvas);
+    document.documentElement.classList.add('world-fallback');
+    return;
+  }
+  const {walker,body,face,comb,arms,legs,guideRing} = sculpture;
+  scene.add(walker);
 
   // Warm workshop near the START; metal hangar farther along the runway.
   const workshop=new THREE.Group();scene.add(workshop);
@@ -280,15 +254,7 @@
     const turn=ease(p/.105);
     walker.rotation.y=smooth(0,Math.PI,turn)+extraTurn;
     const cycle=time*.009;
-    const stride=walking && !stopped?Math.sin(cycle)*.55:0;
-    legs.forEach(({group,side})=>group.rotation.x=stride*side);
-    arms.forEach(({group,side})=>{
-      const flying=ending>.1||time<flapUntil;
-      group.rotation.z=side*(flying?Math.sin(cycle*1.8)*.47:.15+Math.abs(stride)*.12);
-      group.rotation.x=flying?.25:stride*.35;
-    });
-    body.rotation.z=walking?Math.sin(cycle)*.05:Math.sin(time*.001)*.015;
-    body.position.y=1.64+(walking?Math.abs(Math.sin(cycle))*.08:Math.sin(time*.0015)*.035);
+    sculpture.gesture(time,walking&&!stopped,ending>.1||time<flapUntil);
     guideRing.rotation.z=time*.00035;
     // Transform from the garage to sunset, hangar and bright lake.
     const bg=progressPalette(p);
@@ -313,10 +279,12 @@
     const cursorY = pointer?.active ? pointer.y : 0;
     const desiredCamX=smooth(.35,2.0,turn)+Math.sin(p*11)*.55+cursorX*.62;
     const desiredCamY=smooth(3.25,5.3,turn)+wingShot*5.5+skyShot*10.5;
-    const desiredCamZ=pathZ+smooth(15,18,turn)+wingShot*15+skyShot*12;
+    const desiredCamZ=pathZ+smooth(10.8,15.5,turn)+wingShot*15+skyShot*12;
     camera.position.lerp(new THREE.Vector3(desiredCamX,desiredCamY,desiredCamZ),Math.min(1,dt*3.4));
     const desiredLook=new THREE.Vector3(cursorX*.48,1.8+wingShot*5+skyShot*4-cursorY*.26,pathZ-smooth(0,15,turn)-wingShot*7-skyShot*22);
     body.rotation.y = cursorX*.08;
+    face.rotation.y = cursorX*.12;
+    face.rotation.x = -cursorY*.09;
     lookAt.lerp(desiredLook,Math.min(1,dt*3.5));camera.lookAt(lookAt);
     propeller.rotation.z+=dt*2.3;
     props.forEach((g,i)=>{
