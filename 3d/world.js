@@ -44,8 +44,9 @@
   scene.background = new THREE.Color(0x293748);
   scene.fog = new THREE.FogExp2(0x293748,.008);
   const camera = new THREE.PerspectiveCamera(48,window.innerWidth/window.innerHeight,.12,520);
-  camera.position.set(1.0,3.3,16);
-  const lookAt = new THREE.Vector3(0,1.8,0);
+  // Frame Tobito prominently from the very first rendered frame.
+  camera.position.set(.5,3.5,8.6);
+  const lookAt = new THREE.Vector3(-1.45,1.72,0);
   camera.lookAt(lookAt);
   const ambient=new THREE.HemisphereLight(0xf7e5d5,0x1c2b3d,.95);
   const sun=new THREE.DirectionalLight(0xffd6a6,1.35);
@@ -314,10 +315,11 @@
     const cursorX = pointer?.active ? pointer.x : 0;
     const cursorY = pointer?.active ? pointer.y : 0;
     const desiredCamX=smooth(.35,2.0,turn)+Math.sin(p*11)*.55+cursorX*.62;
-    const desiredCamY=smooth(3.25,5.3,turn)+wingShot*5.5+skyShot*10.5;
+    const desiredCamY=smooth(3.5,5.3,turn)+wingShot*5.5+skyShot*10.5;
     const desiredCamZ=pathZ+smooth(7.9,15.5,turn)+wingShot*15+skyShot*12;
     camera.position.lerp(new THREE.Vector3(desiredCamX,desiredCamY,desiredCamZ),Math.min(1,dt*3.4));
-    const desiredLook=new THREE.Vector3(-1.45*(1-turn)+cursorX*.48,1.75+wingShot*5+skyShot*4-cursorY*.26,pathZ-smooth(0,15,turn)-wingShot*7-skyShot*22);
+    const compositionalOffset = window.innerWidth < 700 ? -.55 : -1.45;
+    const desiredLook=new THREE.Vector3(compositionalOffset*(1-turn)+cursorX*.48,1.75+wingShot*5+skyShot*4-cursorY*.26,pathZ-smooth(0,15,turn)-wingShot*7-skyShot*22);
     body.rotation.y = cursorX*.08;
     face.rotation.y = cursorX*.12;
     face.rotation.x = -cursorY*.09;
