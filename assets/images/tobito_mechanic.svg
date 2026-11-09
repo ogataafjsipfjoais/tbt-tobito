@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <defs>
+    <radialGradient id="mechGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f97316" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#c2410c" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="combRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="100" cy="120" r="90" fill="url(#mechGlow)"/>
+
+  <!-- スパナ工具 (右手に持つ) -->
+  <g transform="translate(145, 135) rotate(-25)">
+    <rect x="0" y="0" width="7" height="35" rx="2" fill="#94a3b8"/>
+    <path d="M -3 30 C -8 30 -10 38 -5 42 L 12 42 C 17 38 15 30 10 30 L 6 35 L 1 35 Z" fill="#64748b"/>
+  </g>
+
+  <!-- 足 -->
+  <ellipse cx="80" cy="225" rx="14" ry="7" fill="#0f172a"/>
+  <ellipse cx="120" cy="225" rx="14" ry="7" fill="#0f172a"/>
+  <line x1="80" y1="210" x2="80" y2="225" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
+  <line x1="120" y1="210" x2="120" y2="225" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- 翼 (左) -->
+  <path d="M 55 130 C 20 115 10 145 25 175 C 40 200 65 170 70 150 Z" fill="#334155" stroke="#1e293b" stroke-width="2"/>
+  <!-- 翼 (右) -->
+  <path d="M 145 130 C 180 115 190 145 175 175 C 160 200 135 170 130 150 Z" fill="#334155" stroke="#1e293b" stroke-width="2"/>
+
+  <!-- からだ (メカニックつなぎ & 安全反射ベスト) -->
+  <ellipse cx="100" cy="150" rx="58" ry="60" fill="#334155" stroke="#1e293b" stroke-width="2"/>
+  <!-- オレンジのセーフティベスト -->
+  <path d="M 72 135 L 65 205 L 85 205 L 88 135 Z" fill="#f97316"/>
+  <path d="M 128 135 L 135 205 L 115 205 L 112 135 Z" fill="#f97316"/>
+  <!-- 反射テープ -->
+  <line x1="68" y1="170" x2="86" y2="170" stroke="#fef08a" stroke-width="3.5"/>
+  <line x1="114" y1="170" x2="132" y2="170" stroke="#fef08a" stroke-width="3.5"/>
+
+  <!-- 黄色い作業ヘルメット (トサカの周りを保護) -->
+  <path d="M 60 70 Q 100 45 140 70 Q 148 72 144 78 Q 100 70 56 78 Q 52 72 60 70 Z" fill="#eab308" stroke="#ca8a04" stroke-width="2"/>
+  <circle cx="100" cy="60" r="3.5" fill="#16a34a"/> <!-- 安全第一緑十字マーク風 -->
+
+  <!-- ヘルメットからひょっこり出るトサカ -->
+  <path d="M 88 50 C 90 32 100 30 102 48 C 105 32 115 32 112 50 Z" fill="url(#combRed)"/>
+
+  <!-- ゴーグル (ヘルメットの上にセット) -->
+  <path d="M 64 74 Q 100 68 136 74" stroke="#475569" stroke-width="4" fill="none"/>
+  <circle cx="82" cy="72" r="8" fill="#38bdf8" stroke="#1e293b" stroke-width="1.5"/>
+  <circle cx="118" cy="72" r="8" fill="#38bdf8" stroke="#1e293b" stroke-width="1.5"/>
+
+  <!-- つぶらな目 -->
+  <circle cx="78" cy="116" r="6" fill="#0f172a"/>
+  <circle cx="76" cy="113" r="2.5" fill="#ffffff"/>
+  <circle cx="122" cy="116" r="6" fill="#0f172a"/>
+  <circle cx="120" cy="113" r="2.5" fill="#ffffff"/>
+
+  <!-- ほっぺのチーク -->
+  <circle cx="62" cy="126" r="6" fill="#f43f5e" opacity="0.3"/>
+  <circle cx="138" cy="126" r="6" fill="#f43f5e" opacity="0.3"/>
+
+  <!-- クチバシ -->
+  <polygon points="100,118 86,136 114,136" fill="#f59e0b"/>
+  <polygon points="100,144 91,136 109,136" fill="#d97706"/>
+
+  <!-- あごの肉垂 -->
+  <circle cx="100" cy="148" r="5" fill="#ef4444"/>
+</svg>

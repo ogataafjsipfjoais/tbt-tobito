@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="ja">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>とびとくんサーフィン</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+<header><img src="images/tobito_face_normal.png" alt=""><h1>とびとくんサーフィン</h1></header>
+<main>
+<label class="switch"><span>このタブで表示</span><input id="enabled" type="checkbox"></label>
+<label for="count">人数 <output id="count-value">3</output></label><input id="count" type="range" min="1" max="8" value="3">
+<label for="size">大きさ <output id="size-value">80px</output></label><input id="size" type="range" min="40" max="140" step="5" value="80">
+<label for="speed">速さ <output id="speed-value">1×</output></label><input id="speed" type="range" min="0.5" max="2" step="0.1" value="1">
+<label for="mode">動き</label><select id="mode"><option value="follow">マウスを追う</option><option value="wander">自由に歩く</option></select>
+<label for="skin">ポーズ</label><select id="skin"><option value="mix">いろいろ</option><option value="tobito_pose_airplane.png">飛行機</option><option value="tobito_pose_koi.png">来い</option><option value="tobito_pose_crossed_arms.png">腕組み</option></select>
+<label class="switch"><span>このサイトで自動表示</span><input id="auto-site" type="checkbox"></label>
+<p id="status" role="status"></p>
+</main>
+<script src="surf-core.js"></script><script src="popup.js"></script>
+</body></html>

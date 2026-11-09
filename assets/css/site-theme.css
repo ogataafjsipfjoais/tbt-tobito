@@ -1,0 +1,57 @@
+:root { --theme-paper:#f4f7f6; --theme-panel:#fff; --theme-control:#eaf0f1; --theme-ink:#20262a; --theme-muted:#52636b; --theme-line:#b6c4c9; --theme-accent:#006c86; }
+:root[data-site-theme="dark"] { --theme-paper:#171d20; --theme-panel:#222a2e; --theme-control:#29353a; --theme-ink:#edf4f4; --theme-muted:#b7c7cc; --theme-line:#53666e; --theme-accent:#8fd6df; }
+body:has(.tobito-site) { background:var(--theme-paper); color:var(--theme-ink); }
+.tobito-site { --site-ink:var(--theme-ink); --site-muted:var(--theme-muted); --site-line:var(--theme-line); --site-paper:var(--theme-paper); --site-dark:var(--theme-paper); }
+.site-display-tools { display:flex; justify-content:flex-end; align-items:center; gap:10px; padding:8px 20px; min-height:48px; background:var(--theme-paper); color:var(--theme-ink); font-size:12px; }
+.site-display-tools label { display:flex; align-items:center; gap:8px; }
+.site-display-tools select { padding:6px 28px 6px 10px; border:1px solid var(--theme-line); background:var(--theme-panel); color:var(--theme-ink); min-height:36px; }
+#tobito-companion-widget { position:static; inset:auto; z-index:auto; margin-top:12px; box-shadow:none; }
+.tobito-chirp-control { width:40px; height:40px; border:1px solid var(--theme-line); background:var(--theme-control); color:var(--theme-ink); border-radius:6px; }
+.tobito-mobile-brand, #header_inner { background:var(--theme-panel) !important; color:var(--theme-ink) !important; }
+html[data-site-theme] #header_inner :is(a,.nav_main,ruby,rb,rt) { color:var(--theme-ink) !important; }
+html[data-site-theme] #header_inner #logo_icon,
+html[data-site-theme] #header_inner #logo_icon path { fill:var(--theme-ink) !important; }
+html[data-site-theme] #header_inner { border-bottom-color:var(--theme-line) !important; }
+#prologue-section, #prologue-pinned-stage, .prologue-ambient-bg { background:var(--theme-paper); }
+/* Scroll animation writes an inline light background; dark mode owns this layer. */
+:root[data-site-theme="dark"] #prologue-bg-ambient { background:var(--theme-paper) !important; }
+:root[data-site-theme="dark"] :is(.prologue-text-1,.prologue-text-4,.prologue-s4-story-bold) { color:var(--theme-ink); text-shadow:none; }
+:root[data-site-theme="dark"] :is(.prologue-title-ja,.prologue-text-2,.prologue-kicker,.prologue-s4-tag) { color:var(--theme-accent); text-shadow:none; }
+:root[data-site-theme="dark"] .prologue-text-3 { color:#dfbf65; text-shadow:none; }
+:root[data-site-theme="dark"] :is(.prologue-sub-jp,.prologue-micro-copy,.prologue-s4-story) { color:var(--theme-muted); }
+.tobito-site :is(.atelier-clipboard,.atelier-clipboard-dark) { background:var(--theme-panel); border-color:var(--theme-line); color:var(--theme-ink); }
+.tobito-site :is(.flight-side-section,.flight-map-panel,.flight-session-toolbar) { color:var(--theme-ink); border-color:var(--theme-line); }
+.tobito-site :is(.flight-ranking-row,.flight-keyboard-guide dl > div) { border-color:var(--theme-line); }
+.tobito-site :is(.flight-rank-pilot strong,.flight-keyboard-guide h3) { color:var(--theme-ink); }
+.tobito-site :is(.flight-ranking-status,.flight-ranking-empty,.flight-rank-pilot small,.flight-map-caption,.flight-map-readouts dt,.flight-rules,#flight-keyboard-status,#flight-map-status) { color:var(--theme-muted); }
+.tobito-site :is(.flight-keyboard-guide kbd,.flight-keyboard-footer button,.flight-session-toolbar select,.flight-map-toolbar button,.flight-result-form input) { background:var(--theme-control); color:var(--theme-ink); border-color:var(--theme-line); }
+.tobito-site .flight-map-toolbar button[aria-pressed="true"] { background:#007c9d; color:#fff; }
+.tobito-site #game-result-box { background:var(--theme-panel) !important; color:var(--theme-ink); }
+:root[data-site-theme="light"] .tobito-site [class*="bg-slate-"] { background-color:var(--theme-panel) !important; }
+:root[data-site-theme="light"] .tobito-site :is(.text-white,.text-slate-100,.text-slate-200,.text-slate-300) { color:var(--theme-ink) !important; }
+:root[data-site-theme="light"] .tobito-site :is(.text-slate-400,.text-slate-500) { color:var(--theme-muted) !important; }
+:root[data-site-theme="light"] .tobito-site :is(.text-cyan-300,.text-cyan-400,.text-sky-300,.text-sky-400) { color:var(--theme-accent) !important; }
+:root[data-site-theme="light"] .tobito-site :is(.text-amber-300,.text-amber-400,.flight-rank,.flight-rank-distance) { color:#79540c !important; }
+:root[data-site-theme="light"] .tobito-site [class*="border-slate-"] { border-color:var(--theme-line) !important; }
+:root[data-site-theme="dark"] .tobito-site :is(.text-slate-700,.text-slate-800,.text-slate-900,.text-gray-900):not(button):not(a) { color:var(--theme-ink) !important; }
+:root[data-site-theme="dark"] .tobito-site :is(.bg-white,[class~="bg-white/85"],.bg-slate-50,.bg-slate-100,.bg-slate-200,[class~="bg-sky-50/70"],.bg-sky-50) { background-color:var(--theme-panel) !important; color:var(--theme-ink); }
+:root[data-site-theme="dark"] .tobito-site :is(.text-slate-500,.text-slate-600) { color:var(--theme-muted) !important; }
+.tobito-site [class*="title-giant-atelier"] { color:var(--theme-ink); }
+:root[data-site-theme="dark"] .tobito-site :is(.text-sky-800,.text-sky-900):not(button):not(a) { color:var(--theme-ink) !important; }
+:root[data-site-theme="dark"] .tobito-site :is(a,button):is(.bg-white,[class~="bg-white/85"]) { color:var(--theme-ink) !important; }
+:root[data-site-theme="dark"] .tobito-identity-band { background:var(--theme-paper); color:var(--theme-ink); border-color:var(--theme-line); }
+:root[data-site-theme="dark"] .identity-portrait { background:var(--theme-panel); border-color:var(--theme-line); }
+:root[data-site-theme="dark"] :is(.identity-lead,.identity-note,.identity-facts p) { color:var(--theme-muted); }
+:root[data-site-theme="dark"] :is(.identity-nameplate strong,.identity-facts strong) { color:var(--theme-ink); }
+:root[data-site-theme="dark"] :is(.identity-kicker,.identity-nameplate span,.identity-facts span) { color:var(--theme-accent); }
+:root[data-site-theme="dark"] .identity-facts { border-color:var(--theme-line); }
+:root[data-site-theme="dark"] .identity-facts div { border-color:var(--theme-line); }
+:root[data-site-theme="dark"] .tobito-site :is(.border-slate-200,[class~="border-slate-200/90"],.border-sky-100) { border-color:var(--theme-line); }
+:root[data-site-theme="dark"] #header_inner .nav_inner { background:var(--theme-panel); color:var(--theme-ink); }
+#page-surf-toggle { background:var(--theme-panel); border-color:var(--theme-line); }
+@media (max-width:767px) { .site-display-tools { padding-inline:16px; } }
+@media (min-width:769px) {
+  #header_inner .nav_inner { visibility:hidden; opacity:0; pointer-events:none; background:var(--theme-panel) !important; border:1px solid var(--theme-line); box-shadow:none; }
+  #header_inner .nav_box:is(:hover,:focus-within) .nav_inner { visibility:visible; opacity:1; pointer-events:auto; }
+  #header_inner .nav_box:is(:hover,:focus-within) .nav_inner > a { opacity:1; transform:none; border-color:var(--theme-line); }
+}

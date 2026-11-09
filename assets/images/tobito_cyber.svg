@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <defs>
+    <radialGradient id="cyberGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#0055ff" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="neonFilter">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- サイバーオーラ -->
+  <circle cx="100" cy="120" r="95" fill="url(#cyberGlow)"/>
+
+  <!-- ジェットスラスター (背中から噴射) -->
+  <path d="M 40 160 L 15 175 L 42 185 Z" fill="#00f0ff" filter="url(#neonFilter)"/>
+  <path d="M 160 160 L 185 175 L 158 185 Z" fill="#00f0ff" filter="url(#neonFilter)"/>
+
+  <!-- 足 (サイバーブーツ) -->
+  <ellipse cx="80" cy="225" rx="14" ry="7" fill="#0f172a" stroke="#00f0ff" stroke-width="1.5"/>
+  <ellipse cx="120" cy="225" rx="14" ry="7" fill="#0f172a" stroke="#00f0ff" stroke-width="1.5"/>
+  <line x1="80" y1="210" x2="80" y2="225" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
+  <line x1="120" y1="210" x2="120" y2="225" stroke="#334155" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- サイバージェット翼 (左) -->
+  <path d="M 55 130 C 15 105 5 140 20 170 C 35 195 65 170 70 150 Z" fill="#0f172a" stroke="#00f0ff" stroke-width="2"/>
+  <line x1="30" y1="140" x2="60" y2="160" stroke="#39ff14" stroke-width="2" filter="url(#neonFilter)"/>
+  <!-- サイバージェット翼 (右) -->
+  <path d="M 145 130 C 185 105 195 140 180 170 C 165 195 135 170 130 150 Z" fill="#0f172a" stroke="#00f0ff" stroke-width="2"/>
+  <line x1="170" y1="140" x2="140" y2="160" stroke="#39ff14" stroke-width="2" filter="url(#neonFilter)"/>
+
+  <!-- からだ (ダークナノスーツ) -->
+  <ellipse cx="100" cy="150" rx="58" ry="60" fill="#1e1b4b" stroke="#00f0ff" stroke-width="2"/>
+  <!-- ネオンラインサーキット -->
+  <path d="M 80 145 L 100 175 L 120 145" stroke="#00f0ff" stroke-width="2" fill="none" filter="url(#neonFilter)"/>
+  <circle cx="100" cy="175" r="3.5" fill="#39ff14" filter="url(#neonFilter)"/>
+
+  <!-- ネオントサカ (マゼンタ発光) -->
+  <path d="M 75 75 C 75 45 92 42 95 68 C 100 35 120 35 118 68 C 126 48 140 50 132 75 Z" fill="#ec4899" filter="url(#neonFilter)"/>
+
+  <!-- サイバーバイザー (ホログラムHUD) -->
+  <path d="M 54 85 Q 100 78 146 85" stroke="#0f172a" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <!-- バイザーグラス -->
+  <path d="M 66 102 Q 100 95 134 102 Q 138 118 100 120 Q 62 118 66 102 Z" fill="rgba(0, 240, 255, 0.5)" stroke="#00f0ff" stroke-width="2" filter="url(#neonFilter)"/>
+  <line x1="72" y1="110" x2="128" y2="110" stroke="#39ff14" stroke-width="1.5" stroke-dasharray="3,2"/>
+
+  <!-- クチバシ -->
+  <polygon points="100,122 88,138 112,138" fill="#f59e0b"/>
+  <polygon points="100,144 92,138 108,138" fill="#d97706"/>
+
+  <!-- あごの肉垂 (ネオンレッド) -->
+  <circle cx="100" cy="148" r="5" fill="#f43f5e" filter="url(#neonFilter)"/>
+</svg>

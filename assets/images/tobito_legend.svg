@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <defs>
+    <radialGradient id="goldGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#fbbf24" stop-opacity="0.9"/>
+      <stop offset="50%" stop-color="#f59e0b" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="goldShine" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="50%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#ca8a04"/>
+    </linearGradient>
+    <filter id="goldBloom">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 黄金オーラ & 光のリング -->
+  <circle cx="100" cy="120" r="95" fill="url(#goldGlow)"/>
+  <circle cx="100" cy="120" r="85" fill="none" stroke="#fde047" stroke-width="2" stroke-dasharray="6,4" opacity="0.8"/>
+
+  <!-- 足 (ゴールデン) -->
+  <ellipse cx="80" cy="225" rx="14" ry="7" fill="#b45309"/>
+  <ellipse cx="120" cy="225" rx="14" ry="7" fill="#b45309"/>
+  <line x1="80" y1="210" x2="80" y2="225" stroke="#78350f" stroke-width="5" stroke-linecap="round"/>
+  <line x1="120" y1="210" x2="120" y2="225" stroke="#78350f" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- 翼 (黄金のフェニックスウイング) -->
+  <path d="M 55 130 C 15 100 5 135 20 175 C 35 205 65 175 70 150 Z" fill="url(#goldShine)" stroke="#b45309" stroke-width="2"/>
+  <path d="M 145 130 C 185 100 195 135 180 175 C 165 205 135 175 130 150 Z" fill="url(#goldShine)" stroke="#b45309" stroke-width="2"/>
+
+  <!-- からだ (黄金のマント & 礼装) -->
+  <ellipse cx="100" cy="150" rx="58" ry="60" fill="url(#goldShine)" stroke="#b45309" stroke-width="2"/>
+  <!-- ロイヤルサッシュ (たすき) -->
+  <path d="M 80 135 L 68 150 L 125 210 L 137 195 Z" fill="#7e22ce" opacity="0.85"/>
+  <circle cx="102" cy="172" r="4.5" fill="#fef08a" stroke="#ca8a04" stroke-width="1.5"/>
+
+  <!-- トサカ (ルビーレッド) -->
+  <path d="M 75 75 C 75 45 92 42 95 68 C 100 35 120 35 118 68 C 126 48 140 50 132 75 Z" fill="#ef4444"/>
+
+  <!-- 100周年 クラウン (王冠) -->
+  <g transform="translate(100, 48)">
+    <polygon points="-20,10 -24,-6 -9,3 0,-10 9,3 24,-6 20,10" fill="url(#goldShine)" stroke="#b45309" stroke-width="1.5" filter="url(#goldBloom)"/>
+    <circle cx="0" cy="-10" r="2.5" fill="#ef4444"/>
+    <circle cx="-24" cy="-6" r="2" fill="#3b82f6"/>
+    <circle cx="24" cy="-6" r="2" fill="#10b981"/>
+  </g>
+
+  <!-- ゴーグル (頭部ゴールドフレーム) -->
+  <path d="M 54 88 Q 100 78 146 88" stroke="#78350f" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <circle cx="80" cy="85" r="14" fill="url(#goldShine)" stroke="#78350f" stroke-width="2"/>
+  <circle cx="80" cy="85" r="11" fill="#38bdf8"/>
+  <circle cx="120" cy="85" r="14" fill="url(#goldShine)" stroke="#78350f" stroke-width="2"/>
+  <circle cx="120" cy="85" r="11" fill="#38bdf8"/>
+
+  <!-- キラキラ輝く瞳 -->
+  <circle cx="78" cy="116" r="6.5" fill="#451a03"/>
+  <circle cx="76" cy="113" r="2.5" fill="#ffffff"/>
+  <circle cx="74" cy="118" r="1" fill="#fde047"/>
+  <circle cx="122" cy="116" r="6.5" fill="#451a03"/>
+  <circle cx="120" cy="113" r="2.5" fill="#ffffff"/>
+  <circle cx="118" cy="118" r="1" fill="#fde047"/>
+
+  <!-- クチバシ -->
+  <polygon points="100,118 86,136 114,136" fill="#f59e0b"/>
+  <polygon points="100,144 91,136 109,136" fill="#d97706"/>
+
+  <!-- あごの肉垂 -->
+  <circle cx="100" cy="148" r="5.5" fill="#ef4444"/>
+</svg>

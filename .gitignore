@@ -1,0 +1,29 @@
+# Secret configuration and API keys
+config.secret.php
+.env
+.env.local
+.env.*.local
+.env.*
+!.env.example
+
+# Temporary / Scratch
+*.log
+.DS_Store
+*.tmp
+*.bak
+*.backup.js
+__pycache__/
+*.py[cod]
+/scratch/
+/scratch_*
+
+# Runtime submissions and private ranking ownership information
+/data/
+flight-ranking-store.php
+.flight-ranking.lock
+.flight-ranking-*.php
+
+# Rebuilt from source by scripts/build.sh
+/wordpress-theme-files/
+/index.html
+/extensions/tobito-surfing/surf-core.js

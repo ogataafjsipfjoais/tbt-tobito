@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "とびとくんサーフィン",
+  "version": "1.0.0",
+  "description": "とびとくんがマウスを追いかける、ブラウザーの小さな相棒。",
+  "minimum_chrome_version": "96",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "optional_host_permissions": ["http://*/*", "https://*/*"],
+  "action": {
+    "default_title": "とびとくんサーフィン",
+    "default_popup": "popup.html"
+  },
+  "icons": {
+    "16": "images/tobito_face_normal.png",
+    "48": "images/tobito_face_normal.png",
+    "128": "images/tobito_face_normal.png"
+  },
+  "web_accessible_resources": [{
+    "resources": ["images/*.png"],
+    "matches": ["http://*/*", "https://*/*"]
+  }],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}

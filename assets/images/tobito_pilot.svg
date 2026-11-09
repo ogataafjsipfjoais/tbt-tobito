@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" width="200" height="240">
+  <defs>
+    <radialGradient id="skyGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.7"/>
+      <stop offset="100%" stop-color="#0284c7" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="combRed" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#b91c1c"/>
+    </linearGradient>
+    <linearGradient id="gliderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="100" cy="120" r="95" fill="url(#skyGlow)"/>
+
+  <!-- 背負った超軽量グライダーの主翼 (大きく展開) -->
+  <path d="M 50 120 L 5 80 L 40 145 Z" fill="url(#gliderGrad)" stroke="#b45309" stroke-width="2"/>
+  <path d="M 150 120 L 195 80 L 160 145 Z" fill="url(#gliderGrad)" stroke="#b45309" stroke-width="2"/>
+  <line x1="8" y1="85" x2="40" y2="135" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+  <line x1="192" y1="85" x2="160" y2="135" stroke="#ffffff" stroke-width="2" opacity="0.6"/>
+
+  <!-- 足 -->
+  <ellipse cx="80" cy="225" rx="14" ry="7" fill="#1e293b"/>
+  <ellipse cx="120" cy="225" rx="14" ry="7" fill="#1e293b"/>
+  <line x1="80" y1="210" x2="80" y2="225" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>
+  <line x1="120" y1="210" x2="120" y2="225" stroke="#0f172a" stroke-width="5" stroke-linecap="round"/>
+
+  <!-- 翼 (操縦桿を握る構え) -->
+  <path d="M 55 130 C 20 115 10 145 25 175 C 40 200 65 170 70 150 Z" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
+  <path d="M 145 130 C 180 115 190 145 175 175 C 160 200 135 170 130 150 Z" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
+
+  <!-- からだ (TBTパイロットフライトスーツ) -->
+  <ellipse cx="100" cy="150" rx="58" ry="60" fill="#0284c7" stroke="#0369a1" stroke-width="2"/>
+  <!-- ジッパーライン & ハーネス -->
+  <line x1="100" y1="135" x2="100" y2="210" stroke="#f8fafc" stroke-width="2"/>
+  <line x1="68" y1="170" x2="132" y2="170" stroke="#f59e0b" stroke-width="3"/>
+  <rect x="94" y="166" width="12" height="8" rx="2" fill="#e2e8f0"/>
+
+  <!-- TBTエンブレム (翼マーク) -->
+  <polygon points="118,145 132,142 126,155" fill="#38bdf8"/>
+
+  <!-- 赤いトサカ -->
+  <path d="M 75 75 C 75 45 92 42 95 68 C 100 35 120 35 118 68 C 126 48 140 50 132 75 Z" fill="url(#combRed)"/>
+
+  <!-- 本格パイロットヘルメット ＆ ゴーグル装着 (目元に装着) -->
+  <path d="M 54 88 Q 100 78 146 88" stroke="#1e293b" stroke-width="6" stroke-linecap="round" fill="none"/>
+  <!-- ゴーグル (目元) -->
+  <ellipse cx="78" cy="116" rx="16" ry="14" fill="#38bdf8" stroke="#0f172a" stroke-width="3"/>
+  <ellipse cx="122" cy="116" rx="16" ry="14" fill="#38bdf8" stroke="#0f172a" stroke-width="3"/>
+  <rect x="92" y="113" width="16" height="6" fill="#0f172a"/>
+  <!-- レンズ反射光 -->
+  <ellipse cx="74" cy="112" rx="6" ry="3.5" fill="#ffffff" opacity="0.85"/>
+  <ellipse cx="118" cy="112" rx="6" ry="3.5" fill="#ffffff" opacity="0.85"/>
+
+  <!-- クチバシ -->
+  <polygon points="100,122 86,138 114,138" fill="#f59e0b"/>
+  <polygon points="100,144 91,138 109,138" fill="#d97706"/>
+
+  <!-- あごの肉垂 -->
+  <circle cx="100" cy="148" r="5" fill="#ef4444"/>
+</svg>
