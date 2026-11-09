@@ -126,9 +126,9 @@
     }
   });
   if('IntersectionObserver' in window) {
-    observer=new IntersectionObserver(entries=>{
-      const visible=entries.some(entry=>entry.isIntersecting);
-      tellWorld(!!(active && visible && pageVisible));
+    observer=new IntersectionObserver(()=>{
+      // Check the active frame, not only changed entries from the two hosts.
+      updateFocus();
     },{threshold:0});
     Object.values(hosts).forEach(el=>{if(el)observer.observe(el.parentElement);});
   }
