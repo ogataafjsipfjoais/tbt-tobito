@@ -60,3 +60,12 @@
 @media(max-width:1050px){#play .play-layout{grid-template-columns:1fr}.arcade-showcase-head{display:block}.arcade-showcase-head>p{max-width:600px}}
 @media(max-width:650px){.arcade-showcase{border-radius:31px;padding:26px 12px 12px;margin:20px -8px 48px}.arcade-showcase-head{padding:0 9px}.arcade-showcase-head h3{font-size:clamp(37px,9vw,61px)}.arcade-switch{min-width:0;width:calc(50% - 5px);padding:13px 11px;border-radius:20px 20px 0 0}.arcade-switch b{font-size:13px}.arcade-switch small{font-size:9px}.arcade-ready-screen{min-height:440px;padding:25px 18px;flex-direction:column;gap:8px;text-align:center}.arcade-ready-screen>img{width:120px;max-height:125px}.arcade-ready-ring{width:85%;top:0;left:10%}.arcade-ready-screen h4{font-size:36px}.arcade-ready-screen p{font-size:11px}.arcade-iframe{min-height:370px}.original-wind-header{padding:13px 16px;font-size:9px}.original-wind{margin:40px -5px 90px!important}.absurd-heading h3{font-size:40px}#play .bonus-side-story{padding:15px 6px}}
 @media(prefers-reduced-motion:reduce){.arcade-ready-screen>img{animation:none}}
+
+
+/* Keyboard activation is explicit because the original games live in an iframe. */
+.arcade-keyboard-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 19px;margin:13px 0;background:rgba(12,44,64,.88);border:1px solid rgba(167,222,221,.32);border-radius:19px;color:#e9f2ec;font-size:12px;line-height:1.65}
+.arcade-keyboard-bar b{display:inline-block;font:800 10px/1.3 'DM Sans',sans-serif;letter-spacing:.11em;color:#e4c083;margin-right:8px}
+.arcade-keyboard-bar button{border:0;border-radius:999px;min-height:46px;flex:none;background:#f5c983;color:#173549;padding:10px 18px;font-size:12px;font-weight:900;cursor:pointer}
+.arcade-keyboard-bar button:hover{background:#fff0be}
+.arcade-keyboard-bar button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(max-width:650px){.arcade-keyboard-bar{display:grid;padding:13px 15px;gap:10px}.arcade-keyboard-bar button{width:100%}}
