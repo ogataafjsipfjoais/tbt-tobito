@@ -17,12 +17,12 @@ if(mug && window.matchMedia('(pointer:fine)').matches && !window.matchMedia('(pr
     const r=mug.getBoundingClientRect(),x=(e.clientX-r.left-r.width/2)/r.width,y=(e.clientY-r.top-r.height/2)/r.height;
     if(raf)return;
     raf=requestAnimationFrame(()=>{
-      mug.style.setProperty('--goods-x',String(Math.max(-90,Math.min(90,x*100))));
-      mug.style.setProperty('--goods-y',String(Math.max(-90,Math.min(90,y*100))));
+      mug.style.setProperty('--goods-x',String(Math.max(-9,Math.min(9,x*28)))+'deg');
+      mug.style.setProperty('--goods-y',String(Math.max(-8,Math.min(8,y*21)))+'deg');
       raf=0;
     });
   },{passive:true});
-  mug.addEventListener('pointerleave',()=>{mug.style.setProperty('--goods-x','0');mug.style.setProperty('--goods-y','0');});
+  mug.addEventListener('pointerleave',()=>{mug.style.setProperty('--goods-x','0deg');mug.style.setProperty('--goods-y','0deg');});
 }
 const dialog=document.getElementById('goods-preview-dialog');
 const picture=document.getElementById('goods-preview-img');
