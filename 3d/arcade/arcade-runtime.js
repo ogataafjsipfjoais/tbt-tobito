@@ -57,6 +57,7 @@
     const token = ++ticket;
     switchView(mode);
     if (ready) ready.hidden = false;
+    window.setTimeout(reportHeight,50);
     setStatus('起動中：'+names[mode]+' …');
     try {
       // Components are loaded only when their own game is selected.
@@ -83,7 +84,7 @@
       if (token !== ticket) return;
       if (ready) ready.hidden = true;
       notifyParent({type:'ready',mode});
-      window.setTimeout(() => window.dispatchEvent(new Event('resize')),300);
+      window.setTimeout(() => {window.dispatchEvent(new Event('resize'));reportHeight();},300);
     } catch (err) {
       if (token !== ticket) return;
       setStatus('起動できませんでした。通信環境をご確認ください。'+(err?.message || ''));
@@ -104,6 +105,31 @@
     // The original simulators already suspend rendering on hidden documents.
     if (!document.hidden)window.dispatchEvent(new Event('resize'));
   });
+  // Report the actual copied controls' height to the embedding homepage.
+  // Avoid measuring the iframe viewport itself, which causes resize feedback loops.
+  let heightFrame = 0;
+  let lastHeight = 0;
+  function reportHeight() {
+    if(heightFrame)return;
+    heightFrame = requestAnimationFrame(()=>{
+      heightFrame = 0;
+      const header=document.querySelector('.arcade-header');
+      const main=document.getElementById('arcade-content');
+      if(!main)return;
+      const total=Math.min(5500,Math.max(480,(header?.offsetHeight||0)+main.scrollHeight+30));
+      if(Math.abs(total-lastHeight)>15) {
+        lastHeight=total;
+        notifyParent({type:'height',height:total});
+      }
+    });
+  }
+  if('ResizeObserver' in window) {
+    const resizeObserver=new ResizeObserver(reportHeight);
+    const main=document.getElementById('arcade-content');
+    if(main)resizeObserver.observe(main);
+  }
+  window.addEventListener('resize',reportHeight,{passive:true});
+  document.addEventListener('click',()=>window.setTimeout(reportHeight,120),{passive:true});
   // Do not load a Three.js game until the visitor opens this isolated page.
-  void launch(selected);
+  void launch(selected).then(reportHeight);
 })();
