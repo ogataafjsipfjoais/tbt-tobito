@@ -1,0 +1,98 @@
+/* TOBITO / CINEMATIC FLIGHT WORLD
+   One fixed WebGL viewport. The long document is the input device for a camera shot.
+   Existing games remain semantic, keyboard-reachable and playable above the scene. */
+.journey-world{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:linear-gradient(#35465a,#809ca4)}
+.journey-world canvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.world-hud{position:fixed;z-index:15;top:142px;left:clamp(20px,4vw,84px);display:none;align-items:center;gap:9px;color:#fff7df;font:800 10px/1.3 'DM Sans','Noto Sans JP',sans-serif;letter-spacing:.09em;text-shadow:0 1px 8px #182a39}
+.world-hud>span:last-child{opacity:.65}
+.hud-recording-dot{height:8px;width:8px;border-radius:50%;background:#f34e46;box-shadow:0 0 9px rgba(255,89,79,.7);animation:hud-pulse 1.7s ease-in-out infinite}
+@keyframes hud-pulse{50%{opacity:.35}}
+.world-actions{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.world-actions button{background:#f2efe4;border:1px solid #8e9da6;color:#24435c;padding:8px 11px;min-height:41px;white-space:nowrap;cursor:pointer;font-size:11px;font-weight:900;transition:background .2s}
+.world-actions button:hover,.world-actions button[aria-pressed="false"]{background:#173c60;color:#fff}
+.world-actions button:focus-visible{outline:3px solid #eb4f3c;outline-offset:3px}
+.world-active body,.world-active #main{background:transparent!important}
+.world-active .world-hud{display:flex}
+.world-active #main{position:relative;z-index:2}
+.world-active .site-footer{position:relative;z-index:3;background:#f5f3ebed;backdrop-filter:blur(12px)}
+.world-active .site-header{position:relative;z-index:80;background:rgba(250,248,237,.93);backdrop-filter:blur(15px)}
+.world-active .journey-rail{z-index:76}
+.world-active .journey-buddy{z-index:85}
+.world-active .hero{position:relative;min-height:calc(113svh - 86px);background:transparent!important;border:0}
+.world-active .hero-grid,.world-active .hero-sun,.world-active .hero-edge,.world-active .hero-stage-circle,.world-active .hero-floor{display:none}
+.world-active #prologue-giant-wrap{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+.world-active .hero-content{z-index:4;padding-bottom:150px}
+.world-active .hero h1{color:#fffdf4;filter:drop-shadow(0 6px 20px #14273a91);font-size:clamp(41px,5.4vw,96px)}
+.world-active .hero h1 .outlined-word{color:#ffdc83}
+.world-active .hero .eyebrow,.world-active .hero-description,.world-active .hero-description strong,.world-active .hero-scroll-hint{color:#f6f5eb;text-shadow:0 3px 15px #17253dd4}
+.world-active .hero-description{font-size:clamp(14px,1.2vw,19px);line-height:2.05}
+.world-active .hero-stage{z-index:2}
+.world-active .hero-stage-label,.world-active .hero-stage-number{color:#fff;filter:drop-shadow(0 2px 7px #092537)}
+.world-active .hero-bottomline{background:rgba(14,35,55,.63);color:#fff;border-color:#c5d7e644;backdrop-filter:blur(9px)}
+.world-active .hero-bottomline a{color:#fff}
+.world-active .journey-quickplay{color:#ffebae}
+.world-active #tobito-3d-controls{display:flex;bottom:23%;right:8%;top:auto}
+.world-active #tobito-3d-controls .tobito-3d-eyebrow{background:rgba(16,41,58,.84);color:#fff}
+.world-active #tobito-3d-controls .tobito-3d-tool{box-shadow:0 8px 26px #09152644}
+.world-active .about{background:rgba(246,245,237,.77)!important;border:0;padding-top:clamp(140px,19vh,240px);padding-bottom:clamp(140px,19vh,250px);backdrop-filter:blur(3px)}
+.world-active .about-layout{position:relative}
+.world-active .about-title,.world-active .about-facts{background:rgba(250,250,243,.88);padding:clamp(18px,2vw,28px);box-shadow:0 14px 38px #1f354618;backdrop-filter:blur(12px)}
+.world-active .about-portrait{border:0;background:#d9e6e1ba;box-shadow:0 20px 40px #20384940;transform:rotate(-3deg)}
+.world-active .interlude{min-height:570px;background:rgba(34,64,119,.70)!important;backdrop-filter:blur(2px)}
+.world-active .interlude-inner{min-height:570px}
+.world-active .poses{background:rgba(244,238,226,.75)!important;padding-top:clamp(130px,15vh,210px);padding-bottom:clamp(130px,16vh,220px)}
+.world-active .poses-head{padding:clamp(20px,3vw,34px);background:rgba(253,250,242,.90);backdrop-filter:blur(8px)}
+.world-active .pose-stage{box-shadow:0 25px 80px #102e4545}
+.world-active .play-room{background:rgba(242,232,207,.78)!important;padding-top:110px;padding-bottom:120px;border:0}
+.world-active .oddities-section{background:rgba(255,224,104,.88)!important;padding-top:125px;padding-bottom:145px}
+.world-active .wind-lab{background:rgba(170,221,223,.84)!important;padding-top:130px;padding-bottom:145px}
+.world-active .hangar{background:rgba(9,21,33,.74)!important;padding-top:140px;padding-bottom:120px;backdrop-filter:blur(2px)}
+.world-active .hangar-viewer{box-shadow:0 25px 70px #0008}
+.world-active .journey-goal{min-height:100svh;padding-top:160px;background:linear-gradient(180deg,rgba(107,182,224,.38),rgba(238,248,252,.69) 46%,rgba(245,249,244,.88))!important}
+.world-active .journey-goal:before{background:none}
+.world-active .journey-goal h2{color:#153550;text-shadow:0 3px 25px #e5f7ff}
+.world-active .journey-goal .boarding-zone{box-shadow:0 28px 80px #143c5c35}
+.world-active .section-label{border-bottom:0;font-weight:900;letter-spacing:.12em}
+.world-active .section-label span:first-child:before{display:inline-block;content:"◆";font-size:10px;color:#d94b41;margin-right:12px}
+.world-active .world-hud{pointer-events:none}
+.world-fallback .journey-world{display:none}
+.world-fallback .world-actions{display:none}
+.world-fallback #prologue-giant-tobito{visibility:visible!important;opacity:1!important}
+.world-fallback body{background:#f4f2ed}
+@media (max-width:1200px){
+  .world-active .world-hud{left:18px;top:122px}
+  .world-active .world-actions{gap:3px}
+  .world-active .world-actions button{padding:7px 8px;font-size:10px}
+}
+@media (max-width:880px){
+  .world-active .hero{min-height:calc(112svh - 72px)}
+  .world-active .hero-content{padding-top:clamp(75px,13vh,165px);padding-bottom:20px}
+  .world-active .hero-stage{height:min(69vw,560px);min-height:260px}
+  .world-active .hero h1{font-size:clamp(42px,8.8vw,80px)}
+  .world-active #tobito-3d-controls{bottom:30%;right:5%}
+  .world-active .world-hud{top:111px}
+  .world-active .about{padding-top:130px}
+  .world-active .poses{padding-top:120px}
+}
+@media (max-width:650px){
+  .world-actions{gap:3px}
+  .world-actions button{min-height:38px;padding:6px;font-size:10px;letter-spacing:-.03em}
+  .world-active .header-back{display:none}
+  .world-active .world-hud{left:12px;top:101px;font-size:9px}
+  .world-active .world-hud>span:last-child{display:none}
+  .world-active .hero{min-height:108svh}
+  .world-active .hero-content{padding:90px 16px 0;max-width:90%}
+  .world-active .hero h1{font-size:clamp(35px,9.3vw,57px)}
+  .world-active .hero-description{font-size:12px}
+  .world-active .hero-stage{height:clamp(240px,53vh,450px);min-height:0}
+  .world-active #tobito-3d-controls{bottom:13%;right:12px}
+  .world-active .hero-stage-number,.world-active .hero-stage-label{display:none}
+  .world-active .about-title,.world-active .about-facts{padding:15px}
+  .world-active .interlude{min-height:450px}
+  .world-active .poses-head{padding:15px}
+  .world-active .hangar{padding:90px 0 100px}
+  .world-active .journey-goal{padding-top:110px}
+}
+@media(prefers-reduced-motion:reduce){
+  .hud-recording-dot,.chaos-dashboard .chaos-marquee span{animation:none!important}
+}
