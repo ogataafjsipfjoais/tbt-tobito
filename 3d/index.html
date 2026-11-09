@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f2ed">
+  <meta name="description" content="Team Birdman Trial公式マスコット「とびとくん」の3Dひみつ基地。3Dでとびとくんに会って、ポーズを眺めて、TBTの飛行機を見に行こう。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="とびとくんのひみつ基地 | Team Birdman Trial">
+  <meta property="og:description" content="飛べない鳥が、空を目指す。とびとくんの3D体験サイト。">
+  <meta property="og:image" content="https://raw.githubusercontent.com/ogataafjsipfjoais/tbt-tobito/main/assets/images/tobito_pose_airplane.png">
+  <title>とびとくんのひみつ基地 | Team Birdman Trial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/tobito-3d-world.css">
+  <link rel="stylesheet" href="./studio.css">
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+  <script defer src="../assets/js/s320-model.js"></script>
+  <script defer src="../assets/js/tobito-3d-world.js"></script>
+  <script defer src="./studio.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">本文へスキップ</a>
+  <div class="site-progress" aria-hidden="true"><span id="reading-progress"></span></div>
+  <header class="site-header" id="top">
+    <a class="brand" href="#top" aria-label="とびとくんのひみつ基地 トップへ">
+      <span class="brand-symbol" aria-hidden="true"><img src="../assets/images/tobito_face_normal.png" alt=""></span>
+      <span class="brand-words"><strong>とびとくんのひみつ基地</strong><small>TEAM BIRDMAN TRIAL</small></span>
+    </a>
+    <nav class="site-nav" aria-label="メインメニュー">
+      <a href="#about">とびとくん</a>
+      <a href="#poses">ポーズ図鑑</a>
+      <a href="#hangar">機体を見る</a>
+    </nav>
+    <a class="header-back" href="../">いつもの部屋 <span aria-hidden="true">↗</span></a>
+  </header>
+
+  <main id="main">
+    <section id="prologue-section" class="hero" aria-labelledby="hero-title">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-sun" aria-hidden="true"></div>
+      <div class="hero-edge hero-edge-a" aria-hidden="true"></div>
+      <div class="hero-edge hero-edge-b" aria-hidden="true"></div>
+      <div class="hero-content">
+        <p class="eyebrow"><span class="eyebrow-rule"></span> TBT OFFICIAL MASCOT <span class="eyebrow-index">/ 3D EXPERIENCE</span></p>
+        <h1 id="hero-title"><span>飛べない鳥が、</span><span class="outlined-word">空を目指す。</span></h1>
+        <p class="hero-description">こんにちは、とびとくんです。<br>今日はぼくの世界を、ちょっとのぞいていかない？</p>
+        <div class="hero-cta-row">
+          <a class="primary-link" href="#about">ひみつ基地を探検する <span aria-hidden="true">↘</span></a>
+          <span class="hero-scroll-hint">SCROLL TO EXPLORE</span>
+        </div>
+      </div>
+      <div class="hero-stage" aria-label="3Dとびとくんの展示">
+        <div class="hero-stage-circle" aria-hidden="true"></div>
+        <span class="hero-stage-number" aria-hidden="true">01<span> / 04</span></span>
+        <div id="prologue-giant-wrap">
+          <img id="prologue-giant-tobito" src="../assets/images/tobito_pose_airplane.png" alt="青いつなぎを着て飛行機ポーズをする、四角い頭のとびとくん" width="680" height="680">
+          <div id="tobito-3d-stage"></div>
+        </div>
+        <div class="hero-floor" aria-hidden="true"></div>
+        <div id="tobito-3d-controls" class="studio-controls" role="group" aria-label="とびとくん3D操作">
+          <span class="tobito-3d-eyebrow" aria-hidden="true">さわってみてね</span>
+          <button class="tobito-3d-tool" id="tobito-3d-rotate" type="button" aria-label="とびとくんを90度回す"><span aria-hidden="true">↻</span> <span class="tobito-3d-tool-label">回す</span></button>
+          <button class="tobito-3d-tool" id="tobito-3d-flap" type="button" data-emphasis="true" aria-label="とびとくんを羽ばたかせる"><span aria-hidden="true">✳</span> <span class="tobito-3d-tool-label">羽ばたく</span></button>
+          <button class="tobito-3d-tool" id="tobito-3d-reset" type="button" aria-label="とびとくんを正面に戻す"><span aria-hidden="true">⌂</span> <span class="tobito-3d-tool-label">正面</span></button>
+        </div>
+        <p id="tobito-3d-notice" class="tobito-3d-status" role="status" aria-live="polite"></p>
+        <span class="hero-stage-label" aria-hidden="true">DRAG TO TURN / CLICK TO FLAP</span>
+      </div>
+      <div class="hero-bottomline">
+        <span><span class="red-dot"></span> とびとくん、出動中。</span>
+        <span>ILLUSTRATION → DIGITAL FORM</span>
+        <a href="#about" aria-label="次のセクションへ">↓</a>
+      </div>
+    </section>
+
+    <section id="about" class="about section-wrap" aria-labelledby="about-heading">
+      <div class="section-label"><span>01 / ABOUT</span><span>ぼくのこと</span></div>
+      <div class="about-layout">
+        <div class="about-title" data-reveal>
+          <p class="section-small">はじめまして。</p>
+          <h2 id="about-heading">とびとくん<br>って、<span>だれ？</span></h2>
+          <p>Team Birdman Trialの公式マスコット。<br>空を目指す、ちょっと不思議なニワトリ。</p>
+        </div>
+        <div class="about-portrait tilt-surface" data-reveal>
+          <span class="image-number">PROFILE PHOTO / 001</span>
+          <img src="../assets/images/tobito_pose_crossed_arms.png" alt="青いつなぎ姿で腕組みをするとびとくん" loading="lazy">
+          <span class="portrait-tag">TOBITO-KUN</span>
+        </div>
+        <div class="about-facts" data-reveal>
+          <div><span>NAME</span><strong>とびとくん</strong></div>
+          <div><span>HOME</span><strong>Team Birdman Trial</strong></div>
+          <div><span>STYLE</span><strong>四角い顔と赤いトサカ。青いつなぎがトレードマーク。</strong></div>
+          <div><span>DREAM</span><strong>みんなと一緒に、空を飛ぶこと。</strong></div>
+          <p class="fact-note">※ このページの性格・物語の描写はサイト内のキャラクター設定を含みます。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="interlude" aria-labelledby="interlude-heading">
+      <div class="interlude-track" aria-hidden="true">DESIGN. BUILD. FLY.　DESIGN. BUILD. FLY.　DESIGN. BUILD. FLY.</div>
+      <div class="interlude-inner">
+        <span class="interlude-meta">小さなニワトリの、大きな夢。</span>
+        <h2 id="interlude-heading">飛ぶことは、<br>あきらめない。</h2>
+        <img src="../assets/images/tobito_pose_airplane.png" alt="" loading="lazy">
+      </div>
+    </section>
+
+    <section id="poses" class="poses section-wrap" aria-labelledby="poses-heading">
+      <div class="section-label"><span>02 / POSE ARCHIVE</span><span>とびとくんのいろんな顔</span></div>
+      <div class="poses-head" data-reveal>
+        <div>
+          <p class="section-small">同じとびとくん、ぜんぶちがう。</p>
+          <h2 id="poses-heading">ポーズ図鑑<span class="title-punctuation">。</span></h2>
+        </div>
+        <p>とびとくんは、飛ぶだけじゃない。<br>真剣な顔も、熱い気持ちも、ぜんぶ見ていって。</p>
+      </div>
+      <div class="pose-stage" id="pose-stage" data-pose="0">
+        <div class="pose-art" aria-live="polite">
+          <img id="pose-image" src="../assets/images/tobito_pose_airplane.png" alt="飛行機ポーズのとびとくん" loading="lazy">
+          <span class="pose-index" id="pose-index">01 / 03</span>
+          <span class="pose-decoration" aria-hidden="true">TOBITO</span>
+        </div>
+        <div class="pose-copy">
+          <span id="pose-kicker">POSE 001</span>
+          <h3 id="pose-title">飛行機ポーズ</h3>
+          <p id="pose-description">両腕をいっぱいに広げて、飛行機みたいに。空への憧れをそのままポーズにしました。</p>
+          <div class="pose-controls" role="group" aria-label="ポーズの切り替え">
+            <button type="button" id="pose-prev" aria-label="前のポーズ">←</button>
+            <button type="button" id="pose-next" aria-label="次のポーズ">→</button>
+            <span id="pose-progress" aria-hidden="true"><i></i></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="hangar" class="hangar" aria-labelledby="hangar-heading">
+      <div class="hangar-inner">
+        <div class="section-label label-on-dark"><span>03 / HANGAR</span><span>空を目指す仲間たち</span></div>
+        <div class="hangar-intro" data-reveal>
+          <div>
+            <p class="section-small">とびとくんの大切な仲間。</p>
+            <h2 id="hangar-heading">あの翼を、<br><em>見上げよう。</em></h2>
+          </div>
+          <p>Team Birdman Trialが製作した<br>人力プロペラ機 S-320 Element。<br>とびとくんが応援する、本物のものづくり。</p>
+        </div>
+        <div class="hangar-viewer" id="hangar-viewer">
+          <div class="hangar-rulers" aria-hidden="true"><span>MODEL / S-320 ELEMENT</span><span>TBT HANGAR VIEW</span></div>
+          <div id="s320-viewport" class="s320-viewport" role="region" aria-label="S-320 Element 3D機体ビューア">
+            <div class="hangar-placeholder" id="hangar-placeholder">
+              <span class="placeholder-graphic" aria-hidden="true">
+                <span class="plane-wing"></span><span class="plane-body"></span><span class="plane-tail"></span>
+              </span>
+              <p>3D機体を見てみる？</p>
+              <button id="s320-load" class="load-model" type="button">S-320を読み込む <span aria-hidden="true">↗</span></button>
+              <small>約6.7MBの3Dデータを読み込みます。通信状況によって時間がかかります。</small>
+            </div>
+          </div>
+          <div class="hangar-toolbar">
+            <span id="s320-status" role="status" aria-live="polite">3Dモデル：未読み込み</span>
+            <div>
+              <button id="s320-spin" type="button" disabled aria-pressed="false">自動回転</button>
+              <button id="s320-reset" type="button" disabled>向きを戻す</button>
+            </div>
+          </div>
+        </div>
+        <div class="hangar-spec"><span>S-320 ELEMENT</span><span>WING SPAN <strong>40.0m</strong></span><span>YEAR <strong>2026</strong></span><a href="https://teambirdmantrial.jp/history/s-320-element/" target="_blank" rel="noopener noreferrer">機体の公式紹介へ ↗</a></div>
+      </div>
+    </section>
+
+    <section class="outro" aria-labelledby="outro-heading">
+      <span class="outro-overline">A LITTLE BIRD WITH A BIG DREAM</span>
+      <img src="../assets/images/tobito_pose_koi.png" alt="来いポーズのとびとくん" loading="lazy">
+      <h2 id="outro-heading">また、遊びに来てね。</h2>
+      <p>とびとくんは、今日も空を見上げています。</p>
+      <div class="outro-links">
+        <a class="primary-link" href="../">いつもの「とびとくんの部屋」へ <span aria-hidden="true">↗</span></a>
+        <a class="subtle-link" href="https://teambirdmantrial.jp/" target="_blank" rel="noopener noreferrer">TBT公式サイト ↗</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© Team Birdman Trial / TOBITO</span>
+    <a href="#top">ページの先頭へ ↑</a>
+    <span>MADE FOR THE SKY.</span>
+  </footer>
+</body>
+</html>
