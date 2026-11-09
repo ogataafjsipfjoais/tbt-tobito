@@ -1,0 +1,314 @@
+/*
+ * TOBITO / THE HANGAR OPENS
+ * Purpose-built landing art direction, separate from the long game page.
+ * A cinematic 2.5D illustrated cover dissolves into the persistent 3D journey.
+ * Design language: industrial stagecraft, warm flight markings, official character.
+ */
+:root{--opening-night:#071c2b;--opening-steel:#173c51;--opening-cream:#fff5db;--opening-gold:#f3b958;--opening-coral:#ef694a}
+html body #prologue-section.hero-opening-scene{
+  position:relative!important;display:block!important;
+  min-height:164svh!important;background:transparent!important;
+  isolation:auto!important;overflow:visible!important;border:0!important;
+  color:var(--opening-cream)
+}
+html body #prologue-section .opening-sticky{
+  display:block;position:sticky;top:0;height:100svh;min-height:620px;
+  overflow:hidden;isolation:isolate;background:var(--opening-night);
+  --hero-pointer-x:0px;--hero-pointer-y:0px;--opening-progress:0;
+}
+html body #prologue-section .opening-environment{
+  position:absolute;inset:0;overflow:hidden;z-index:0;
+  background:
+    radial-gradient(ellipse 39% 47% at 74% 37%,rgba(238,163,91,.30),transparent 89%),
+    linear-gradient(100deg,#071521 0%,#102e3e 48%,#214452 75%,#091d2b 100%)
+}
+.opening-environment::before{
+  content:"";position:absolute;inset:0;z-index:2;
+  background:linear-gradient(90deg,rgba(3,15,25,.68),rgba(4,20,32,.28) 44%,transparent 78%),
+    linear-gradient(0deg,#071521a8,transparent 24%,transparent 76%,#071521ab)
+}
+.opening-ceiling{
+  position:absolute;left:-12%;right:-12%;top:-14%;height:63%;opacity:.62;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 10.9%,rgba(184,209,214,.16) 11.0% 11.2%,transparent 11.4% 22.2%),
+    repeating-linear-gradient(0deg,transparent 0 78px,#67899e3a 80px 82px,transparent 85px 151px);
+  transform:perspective(480px) rotateX(-34deg);
+  transform-origin:top center;
+}
+.opening-depth{position:absolute;pointer-events:none;inset:auto}
+.opening-depth-back{
+  left:34%;top:19%;width:55%;height:52%;border:1px solid rgba(255,229,186,.22);
+  background:linear-gradient(0deg,#061a2a85,transparent),repeating-linear-gradient(90deg,transparent 0 17%,rgba(169,207,216,.13) 17% 17.4%,transparent 17.6% 34%);
+  box-shadow:0 0 0 2px #152d3b88,0 0 130px #ffb26e1a,inset 0 0 140px #071d2c;
+  transform:perspective(1300px) rotateY(-9deg)
+}
+.opening-depth-front{
+  right:2%;top:11%;width:68%;height:77%;
+  border-left:16px solid #233b4a77;border-top:14px solid #263e4b88;
+  box-shadow:-18px -10px 12px #05142155;
+  transform:skewY(-2deg)
+}
+.opening-portal-light{
+  position:absolute;top:-30%;right:-16%;width:85%;height:125%;
+  transform:rotate(-27deg);
+  background:linear-gradient(92deg,transparent 25%,rgba(246,198,126,.08) 41%,rgba(248,188,109,.18) 52%,transparent 73%);
+  filter:blur(18px);
+  animation:opening-light-breathe 7s ease-in-out infinite alternate
+}
+@keyframes opening-light-breathe{to{opacity:.72;transform:rotate(-23deg) translateX(6%)}}
+.opening-runway{position:absolute;left:27%;bottom:-5%;width:77%;height:62%;opacity:.82;perspective:480px;transform-origin:bottom center;transform:perspective(380px) rotateX(57deg)}
+.opening-runway::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(118,151,159,.25),transparent 70%);border-left:2px solid #daae7277;border-right:2px solid #daae7277;box-shadow:0 0 120px #112a3e}
+.opening-runway::after{content:"";position:absolute;left:49.5%;top:0;bottom:0;width:1.6%;background:repeating-linear-gradient(0deg,#fff0c8b3 0 13%,transparent 13% 29%);opacity:.76}
+.opening-runway span{position:absolute;top:0;bottom:0;width:1px;background:#ffd6a277}
+.opening-runway span:nth-child(1){left:12%}.opening-runway span:nth-child(2){left:28%}.opening-runway span:nth-child(3){right:12%}
+.opening-shutter{
+  position:absolute;top:0;bottom:0;width:27%;z-index:1;
+  opacity:.78;pointer-events:none;
+  background:
+    repeating-linear-gradient(0deg,transparent 0 36px,#c4cbd11d 38px 40px,transparent 42px 70px),
+    linear-gradient(93deg,#132d3d,#1f3c4c);
+  box-shadow:inset 0 0 50px #0008;
+}
+.opening-shutter-left{left:-20%;transform:skewY(3deg);animation:opening-door-left 1.1s cubic-bezier(.2,.8,.2,1) both}
+.opening-shutter-right{right:-23%;transform:skewY(-3deg);animation:opening-door-right 1.1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes opening-door-left{from{left:0}to{left:-20%}}
+@keyframes opening-door-right{from{right:0}to{right:-23%}}
+.opening-grain{
+  position:absolute;inset:0;z-index:4;opacity:.12;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.69' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.45'/%3E%3C/svg%3E");
+  background-size:180px
+}
+html body #prologue-section .opening-topline{
+  position:absolute;z-index:11;left:clamp(25px,5.6vw,100px);right:clamp(22px,4.5vw,74px);
+  top:clamp(82px,11vh,136px);display:flex;justify-content:space-between;gap:20px;
+  font:700 10px/1.5 'DM Sans','Noto Sans JP',sans-serif;letter-spacing:.15em;
+  color:#d5edf1a8;pointer-events:none
+}
+.opening-topline b{color:#f7cc84;letter-spacing:.12em}
+.opening-topline i{font-style:normal;color:var(--opening-coral)}
+html body #prologue-section .hero-content.opening-copy{
+  position:absolute!important;left:0;top:48%;transform:translateY(-44%);z-index:9;
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
+  width:58%;max-width:930px;min-height:0!important;height:auto!important;
+  padding:0 0 0 clamp(25px,5.6vw,100px)!important;
+  margin:0!important;background:none!important
+}
+html body #prologue-section .opening-eyebrow{display:flex;align-items:center;gap:11px;color:#f5c985!important;text-shadow:none!important;font:800 clamp(9px,.7vw,12px)/1.3 'DM Sans','Noto Sans JP',sans-serif;letter-spacing:.20em;margin:0 0 clamp(23px,3vw,41px);white-space:normal}
+html body #prologue-section .opening-eyebrow .eyebrow-rule{background:var(--opening-coral);width:35px}
+html body #prologue-section .opening-eyebrow .eyebrow-index{color:#d8e5e0b8}
+html body #prologue-section h1#hero-title{
+  display:flex;flex-direction:column;gap:0;align-items:flex-start;
+  color:var(--opening-cream)!important;margin:0;line-height:1.14!important;
+  text-shadow:0 10px 44px #020a16aa;
+  filter:none!important;white-space:normal!important
+}
+.opening-title-lead{font-weight:900;letter-spacing:-.07em;font-size:clamp(38px,3.9vw,74px)!important}
+.opening-title-core{
+  display:inline-block;position:relative;white-space:nowrap;
+  font-size:clamp(62px,7.65vw,144px)!important;font-weight:900;letter-spacing:-.10em;
+  padding-right:.14em;margin-top:-.03em;
+  transform:translateX(-.04em)
+}
+.opening-title-accent{color:var(--opening-gold)}
+.opening-title-stop{color:var(--opening-coral)}
+.opening-title-core::after{
+  content:"";position:absolute;height:5px;left:.05em;right:.3em;bottom:-.075em;
+  background:linear-gradient(90deg,var(--opening-coral),var(--opening-gold));
+  border-radius:6px;transform:rotate(-1.7deg)
+}
+.opening-title-scribble{
+  margin-top:clamp(17px,2.5vw,34px);
+  color:#c4e4e3;letter-spacing:.08em;
+  font-size:clamp(14px,1.3vw,21px)!important;font-weight:900;
+  transform:rotate(-2deg);border-bottom:1px dashed #bad6da66;padding:0 0 8px 2px
+}
+html body #prologue-section .hero-description.opening-description{
+  color:#e6efedf0!important;font-size:clamp(12px,.94vw,15px)!important;
+  font-weight:600;line-height:2.05!important;letter-spacing:.035em;
+  margin:clamp(22px,3vw,40px) 0 28px;max-width:450px;
+  text-shadow:0 3px 16px #020b16c8
+}
+html body #prologue-section .hero-description.opening-description strong{color:#ffe4b2!important;font-weight:850}
+html body #prologue-section .hero-cta-row.opening-actions{display:flex;align-items:center;flex-wrap:wrap;gap:clamp(14px,2vw,29px);margin:0!important;z-index:9}
+html body #prologue-section .primary-link.opening-main-action{
+  display:inline-flex;gap:25px;min-width:245px;min-height:78px;
+  border-radius:1px 25px 1px 25px;padding:13px 17px 13px 24px;
+  background:var(--opening-coral);box-shadow:0 15px 44px #020b1a5e;color:#fff;
+  transform:translateY(0);text-decoration:none;transition:transform .25s,box-shadow .25s,background .25s
+}
+.opening-main-action .action-label{display:flex;flex-direction:column;gap:3px;font-size:17px;font-weight:900;letter-spacing:.01em}
+.opening-main-action .action-label small{font:800 9px 'DM Sans',sans-serif;letter-spacing:.15em;color:#fff9d4}
+.opening-main-action .action-arrow{font:700 34px/1 'DM Sans',sans-serif}
+html body #prologue-section .primary-link.opening-main-action:hover{background:#ff7b55;transform:translateY(-4px);box-shadow:0 22px 55px #020b1a73}
+html body #prologue-section .journey-quickplay.opening-secondary-action{
+  display:inline-flex;align-items:center;gap:12px;min-height:50px;
+  color:#f5edcf!important;font-size:13px;text-decoration:none;font-weight:900;
+  border-bottom:1px solid #f5e2b88a;transition:transform .2s,border-color .2s
+}
+.opening-secondary-action:hover{transform:translateX(6px);border-color:var(--opening-coral)}
+.opening-handwritten{
+  position:absolute;right:-13%;bottom:2%;display:flex;align-items:center;gap:9px;white-space:nowrap;
+  transform:rotate(-7deg);font-size:clamp(11px,.95vw,15px);font-weight:800;letter-spacing:.06em;
+  color:#ffe4adcc;pointer-events:none
+}
+.opening-sketch-arrow{display:inline-block;font-size:45px;font-weight:300;transform:rotate(18deg)}
+html body #prologue-section .opening-tobito{
+  position:absolute;z-index:5;right:clamp(-25px,1vw,24px);bottom:clamp(34px,5vh,76px);
+  width:clamp(420px,56vw,940px);height:clamp(460px,81vh,970px);
+  display:grid;place-items:center;isolation:isolate;padding:0;border:0;background:none;
+  cursor:pointer;transform:translate3d(var(--hero-pointer-x),var(--hero-pointer-y),0)
+    translateY(calc(var(--opening-progress) * -72px)) scale(calc(1 - var(--opening-progress) * .1));
+  opacity:calc(1 - var(--opening-progress) * 1.2);filter:drop-shadow(-27px 32px 29px #050e19a0);
+  transition:filter .25s,opacity .18s;will-change:transform
+}
+.opening-tobito img{
+  position:relative;z-index:3;display:block;width:100%;height:100%;object-fit:contain;
+  transform-origin:50% 67%;animation:opening-tobito-float 5.1s cubic-bezier(.4,0,.6,1) infinite;
+  filter:drop-shadow(6px 15px 0 #172b3b30);
+  pointer-events:none;user-select:none
+}
+@keyframes opening-tobito-float{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-13px) rotate(2deg)}}
+.opening-tobito:hover img,.opening-tobito:focus-visible img{animation:opening-tobito-hello .45s ease-in-out infinite alternate}
+@keyframes opening-tobito-hello{to{transform:translateY(-15px) rotate(7deg)}}
+.opening-tobito.is-surprised img{animation:opening-tobito-surprise .52s ease-in-out 2}
+@keyframes opening-tobito-surprise{0%,100%{transform:translateY(0) rotate(0)}45%{transform:translateY(-48px) rotate(16deg)}}
+.opening-tobito:focus-visible{outline:3px dashed #ffdd85;outline-offset:-7px;border-radius:50%}
+.opening-tobito-backdrop{
+  position:absolute;inset:9% 12% 14% 15%;z-index:0;border-radius:49% 51% 54% 46%;
+  background:radial-gradient(circle at 55% 40%,#e4f7d744 0%,#ffc15f2d 35%,#5aabb81d 60%,transparent 72%);
+  filter:blur(18px)
+}
+.opening-tobito-orbit{position:absolute;z-index:1;pointer-events:none;border:1px dashed #f8c16a4f;border-radius:50%}
+.opening-tobito-orbit-a{width:78%;height:72%;transform:rotate(-28deg);animation:opening-ring-orbit 18s linear infinite}
+.opening-tobito-orbit-b{width:92%;height:82%;transform:rotate(21deg);border-color:#bedcdd50;animation:opening-ring-orbit 24s linear reverse infinite}
+@keyframes opening-ring-orbit{to{transform:rotate(360deg)}}
+.opening-tobito-speech{
+  position:absolute;z-index:5;top:19%;right:3%;padding:13px 19px;
+  border-radius:20px 20px 20px 4px;background:#fff3d7;
+  color:#174258;box-shadow:0 14px 35px #020d1a52;
+  font-size:clamp(10px,1vw,15px);font-weight:900;
+  transform:rotate(9deg);transition:transform .25s,opacity .25s;pointer-events:none
+}
+.opening-tobito:hover .opening-tobito-speech{transform:rotate(-6deg) scale(1.1)}
+.opening-strange-label{
+  position:absolute;z-index:8;right:clamp(18px,5vw,94px);top:clamp(130px,19vh,225px);
+  display:flex;flex-direction:column;gap:8px;max-width:190px;
+  transform:rotate(9deg);background:var(--opening-gold);color:#15364c;
+  border:2px solid #102d41;border-radius:4px 18px 3px 17px;
+  padding:16px 18px;box-shadow:9px 13px 0 #04182794;pointer-events:none;
+  animation:opening-annotation 5s ease-in-out infinite alternate
+}
+@keyframes opening-annotation{to{transform:rotate(5deg) translateY(-9px)}}
+.opening-strange-label>span{font-size:9px;font-weight:900;letter-spacing:.07em}
+.opening-strange-label>strong{font-size:clamp(13px,1.1vw,17px);line-height:1.6;letter-spacing:-.02em}
+.opening-strange-label>span:last-child{color:#b04632}
+.opening-vertical-serial{
+  position:absolute;z-index:4;right:12px;top:45%;writing-mode:vertical-rl;
+  font:800 10px/1 'DM Sans',sans-serif;letter-spacing:.2em;color:#e6e7dab3
+}
+.opening-secret{
+  position:absolute;z-index:11;right:clamp(55px,15vw,250px);bottom:clamp(90px,13vh,170px);
+  display:flex;align-items:center;gap:6px;padding:10px 13px;color:#f7cf92;
+  background:#071b2b88;border:1px dashed #ffd59d88;border-radius:22px;
+  cursor:pointer;transform:rotate(8deg);font-weight:900;
+  animation:opening-secret-gleam 2.3s ease-in-out infinite alternate
+}
+.opening-secret>span{font-size:22px}.opening-secret small{font-size:9px;white-space:nowrap}
+@keyframes opening-secret-gleam{to{filter:brightness(1.7);box-shadow:0 0 16px #ffc87155}}
+.opening-secret:focus-visible{outline:3px solid var(--opening-gold);outline-offset:3px}
+.opening-footer{
+  position:absolute;left:clamp(25px,5.6vw,100px);right:clamp(22px,4.5vw,74px);
+  bottom:clamp(21px,4.6vh,51px);z-index:10;
+  display:flex;justify-content:space-between;align-items:center;gap:24px;
+  padding-top:17px;border-top:1px solid #bfdfdb3d;
+  color:#d7e3d8a9;font:750 10px/1.4 'DM Sans','Noto Sans JP',sans-serif;letter-spacing:.13em
+}
+.opening-footer-status,.opening-footer-direction{display:inline-flex;align-items:center;gap:12px}
+.opening-live{width:7px;height:7px;border-radius:50%;background:#f7b860;box-shadow:0 0 11px #ffd36b;animation:opening-live-pulse 1.8s infinite alternate}
+@keyframes opening-live-pulse{to{opacity:.3}}
+.opening-footer-direction{color:#fbe7be;font-size:10px}
+.opening-scroll-arrow{display:inline-grid;place-items:center;width:35px;height:35px;border:1px solid #e6d0a16e;border-radius:50%;font-size:17px;animation:opening-scroll-bob 1.8s ease-in-out infinite}
+@keyframes opening-scroll-bob{50%{transform:translateY(7px)}}
+.opening-screen-reader{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+html body #prologue-section .opening-transition{
+  position:relative;min-height:64svh;display:flex;justify-content:center;
+  align-items:flex-start;gap:20px;padding-top:7svh;
+  color:#d3eae6a0;font-size:11px;letter-spacing:.16em;font-weight:900;
+  background:linear-gradient(180deg,#071c2b 0%,transparent 85%);
+  pointer-events:none
+}
+.opening-transition span:last-child{animation:opening-scroll-bob 1.8s ease-in-out infinite}
+html body #prologue-section .opening-legacy-stage{display:none!important}
+html.world-active #prologue-section:before{display:none!important}
+html.world-active #prologue-section .hero-content{filter:none!important}
+html.opening-at-top .journey-rail,html.opening-at-top .chaos-dashboard,html.opening-at-top .world-hud{opacity:0!important;pointer-events:none!important;visibility:hidden!important}
+html.opening-at-top .journey-buddy{display:none!important}
+html.world-active .opening-sticky{box-shadow:0 0 0 1px #071b2b}
+@media(max-width:1220px){
+  html body #prologue-section .hero-content.opening-copy{width:64%}
+  .opening-tobito{right:-6%!important;width:60vw!important}
+  .opening-strange-label{right:3%;top:18%}
+  .opening-title-core{font-size:clamp(60px,7vw,110px)!important}
+  .opening-handwritten{display:none}
+}
+@media(max-width:900px){
+  html body #prologue-section.hero-opening-scene{min-height:150svh!important}
+  html body #prologue-section .opening-sticky{min-height:600px}
+  html body #prologue-section .hero-content.opening-copy{top:35%;left:0;transform:translateY(-28%);width:82%;padding-left:clamp(25px,6vw,65px)!important}
+  .opening-title-lead{font-size:clamp(32px,5vw,53px)!important}
+  .opening-title-core{font-size:clamp(60px,9vw,100px)!important}
+  .opening-tobito{width:72vw!important;height:66vh!important;right:-10%!important;bottom:3%!important;opacity:calc(.9 - var(--opening-progress) * 1.2)!important}
+  .opening-strange-label{max-width:165px;top:15%;right:4%}
+  .opening-ceiling{height:40%}
+  .opening-vertical-serial,.opening-footer-coordinates{display:none}
+  .opening-runway{left:10%;width:100%}
+  html body #prologue-section .opening-transition{min-height:50svh}
+}
+@media(max-width:650px){
+  html body #prologue-section.hero-opening-scene{min-height:144svh!important}
+  html body #prologue-section .opening-sticky{height:100svh;min-height:590px}
+  html body #prologue-section .opening-topline{top:80px;left:20px;right:20px}
+  .opening-topline span:last-child{display:none}
+  html body #prologue-section .hero-content.opening-copy{
+    top:17%;transform:none;width:100%;
+    padding:0 20px!important;align-items:flex-start;
+  }
+  html body #prologue-section .opening-eyebrow{font-size:9px;margin-bottom:17px;gap:8px}
+  html body #prologue-section .opening-eyebrow .eyebrow-index{display:none}
+  html body #prologue-section h1#hero-title{width:100%}
+  .opening-title-lead{font-size:clamp(31px,7.5vw,45px)!important}
+  .opening-title-core{font-size:clamp(54px,12.9vw,82px)!important}
+  .opening-title-scribble{font-size:12px!important;margin-top:17px}
+  html body #prologue-section .hero-description.opening-description{font-size:11px!important;line-height:1.85!important;margin:22px 0 19px;max-width:76%}
+  html body #prologue-section .hero-cta-row.opening-actions{flex-direction:column;align-items:flex-start;gap:7px}
+  html body #prologue-section .primary-link.opening-main-action{
+    min-height:59px;min-width:194px;padding:10px 12px 10px 16px;border-radius:1px 18px 1px 18px
+  }
+  .opening-main-action .action-label{font-size:14px}
+  .opening-main-action .action-label small{font-size:8px}
+  .opening-main-action .action-arrow{font-size:27px}
+  html body #prologue-section .journey-quickplay.opening-secondary-action{font-size:11px;min-height:38px}
+  .opening-tobito{right:-31%!important;bottom:5%!important;width:101vw!important;height:56vh!important;opacity:calc(.87 - var(--opening-progress) * 1.1)!important;filter:drop-shadow(-10px 19px 15px #050e19a0)}
+  .opening-tobito-speech{top:14%;right:23%;padding:8px 12px;font-size:10px;transform:rotate(5deg)}
+  .opening-strange-label{display:none}
+  .opening-secret{right:15px;bottom:14%;padding:6px 8px}
+  .opening-secret small{display:none}
+  html body #prologue-section .opening-footer{bottom:22px;left:20px;right:20px;padding-top:12px;gap:10px;letter-spacing:.04em;font-size:9px}
+  .opening-footer-direction>span:first-child{font-size:8px}
+  .opening-footer-status{max-width:170px}
+  .opening-scroll-arrow{width:29px;height:29px}
+  .opening-runway{left:-30%;width:140%;bottom:-12%}
+  html body #prologue-section .opening-transition{min-height:44svh}
+}
+@media(max-height:700px) and (min-width:651px){
+  html body #prologue-section .opening-sticky{min-height:560px}
+  html body #prologue-section .opening-topline{top:70px}
+  html body #prologue-section .hero-content.opening-copy{top:45%}
+  .opening-title-core{font-size:clamp(60px,6.9vw,108px)!important}
+  .opening-tobito{height:84vh}
+}
+@media(prefers-reduced-motion:reduce){
+  .opening-tobito img,.opening-tobito-orbit,.opening-portal-light,.opening-shutter,
+  .opening-strange-label,.opening-secret,.opening-live,.opening-scroll-arrow{animation:none!important}
+  .opening-tobito,.opening-tobito-speech,.opening-main-action{transition:none!important}
+}
