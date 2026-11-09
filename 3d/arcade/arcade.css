@@ -1,0 +1,44 @@
+/* /3d/arcade/
+   The original simulation engines live in this isolated stage.
+   Styling changes only their frame, never their controls or game logic. */
+:root{--play-ink:#0b2137;--play-pale:#d6eef0;--play-mango:#eabe80;--play-cyan:#71ced6}
+html{scroll-behavior:auto!important}
+*,*::before,*::after{box-sizing:border-box}
+body.arcade-body{margin:0!important;background:transparent!important;color:#edf8f8!important;font-family:"Noto Sans JP",system-ui,sans-serif!important;overflow-x:hidden;min-width:0}
+body.arcade-body #arcade-content{padding:0 6px 12px;min-width:0}
+.arcade-skip{position:absolute;top:-100px;left:0;padding:10px;background:#ffdd82;z-index:50;color:#0d263f}
+.arcade-skip:focus-visible{top:0}
+.arcade-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px clamp(14px,3.2vw,38px);color:#eafafa;font-size:11px;letter-spacing:.13em;font-weight:900}
+.arcade-brand{display:flex;align-items:center;gap:12px;white-space:nowrap}
+.arcade-flair{display:grid;place-items:center;width:35px;height:35px;font-size:26px;line-height:1;border-radius:50%;background:#cdecee;color:#0c324c;animation:arcade-bloom 8s ease-in-out infinite}
+@keyframes arcade-bloom{50%{transform:rotate(130deg)}}
+#arcade-mode-caption{border:1px solid #91bcba70;border-radius:999px;padding:8px 14px;color:#a4d9df;text-align:right;letter-spacing:.06em}
+.arcade-loading{margin:0 12px 14px;padding:16px 20px;border-radius:18px;background:#193e57;color:#d7edf4;font-size:12px;font-weight:700}
+.arcade-body .arcade-block[hidden]{display:none!important}
+.arcade-body #aerolab,.arcade-body #flight{margin:0!important;padding:0!important;min-height:0!important;max-width:none!important;background:transparent!important;border:0!important}
+.arcade-body #aerolab>.max-w-7xl,.arcade-body #flight>.max-w-7xl{max-width:none!important;padding:0 7px!important}
+.arcade-body #aerolab>.max-w-7xl>div:first-child,.arcade-body #flight>.max-w-7xl>div:first-child{display:none!important}
+.arcade-body #aerolab .rounded-3xl,.arcade-body #flight #game-viewport-container,.arcade-body #flight #yakitori-viewport-container{border-radius:clamp(20px,3.7vw,46px)!important;overflow:hidden!important;border:1px solid rgba(156,208,216,.24)!important;box-shadow:0 20px 70px rgba(0,7,27,.34)!important}
+.arcade-body #aerolab .rounded-3xl{background:#0b1929!important;border:2px solid #29596b!important}
+.arcade-body #flight #game-viewport-container{min-height:360px!important;max-height:720px!important;background:#0b172c!important}
+.arcade-body #flight #yakitori-viewport-container{min-height:360px!important;max-height:720px!important}
+.arcade-body #wind-tunnel-canvas-container{min-height:390px;height:clamp(390px,41vw,570px)!important;background:#071828!important;cursor:grab}
+.arcade-body #game-touch-controls{border-radius:inherit;overflow:hidden}
+.arcade-body #aerolab .wind-flex-controls{padding:12px 18px!important}
+.arcade-body #flight .flight-session-toolbar{margin:0 7px 15px!important;padding:14px 18px!important;background:#193449!important;border-radius:20px!important;display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.arcade-body #flight .flight-session-toolbar label,.arcade-body #flight .flight-session-toolbar span{color:#e4e6e6!important}
+.arcade-body #tab-game-flight,.arcade-body #tab-game-yakitori{min-height:42px;border-radius:999px!important}
+.arcade-body #flight .flight-map-panel,.arcade-body #flight .flight-side-section{border-radius:22px!important;background:#0c1b2bdc!important;border:1px solid #2e4c5bb0;padding:16px}
+.arcade-body #flight .flight-map-panel{min-height:200px}
+.arcade-body #flight .flight-map-readouts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:10px}
+.arcade-body #flight .flight-side-section h3{color:#d5f2ee!important}
+.arcade-body .arcade-disclaimer{max-width:1100px;margin:21px auto 0;color:#a8b9be;font-size:10px;line-height:1.8;text-align:center;padding:0 18px}
+.arcade-body #game-view-yakitori>.max-w-4xl{max-width:100%!important}
+.arcade-body #game-view-yakitori .max-w-4xl>.flex{padding:14px}
+.arcade-body #game-view-yakitori .max-w-4xl button{border-radius:999px}
+.arcade-body button:focus-visible,.arcade-body select:focus-visible,.arcade-body input:focus-visible{outline:3px solid #f6c47d!important;outline-offset:3px!important}
+.arcade-body #flight #ranking-list-container{max-height:260px;overflow-y:auto}
+@media(min-width:1000px){.arcade-body #game-view-flight>.grid{grid-template-columns:minmax(0,1.9fr) minmax(245px,.8fr)!important;gap:24px!important}.arcade-body #flight #game-viewport-container{aspect-ratio:16/9;min-height:450px!important}}
+@media(max-width:800px){.arcade-header{padding:10px 10px 15px}.arcade-body #wind-tunnel-canvas-container{height:380px!important}.arcade-body #flight #game-viewport-container,.arcade-body #flight #yakitori-viewport-container{min-height:300px!important}.arcade-body #flight>.max-w-7xl{padding:0!important}.arcade-body #aerolab>.max-w-7xl{padding:0!important}.arcade-body #flight #game-view-flight>.grid{gap:15px!important}.arcade-body #flight .flight-session-toolbar{margin:0 3px 10px!important}}
+@media(max-width:600px){.arcade-header{font-size:9px;padding:10px}.arcade-brand{gap:5px}.arcade-flair{width:26px;height:26px;font-size:21px}.arcade-body #wind-tunnel-canvas-container{height:310px!important;min-height:310px}.arcade-body #flight #game-viewport-container,.arcade-body #flight #yakitori-viewport-container{min-height:270px!important}.arcade-body #game-touch-controls{padding:8px!important}.arcade-body #flight .flight-session-toolbar{padding:9px!important;gap:8px!important}.arcade-body #aerolab .rounded-3xl{border-radius:22px!important}.arcade-body #aerolab .p-6{padding:13px!important}.arcade-body #flight #game-view-flight>.grid{display:block!important}.arcade-body #flight #game-view-flight>.grid>div:last-child{margin-top:12px}.arcade-body #flight #game-viewport-container{max-height:none!important}}
+@media(prefers-reduced-motion:reduce){.arcade-flair{animation:none!important}}
