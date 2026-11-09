@@ -17,9 +17,9 @@ for source in index.php page-tobito.php data.php includes/header.php includes/fo
     php -l "$source"
 done
 
-# Replace the static preview only after PHP has rendered successfully.
+# Build a legacy PHP preview without overwriting the tracked Pages 3D entrance.
 preview_file="$(mktemp "$BASE_DIR/.preview.XXXXXX")"
 trap 'rm -f "$preview_file"' EXIT
 php index.php > "$preview_file"
-mv "$preview_file" index.html
+mv "$preview_file" preview.html
 bash scripts/sync_wordpress.sh
