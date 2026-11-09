@@ -14,7 +14,7 @@ test('3D page includes all interactive sections and fallback art', () => {
     assert.match(html, new RegExp('id="' + anchor + '"'), anchor);
   }
   assert.match(html, /tobito_pose_airplane\.png/);
-  assert.match(html, /assets\/js\/tobito-3d-world\.js/);
+  assert.match(html, /src="\.\/world\.js"/);
   assert.match(html, /assets\/js\/s320-model\.js/);
 });
 
