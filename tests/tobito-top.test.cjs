@@ -84,3 +84,15 @@ test('arcade uses one active game and pauses persistent 3D world',()=>{
   assert.match(read('3d/gameport.css'),/border-radius/);
   assert.match(read('3d/arcade/arcade.css'),/border-radius/);
 });
+
+test('organic design polish loads after original layout and does not damage touch controls',()=>{
+  const page=read('3d/index.html');
+  const css=read('3d/polish.css');
+  assert.match(page,/href="\.\/polish\.css"/);
+  assert.match(css,/\.oddities-board/);
+  assert.match(css,/\.wind-lab-layout/);
+  assert.match(css,/\.journey-rail/);
+  assert.match(css,/\.chaos-toolbar/);
+  assert.match(css,/border-radius/);
+  assert.match(css,/prefers-reduced-motion/);
+});
