@@ -4,7 +4,7 @@ set -euo pipefail
 BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$BASE_DIR"
 
-for source in prologue-scroll s320-model s320-aig-hero game flight-ranking wind-tunnel tobito-dialogue tbt-hangar-console yakitori-game site-ui site-theme tobito-companion birdman-course flight-scenery contest-venue tobito-surf-core tobito-surf-demo active-theory-archive; do
+for source in prologue-scroll tobito-3d-world s320-model s320-aig-hero game flight-ranking wind-tunnel tobito-dialogue tbt-hangar-console yakitori-game site-ui site-theme tobito-companion birdman-course flight-scenery contest-venue tobito-surf-core tobito-surf-demo active-theory-archive; do
     node --check "assets/js/$source.js"
 done
 node --check extensions/tobito-surfing/content.js
