@@ -1,0 +1,184 @@
+/* TOBITO / INTERACTIVE 3D STUDIO
+   An additive layer for the existing scroll-driven brand prologue.
+   The official illustration remains readable when WebGL is unavailable. */
+
+#prologue-giant-wrap {
+  isolation: isolate;
+}
+
+#tobito-3d-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: auto;
+  touch-action: pan-y;
+  cursor: grab;
+  transition: opacity 420ms ease;
+}
+
+#tobito-3d-stage:active {
+  cursor: grabbing;
+}
+
+#tobito-3d-stage canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  pointer-events: auto;
+  touch-action: pan-y;
+  outline: none;
+}
+
+.tobito-3d-ready:not(.tobito-3d-fallback) #tobito-3d-stage {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tobito-3d-ready:not(.tobito-3d-fallback) #prologue-giant-tobito {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.tobito-3d-ready:not(.tobito-3d-fallback) #prologue-small-tobito {
+  opacity: 0 !important;
+}
+
+#tobito-3d-controls {
+  position: absolute;
+  z-index: 19;
+  top: 26%;
+  right: clamp(1rem, 3.5vw, 4.2rem);
+  display: none;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+  max-width: calc(100% - 2rem);
+}
+
+.tobito-3d-ready:not(.tobito-3d-fallback) #tobito-3d-controls {
+  display: flex;
+}
+
+.tobito-3d-eyebrow {
+  display: block;
+  margin-bottom: 0.35rem;
+  padding: 0.42rem 0.7rem;
+  font: 700 0.63rem/1.2 "JetBrains Mono", monospace;
+  letter-spacing: 0.08em;
+  color: #396d85;
+  background: rgba(255,255,255,0.76);
+  border: 1px solid rgba(83,155,181,0.15);
+}
+
+.tobito-3d-tool {
+  min-width: 6.65rem;
+  min-height: 2.75rem;
+  padding: 0.65rem 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.62rem;
+  border-radius: 2px;
+  border: 1px solid rgba(76, 135, 163, 0.22);
+  background: rgba(255, 255, 255, 0.91);
+  box-shadow: 0 7px 25px rgba(20, 90, 126, 0.075);
+  color: #194960;
+  font-family: "Noto Sans JP", sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 160ms ease, transform 160ms ease, border-color 160ms ease;
+}
+
+.tobito-3d-tool svg {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  stroke: currentColor;
+}
+
+.tobito-3d-tool:hover {
+  border-color: #4d96b9;
+  background: #f1fbff;
+  transform: translateX(-3px);
+}
+
+.tobito-3d-tool:active {
+  transform: translateX(0) scale(0.97);
+}
+
+.tobito-3d-tool:focus-visible {
+  outline: 3px solid #047ba8;
+  outline-offset: 3px;
+}
+
+.tobito-3d-tool[data-emphasis="true"] {
+  background: #155872;
+  border-color: #155872;
+  color: #fff;
+}
+
+.tobito-3d-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+#prologue-section.tobito-3d-ready .prologue-brand-watermark {
+  -webkit-text-stroke-color: rgba(13, 83, 112, 0.12);
+}
+
+@media (max-width: 760px) {
+  #tobito-3d-controls {
+    top: 18%;
+    right: 0.7rem;
+    gap: 0.35rem;
+  }
+
+  .tobito-3d-eyebrow {
+    max-width: 9rem;
+    text-align: right;
+    font-size: 0.54rem;
+  }
+
+  .tobito-3d-tool {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    width: 2.75rem;
+    padding: 0.45rem;
+  }
+
+  .tobito-3d-tool .tobito-3d-tool-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #tobito-3d-controls {
+    display: none !important;
+  }
+  #tobito-3d-stage,
+  .tobito-3d-tool {
+    transition: none !important;
+  }
+}
