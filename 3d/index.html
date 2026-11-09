@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="./journey.css">
   <link rel="stylesheet" href="./chaos.css">
   <link rel="stylesheet" href="./cinematic.css">
+  <link rel="stylesheet" href="./gameport.css">
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
@@ -28,6 +29,7 @@
   <script defer src="./play.js"></script>
   <script defer src="./journey.js"></script>
   <script defer src="./chaos.js"></script>
+  <script defer src="./gameport.js"></script>
 </head>
 <body>
   <div id="journey-world" class="journey-world" aria-hidden="true"></div>
@@ -40,11 +42,11 @@
       <span class="brand-words"><strong>とびとくんのひみつ基地</strong><small>TEAM BIRDMAN TRIAL</small></span>
     </a>
     <nav class="site-nav" aria-label="メインメニュー">
-      <a href="#play">遊ぶ</a>
+      <a href="#play">ゲーム</a>
       <a href="#about">とびとくん</a>
       <a href="#poses">旅の記録</a>
       <a href="#oddities">とびとを探せ</a>
-      <a href="#wind-lab">へんな風洞</a>
+      <a href="#wind-lab">風洞</a>
       <a href="#hangar">格納庫</a>
       <a href="#takeoff">ゴール</a>
     </nav>
@@ -52,7 +54,7 @@
       <button id="world-motion" type="button" aria-pressed="true">動きを止める</button>
       <button id="world-sound" type="button" aria-pressed="false">音を鳴らす</button>
     </div>
-    <a class="header-back" href="../legacy.html#flight">フライトゲーム <span aria-hidden="true">↗</span></a>
+    <a class="header-back" href="#play">ゲームを遊ぶ <span aria-hidden="true">↗</span></a>
   </header>
 
   <nav class="journey-rail" aria-label="とびとくんとの旅のチェックポイント">
@@ -193,7 +195,37 @@
             <p class="section-small">誰かが実験装置の電源を入れっぱなしにした。</p>
             <h2 id="play-title">ちょっと、<br><span>試運転。</span></h2>
           </div>
-          <p>飛ぶ。逃げる。風をつかまえる。<br>気になったところから、好きに遊んでね。</p>
+          <p>元のフライトゲームとやきとり脱出を、<br>このページの中でそのまま遊べるようにした。</p>
+        </div>
+
+        <div class="arcade-showcase" id="arcade-showcase" aria-labelledby="arcade-showcase-title">
+          <div class="arcade-showcase-head">
+            <div>
+              <span class="arcade-serial">ORIGINAL / THE REAL GAMES</span>
+              <h3 id="arcade-showcase-title">空を飛ぶか。<br><em>焼き鳥になるか。</em></h3>
+            </div>
+            <p>旧サイトのゲームエンジンを移植。<br>新サイトを離れずに遊べます。</p>
+          </div>
+          <div class="arcade-selector" role="group" aria-label="移植ゲームを選択">
+            <button type="button" class="arcade-switch is-selected" data-arcade-mode="flight" aria-pressed="true">
+              <span class="arcade-switch-number">01 / FLY</span><b>琵琶湖フライト</b><small>3D・操縦桿・ペダル</small>
+            </button>
+            <button type="button" class="arcade-switch" data-arcade-mode="yakitori" aria-pressed="false">
+              <span class="arcade-switch-number">02 / ESCAPE</span><b>やきとり脱出</b><small>ジャンプ・しゃがむ</small>
+            </button>
+          </div>
+          <div class="arcade-portal" data-arcade-host="games">
+            <div class="arcade-ready-screen" data-arcade-placeholder="games">
+              <div class="arcade-ready-ring" aria-hidden="true"></div>
+              <img src="../assets/images/tobito_pose_airplane.png" alt="" aria-hidden="true" loading="lazy">
+              <div><span>FLIGHT DECK IS READY.</span><h4>操縦席へようこそ。</h4><p>操作したら元のゲームが、この場所に起動します。最初は読み込まず、3Dの負荷を抑えています。</p>
+                <button type="button" class="arcade-start" data-arcade-launch="flight">フライトゲームを起動 <span aria-hidden="true">↗</span></button>
+              </div>
+            </div>
+            <div class="arcade-frame-wrap" data-arcade-frame="games" hidden></div>
+            <p class="arcade-engine-status" data-arcade-status="games" role="status" aria-live="polite"></p>
+          </div>
+          <div class="arcade-footer"><span><span class="arcade-engine-indicator"></span> ORIGINAL GAME ENGINES / PORTED INTACT</span><a href="../legacy.html#flight">旧版も見る ↗</a></div>
         </div>
 
         <div class="play-layout">
@@ -232,21 +264,13 @@
             <div class="wind-foot"><span>GOAL <b>100 PTS</b></span><div class="wind-goal-track"><span id="wind-progress"></span></div><span>100+</span></div>
           </div>
 
-          <div class="game-doors" aria-label="元のゲームと実験室">
-            <a class="game-door door-flight" href="../legacy.html#flight">
-              <span class="door-top"><b>ORIGINAL / 01</b><span aria-hidden="true">↗</span></span>
-              <div><span class="door-icon" aria-hidden="true">✈</span><h3>琵琶湖フライト</h3><p>人力飛行機を操縦して、遠くまで飛ぼう。<br>ペダル、操縦桿、着水、ランキング。</p></div>
-              <span class="door-bottom">3D FLIGHT GAME <b>PLAY →</b></span>
-            </a>
-            <a class="game-door door-yakitori" href="../legacy.html?game=yakitori#flight">
-              <span class="door-top"><b>ORIGINAL / 02</b><span aria-hidden="true">↗</span></span>
-              <div><span class="door-icon" aria-hidden="true">♨</span><h3>やきとり脱出</h3><p>逃げ切れるか、とびとくん。<br>あのサバイバルゲームもそのまま復活。</p></div>
-              <span class="door-bottom">SURVIVAL GAME <b>PLAY →</b></span>
-            </a>
-            <a class="game-lab-link" href="../legacy.html#aerolab"><span>風洞シミュレーターも遊べます</span><b>風の実験室へ ↗</b></a>
+          <div class="bonus-side-story">
+            <span>BONUS / 25 SECOND GAME</span>
+            <p>もっと飛びたいとびと君のために、追い風を集めるおまけのゲーム。旧作とは別の新しい遊びです。</p>
+            <a href="#wind-lab">次は本物の風洞へ <span aria-hidden="true">↗</span></a>
           </div>
         </div>
-        <p class="play-clarification">※ 琵琶湖フライト・やきとり脱出は従来のゲーム画面に移動します。旧版のすべての機能を残したまま、新しい3D体験を追加しています。</p>
+        <p class="play-clarification">※ フライト・やきとり脱出は既存のゲームプログラムを利用しています。GitHub Pages版ではサーバー共有ランキングは利用できず、端末内の記録になります。</p>
       </div>
     </section>
 
@@ -298,10 +322,24 @@
       <div class="wind-lab-inner">
         <div class="wind-lab-stamp">実験番号 0000-A / 上司には秘密</div>
         <header class="wind-lab-intro">
-          <p class="absurd-eyebrow">IT'S SCIENCE. PROBABLY.</p>
-          <h2 id="wind-lab-heading">風洞に、<br><span>なんでも入れるな。</span></h2>
-          <p>「とびとくんに関係ある？」と聞かれたら、すべて「空気力学です」と答えてください。</p>
+          <p class="absurd-eyebrow">AERODYNAMICS / ACTUAL SIMULATOR</p>
+          <h2 id="wind-lab-heading">本物の風洞が、<br><span>帰ってきた。</span></h2>
+          <p>旧サイトのS-320風洞シミュレーターを、そのままここへ。風速・迎角・流線・翼のしなりを動かせます。</p>
         </header>
+        <div class="original-wind" id="original-wind">
+          <div class="original-wind-header"><span><span class="wind-ready-dot"></span> ORIGINAL WIND TUNNEL / S-320</span><b>シミュレーション / 簡易空力モデル</b></div>
+          <div class="arcade-portal" data-arcade-host="wind">
+            <div class="arcade-ready-screen wind-ready-screen" data-arcade-placeholder="wind">
+              <div class="arcade-ready-ring" aria-hidden="true"></div>
+              <div><span>REAL WIND TUNNEL / RETURNED.</span><h3>風が、見える。</h3><p>流線、翼の変形、迎角と風速の関係。元の風洞エンジンをこのページで直接動かせます。</p>
+                <button type="button" class="arcade-start" data-arcade-launch="wind">S-320風洞を起動する <span aria-hidden="true">↗</span></button>
+              </div>
+            </div>
+            <div class="arcade-frame-wrap" data-arcade-frame="wind" hidden></div>
+            <p class="arcade-engine-status" data-arcade-status="wind" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+        <div class="absurd-heading"><span>SIDE EXPERIMENT / DO NOT TRY AT HOME</span><h3>ところで、ラーメンは飛ぶのか。</h3><p>ここから先は航空力学とは関係ありません。余計な実験です。</p></div>
         <div class="wind-lab-layout">
           <div class="absurd-tunnel">
             <div class="absurd-tunnel-top"><span>非公式 なんでも風洞</span><strong id="wind-experiment-no">EXPERIMENT 001</strong></div>
@@ -328,7 +366,7 @@
               <button type="button" id="absurd-reset">元に戻す</button>
             </div>
             <p id="absurd-comment" class="absurd-comment" role="status" aria-live="polite">本実験は真面目な空気力学を一切保証しません。</p>
-            <a href="../legacy.html#aerolab" class="absurd-serious-link">本当の風洞シミュレーターはこちら ↗</a>
+            <a href="#original-wind" class="absurd-serious-link">上にあるS-320風洞へ戻る ↗</a>
           </div>
         </div>
       </div>
