@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="./studio.css">
   <link rel="stylesheet" href="./play.css">
   <link rel="stylesheet" href="./journey.css">
+  <link rel="stylesheet" href="./chaos.css">
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
@@ -25,6 +26,7 @@
   <script defer src="./studio.js"></script>
   <script defer src="./play.js"></script>
   <script defer src="./journey.js"></script>
+  <script defer src="./chaos.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">本文へスキップ</a>
@@ -38,6 +40,8 @@
       <a href="#play">遊ぶ</a>
       <a href="#about">とびとくん</a>
       <a href="#poses">旅の記録</a>
+      <a href="#oddities">とびとを探せ</a>
+      <a href="#wind-lab">へんな風洞</a>
       <a href="#hangar">格納庫</a>
       <a href="#takeoff">ゴール</a>
     </nav>
@@ -47,6 +51,7 @@
   <nav class="journey-rail" aria-label="とびとくんとの旅のチェックポイント">
     <a href="#prologue-section" data-rail-step="start" aria-current="step"><b>00</b><span>合流</span></a>
     <a href="#poses" data-rail-step="practice"><b>01</b><span>特訓</span></a>
+    <a href="#oddities" data-rail-step="oddities"><b>?</b><span>迷子</span></a>
     <a href="#hangar" data-rail-step="hangar"><b>02</b><span>格納庫</span></a>
     <a href="#takeoff" data-rail-step="takeoff"><b>GOAL</b><span>離陸</span></a>
   </nav>
@@ -61,6 +66,17 @@
     </button>
     <span id="buddy-live" class="journey-visually-hidden" role="status" aria-live="polite"></span>
   </div>
+
+  <aside class="chaos-dashboard" id="chaos-dashboard" aria-label="異常現象コントロール">
+    <div class="chaos-marquee" aria-hidden="true"><span>ただいま基地内で意味不明な事件が発生しています　／　とびとくんがどこかにいます　／　風洞にラーメンを入れないでください　／　</span></div>
+    <div class="chaos-toolbar">
+      <span class="chaos-live-dot" aria-hidden="true"></span><strong>異常現象 <span id="chaos-counter">0</span>件</strong>
+      <button type="button" id="chaos-trigger">押してはいけない</button>
+      <button type="button" id="chaos-toggle" aria-pressed="true">演出を止める</button>
+    </div>
+    <div id="chaos-fall" aria-hidden="true"></div>
+    <p class="chaos-notice" id="chaos-notice" role="status" aria-live="polite"></p>
+  </aside>
 
   <main id="main">
     <section id="prologue-section" data-journey-step="start" class="hero" aria-labelledby="hero-title">
@@ -224,6 +240,90 @@
           </div>
         </div>
         <p class="play-clarification">※ 琵琶湖フライト・やきとり脱出は従来のゲーム画面に移動します。旧版のすべての機能を残したまま、新しい3D体験を追加しています。</p>
+      </div>
+    </section>
+
+    <section id="oddities" data-journey-step="oddities" class="oddities-section" aria-labelledby="oddities-heading">
+      <div class="oddities-inner">
+        <div class="oddities-overline"><span>緊急指令 047 / 捜索願</span><span>普通のサイトには戻れません</span></div>
+        <div class="oddities-intro">
+          <p class="absurd-eyebrow">SOMEONE IS MISSING.</p>
+          <h2 id="oddities-heading">とびとくんを、<br><span>探せ。</span></h2>
+          <p>格納庫でとびと君が行方不明になりました。<br>なぜか冷蔵庫とラーメンと謎のロボットまでいます。<br>この絵の中から<strong>6つの捜索対象</strong>を見つけてください。</p>
+          <span class="oddities-warning">※ これは完全オリジナルの「さがしものゲーム」です。収拾はつきません。</span>
+        </div>
+        <div class="oddities-layout">
+          <div class="oddities-board">
+            <div class="oddities-board-top">
+              <div><span class="board-led" aria-hidden="true"></span><b>HANGAR CCTV / 変なもの発見カメラ</b></div>
+              <div class="board-tools">
+                <button type="button" id="find-zoom-out" aria-label="絵を縮小">−</button>
+                <span id="find-zoom-label" aria-live="off">100%</span>
+                <button type="button" id="find-zoom-in" aria-label="絵を拡大">＋</button>
+                <button type="button" id="find-reset-view">全体表示</button>
+              </div>
+            </div>
+            <div id="find-viewport" class="find-viewport" role="region" aria-label="さがしものゲームの格納庫。ドラッグで移動、ボタンで拡大縮小できます。">
+              <div id="find-scene" class="find-scene">
+                <svg id="find-art" viewBox="0 0 1440 880" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="機械やニワトリや変なものがぎっしり詰まった架空の格納庫"></svg>
+                <div id="find-hits" class="find-hits"></div>
+              </div>
+              <div class="find-hint-marker" id="find-hint-marker" hidden aria-hidden="true"></div>
+            </div>
+            <div class="oddities-board-bottom"><span>移動：ドラッグ / 拡大：＋− / さがす：タップ</span><span id="find-found-count">0 / 6 発見</span></div>
+          </div>
+          <div class="find-mission">
+            <div class="find-mission-head"><span>SEARCH MISSION</span><strong>捜索リスト</strong></div>
+            <ol id="find-list" class="find-list"></ol>
+            <p id="find-result" class="find-result" role="status" aria-live="polite">とびと君「見つけたら教えてトビ！」</p>
+            <div class="find-actions">
+              <button type="button" id="find-hint">ヒントを使う <span id="find-hints-used">0</span>回</button>
+              <button type="button" id="find-restart">最初から探す</button>
+            </div>
+            <button type="button" class="find-share" id="find-share">捜索結果をシェアする ↗</button>
+            <p class="find-aside">6つ全部見つけると、なぜか「秘密基地名誉捜索隊員」に認定されます。資格としての価値はありません。</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="wind-lab" class="wind-lab" aria-labelledby="wind-lab-heading">
+      <div class="wind-lab-inner">
+        <div class="wind-lab-stamp">実験番号 0000-A / 上司には秘密</div>
+        <header class="wind-lab-intro">
+          <p class="absurd-eyebrow">IT'S SCIENCE. PROBABLY.</p>
+          <h2 id="wind-lab-heading">風洞に、<br><span>なんでも入れるな。</span></h2>
+          <p>「とびとくんに関係ある？」と聞かれたら、すべて「空気力学です」と答えてください。</p>
+        </header>
+        <div class="wind-lab-layout">
+          <div class="absurd-tunnel">
+            <div class="absurd-tunnel-top"><span>非公式 なんでも風洞</span><strong id="wind-experiment-no">EXPERIMENT 001</strong></div>
+            <div id="absurd-wind-stage" class="absurd-wind-stage" aria-label="おかしなものを飛ばす風洞の実験画面">
+              <div class="wind-tunnel-grill" aria-hidden="true"></div>
+              <div class="absurd-airflow" id="absurd-airflow" aria-hidden="true"></div>
+              <div class="absurd-object" id="absurd-object" aria-hidden="true"><span id="absurd-object-icon">🍜</span><strong id="absurd-object-label">ラーメン</strong></div>
+              <div class="wind-tunnel-fan" aria-hidden="true"><span>✳</span></div>
+              <span class="wind-tunnel-label" aria-hidden="true">風向 → → → → →</span>
+            </div>
+            <div class="wind-readouts">
+              <span>風速 <b><span id="absurd-speed-readout">12</span> m/s</b></span>
+              <span>飛距離（おおよそ） <b><span id="absurd-distance">0.0</span> m</b></span>
+              <span>状態 <b id="absurd-state">発射待ち</b></span>
+            </div>
+          </div>
+          <div class="absurd-console">
+            <span class="console-overline">風洞の持ち込みリスト（審査なし）</span>
+            <div id="wind-object-choices" class="wind-object-choices" role="group" aria-label="風洞に入れるもの"></div>
+            <label class="absurd-wind-control" for="absurd-speed">風速 <b id="absurd-speed-label">12 m/s</b></label>
+            <input type="range" id="absurd-speed" min="0" max="50" step="1" value="12" aria-label="風洞の風速">
+            <div class="absurd-actions">
+              <button type="button" id="absurd-fire">送風開始！ →</button>
+              <button type="button" id="absurd-reset">元に戻す</button>
+            </div>
+            <p id="absurd-comment" class="absurd-comment" role="status" aria-live="polite">本実験は真面目な空気力学を一切保証しません。</p>
+            <a href="../legacy.html#aerolab" class="absurd-serious-link">本当の風洞シミュレーターはこちら ↗</a>
+          </div>
+        </div>
       </div>
     </section>
 
