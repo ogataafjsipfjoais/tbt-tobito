@@ -23,12 +23,14 @@ require_once __DIR__ . '/includes/header.php';
 <link rel="stylesheet" href="<?= e(tobito_asset_url('assets/css/tobito-profile.css')) ?>">
 <link rel="stylesheet" href="<?= e(tobito_asset_url('assets/css/site-ui.css')) ?>">
 <link rel="stylesheet" href="<?= e(tobito_asset_url('assets/css/site-theme.css')) ?>">
+<link rel="stylesheet" href="<?= e(tobito_asset_url('assets/css/tobito-3d-world.css')) ?>">
 
 <!-- アクセシビリティ & 多言語対応エンジン (i18n & Font Scaling) -->
 <script src="<?= e(tobito_asset_url('assets/js/tbt-accessibility-i18n.js')) ?>"></script>
 
 <!-- プロローグ・スクロール駆動パララックスエンジン -->
 <script src="<?= e(tobito_asset_url('assets/js/prologue-scroll.js')) ?>"></script>
+<script src="<?= e(tobito_asset_url('assets/js/tobito-3d-world.js')) ?>"></script>
 
 <main class="tobito-site space-y-0 overflow-x-hidden">
     <div class="site-display-tools"><label for="site-theme"><i class="fa-solid fa-circle-half-stroke" aria-hidden="true"></i> 表示</label><select id="site-theme" aria-label="表示テーマ"><option value="system">自動</option><option value="light">ライト</option><option value="dark">ダーク</option></select></div>
@@ -54,11 +56,25 @@ require_once __DIR__ . '/includes/header.php';
 
             <!-- 巨大手描きとびとくん (頭部が画面上端から大胆にはみ出す構図) -->
             <div id="prologue-giant-wrap">
-                <img id="prologue-giant-tobito" 
-                     src="assets/images/tobito_pose_airplane.png" 
-                     alt="巨大手描きとびとくん" 
+                <img id="prologue-giant-tobito"
+                     src="assets/images/tobito_pose_airplane.png"
+                     alt="とびとくんの公式イラスト。3D表示に対応していない環境でも表示されます"
                      class="select-none pointer-events-none">
+                <div id="tobito-3d-stage"></div>
             </div>
+            <div id="tobito-3d-controls" role="group" aria-label="とびとくん3D操作">
+                <span class="tobito-3d-eyebrow" aria-hidden="true">3D TOBITO / DRAG TO ROTATE</span>
+                <button type="button" class="tobito-3d-tool" id="tobito-3d-rotate" aria-label="とびとくんを90度回す">
+                    <i class="fa-solid fa-rotate" aria-hidden="true"></i><span class="tobito-3d-tool-label">回してみる</span>
+                </button>
+                <button type="button" class="tobito-3d-tool" id="tobito-3d-flap" data-emphasis="true" aria-label="とびとくんを羽ばたかせる">
+                    <i class="fa-solid fa-feather" aria-hidden="true"></i><span class="tobito-3d-tool-label">羽ばたく</span>
+                </button>
+                <button type="button" class="tobito-3d-tool" id="tobito-3d-reset" aria-label="とびとくんを正面に戻す">
+                    <i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i><span class="tobito-3d-tool-label">正面に戻す</span>
+                </button>
+            </div>
+            <p id="tobito-3d-notice" class="tobito-3d-status" role="status" aria-live="polite"></p>
 
             <!-- 遠くに浮かぶ小さなとびとくん (多重平面パララックス) -->
             <div id="prologue-small-tobito">
