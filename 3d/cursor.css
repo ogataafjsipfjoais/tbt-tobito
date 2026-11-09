@@ -1,0 +1,26 @@
+/* Cursor: alive, nosy, a little excessive, but never blocks clicks. */
+.tobito-cursor{position:fixed;z-index:190;left:0;top:0;pointer-events:none;width:74px;height:74px;transform:translate3d(-150px,-150px,0);opacity:0;contain:layout style;will-change:transform}
+.tobito-cursor.is-visible{opacity:1}
+.tobito-cursor-ring{position:absolute;inset:7px;border:1.5px solid #f0d5a0c9;border-radius:50%;box-shadow:0 0 0 2px #123e5545,0 0 24px 4px #80d9e748;transition:transform .2s ease,background .2s}
+.tobito-cursor-eye{position:absolute;top:20px;left:19px;width:36px;height:35px;background:#fffbee;border-radius:38% 38% 50% 50%;border:1px solid #1b455b;box-shadow:0 4px 9px #1b455b44;display:flex;justify-content:center;align-items:center;gap:6px;transform:translate3d(calc(var(--cursor-eye-x,0)*3px),calc(var(--cursor-eye-y,0)*3px),0)}
+.tobito-cursor-eye:before,.tobito-cursor-eye:after{content:"";height:8px;width:4px;border-radius:50%;background:#182f43}
+.tobito-cursor-beak{position:absolute;top:43px;left:31px;width:13px;height:10px;background:#f4c658;clip-path:polygon(0 0,100% 0,50% 100%)}
+.tobito-cursor-comb{position:absolute;left:32px;top:11px;background:#d74537;width:15px;height:14px;border-radius:60% 80% 30% 40%;transform:rotate(-24deg)}
+.tobito-cursor-caption{position:absolute;top:70px;left:50%;transform:translateX(-50%);min-width:67px;padding:6px 10px;border-radius:30px;background:#183f57;color:#fff8ed;font-size:10px;font-weight:900;white-space:nowrap;text-align:center;box-shadow:0 5px 12px #123e5540}
+.tobito-cursor.is-action .tobito-cursor-ring{transform:scale(1.16);background:#effce22b;box-shadow:0 0 0 9px #cbe9de2f}
+.tobito-cursor.is-action .tobito-cursor-eye{transform:scale(1.12)}
+.tobito-cursor.is-down .tobito-cursor-ring{transform:scale(.72);background:#ffd8986b}
+.tobito-cursor.is-down .tobito-cursor-eye{transform:scale(.87)}
+.cursor-wind-trail{position:fixed;z-index:188;pointer-events:none;width:12px;height:12px;left:0;top:0;border-radius:40% 70% 60% 50%;background:#f7deaa;box-shadow:0 0 12px #eaf7e87b;animation:cursor-trail-away var(--trail-lifetime,.7s) ease-out forwards;opacity:.75}
+.cursor-wind-trail:before{content:"";position:absolute;inset:5px -9px 5px 0;border-top:1px solid #a6e1de70;transform:rotate(-15deg)}
+@keyframes cursor-trail-away{0%{opacity:.9;transform:translate(var(--trail-x),var(--trail-y)) scale(1) rotate(0)}100%{opacity:0;transform:translate(calc(var(--trail-x) - 24px),calc(var(--trail-y) - 54px)) scale(.1) rotate(210deg)}}
+.cursor-burst{position:fixed;z-index:190;pointer-events:none;left:0;top:0;font-size:clamp(18px,2vw,32px);font-weight:900;line-height:1;animation:cursor-burst .85s cubic-bezier(.1,.6,.3,1) forwards;filter:drop-shadow(0 2px 4px #1f394d44);user-select:none}
+@keyframes cursor-burst{0%{transform:translate(var(--burst-x),var(--burst-y)) scale(.3) rotate(0);opacity:0}18%{opacity:1}100%{transform:translate(calc(var(--burst-x) + var(--burst-dx)),calc(var(--burst-y) + var(--burst-dy))) scale(1.1) rotate(var(--burst-spin));opacity:0}}
+.cursor-eye-target{position:relative}
+.cursor-secret-shiver{animation:cursor-shiver .38s ease-in-out 2}
+@keyframes cursor-shiver{0%,100%{transform:none}35%{transform:rotate(-2deg) translateX(-2px)}68%{transform:rotate(2deg) translateX(3px)}}
+.world-active #prologue-section .hero h1{transform:translate3d(calc(var(--look-x,0)*-1px),calc(var(--look-y,0)*-1px),0);transition:transform .18s ease-out}
+.goods-workshop .goods-print{transform:translate3d(0,0,0)}
+.goods-workshop .goods-print:hover{cursor:zoom-in}
+@media(pointer:coarse),(hover:none){.tobito-cursor,.cursor-wind-trail{display:none!important}}
+@media(prefers-reduced-motion:reduce){.tobito-cursor,.cursor-wind-trail,.cursor-burst{display:none!important}.world-active #prologue-section .hero h1{transform:none!important}.cursor-secret-shiver{animation:none!important}}
