@@ -1,0 +1,56 @@
+/* Tobito legacy prologue: preserve the playful paths when 3D is added. */
+#prologue-pinned-stage .tobito-world-shortcuts {
+  position:absolute;
+  z-index:60;
+  bottom:17px;
+  left:clamp(12px,2.4vw,36px);
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  max-width:calc(100% - 24px);
+}
+#prologue-pinned-stage .tobito-world-shortcuts a {
+  display:inline-flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-height:43px;
+  padding:9px 13px;
+  border:1px solid rgba(21,73,100,.25);
+  background:rgba(255,255,255,.95);
+  color:#193e59;
+  font:800 12px/1.2 "Noto Sans JP",sans-serif;
+  text-decoration:none;
+  box-shadow:0 4px 18px rgba(14,36,53,.08);
+  transition:transform .16s ease,background .16s ease;
+}
+#prologue-pinned-stage .tobito-world-shortcuts a:first-child {
+  background:#173d70;
+  color:#fff;
+}
+#prologue-pinned-stage .tobito-world-shortcuts a:hover {
+  transform:translateY(-2px);
+  background:#d9f2fa;
+  color:#0c354e;
+}
+#prologue-pinned-stage .tobito-world-shortcuts a:focus-visible {
+  outline:3px solid #dc4136;
+  outline-offset:3px;
+}
+#prologue-pinned-stage .tobito-world-shortcuts span {
+  font:800 9px/1 "JetBrains Mono",monospace;
+  letter-spacing:.1em;
+  opacity:.7;
+}
+@media(max-width:640px) {
+  #prologue-pinned-stage .tobito-world-shortcuts {
+    left:10px;bottom:9px;gap:6px;
+  }
+  #prologue-pinned-stage .tobito-world-shortcuts a {
+    min-height:42px;font-size:11px;padding:8px 10px;gap:8px;
+  }
+  #prologue-pinned-stage .tobito-world-shortcuts span{display:none}
+}
+@media(prefers-reduced-motion:reduce) {
+  #prologue-pinned-stage .tobito-world-shortcuts a {transition:none}
+}
