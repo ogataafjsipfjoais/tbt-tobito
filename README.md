@@ -28,7 +28,7 @@ GitHub Pagesの`/`は元サイトの静的版`legacy.html`へ、`/3d/`は新し�
 - **機体格納庫**：既存の S-320 Element GLB を明示的な操作後に読み込んで回転表示。
 - **表示設計**：PC/スマホ、操作性・省電力・フォールバック・動きを減らす設定に配慮。
 
-GitHub Pagesは `_site/3d/` へ配信するワークフローを用意しています。**公開成功はGitHub Actionsの結果とPages設定を確認するまで確定しません。** GitHub Pagesでは既存PHP APIは動きません。
+GitHub Pagesの**ブランチ公開（main）**を利用します。`.github/workflows/pages.yml` は静的テストと `legacy.html` のPHPからの生成・GitHubへの同期を担当し、競合する二重デプロイを行いません。Pagesの実行成功と公開URLへの表示確認は別々に行います。
 
 ## 3Dとびとくん体験（2026-11-09追加）
 
@@ -56,7 +56,7 @@ bash scripts/build.sh
 - `index.php` の `TOBITO:CONTENT:START/END`：通常版とWordPress版で共有する本文の範囲。
 - `scripts/templates/`：WordPress版の前後に付けるPHPテンプレート。
 
-`index.html`・`page-tobito.php`・`wordpress-theme-files/` は生成物のため、元のファイルを編集してから再生成してください。ビルドは公開サーバーへの転送やトンネル設定の変更を行いません。
+`index.html` は3Dサイトへの入口を含むGit管理ファイルです（ローカルビルドでは上書きしません）。`legacy.html` はGitHub Actionsが `index.php` から生成してブランチに同期する旧サイトの静的版、`preview.html` はローカルビルドで生成するプレビューです。WordPress用 `page-tobito.php` / `wordpress-theme-files/` は別の生成フローで更新します。
 
 ---
 
