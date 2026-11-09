@@ -4,6 +4,18 @@
 
 ---
 
+## 3Dとびとくん体験（2026-11-09追加）
+
+トップのとびとくんを、既存のThree.js上で動作する試作3Dモデルとして表示します。ドラッグ回転、羽ばたき、向きのリセットに対応。表示できない端末では従来のイラストへ自動で戻ります。既存のプロフィール・アーカイブ・ゲームは残しています。
+
+- 3Dエンジン: `assets/js/tobito-3d-world.js`
+- 3Dの表示と操作UI: `assets/css/tobito-3d-world.css`
+- PHP・WordPress共通の埋め込み: `index.php` と `page-tobito.php`
+- テスト: `tests/tobito-3d.test.cjs`
+- 設計と制約: `docs/3d-experience-2026-11-09.md`
+
+3Dキャラクターは公式イラストを参考にした試作であり、監修済みの公式3D原型ではありません。GitHub Pagesは静的プレビュー専用で、サーバー処理を伴う既存のPHP機能は動作しません。
+
 ## 開発・更新手順
 
 `index.php` と `assets/` を編集し、プロジェクト直下で次を実行します。
