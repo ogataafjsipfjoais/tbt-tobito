@@ -52,9 +52,36 @@
     window.history.replaceState(null,'',window.location.pathname+'?mode='+encodeURIComponent(mode));
   }
   let ticket = 0;
+  let loadingMode = null;
+  const initialized = new Set();
+  function activeCanvas(mode) {
+    return $(mode === 'flight' ? 'tobito-game-canvas' : mode === 'yakitori' ? 'yakitori-game-canvas' : 'wind-tunnel-canvas-container');
+  }
+  function focusGame(mode = selected) {
+    const el = activeCanvas(mode);
+    if (!el) return false;
+    if (mode === 'wind') return true; // Wind tunnel is controlled with sliders.
+    el.setAttribute('tabindex','0');
+    el.focus({preventScroll:true});
+    const focused = document.activeElement === el;
+    notifyParent({type:'focus',mode,focused});
+    return focused;
+  }
   async function launch(mode) {
     if (!valid.includes(mode)) return;
+    // Do not initialize the same 3D engine twice when the iframe's load
+    // notification and the initial ?mode= route arrive together.
+    if (initialized.has(mode)) {
+      ++ticket;
+      switchView(mode);
+      if (ready) ready.hidden = true;
+      window.setTimeout(() => { focusGame(mode);reportHeight(); }, 30);
+      notifyParent({type:'ready',mode});
+      return;
+    }
+    if (loadingMode === mode) return;
     const token = ++ticket;
+    loadingMode = mode;
     switchView(mode);
     if (ready) ready.hidden = false;
     window.setTimeout(reportHeight,50);
@@ -63,10 +90,12 @@
       // Components are loaded only when their own game is selected.
       if (mode === 'wind') {
         await loadSeries(['wind-tunnel.js']);
+        if (token !== ticket) return;
         if (!window.tbtWindTunnel && window.WindTunnelSimulator)
           window.tbtWindTunnel = new window.WindTunnelSimulator();
       } else if (mode === 'yakitori') {
         await loadSeries(['yakitori-game.js']);
+        if (token !== ticket) return;
         if (!window.yakitoriGame && window.YakitoriGame)
           window.yakitoriGame = new window.YakitoriGame('yakitori-game-canvas');
       } else {
@@ -74,6 +103,7 @@
           'flight-ranking.js','birdman-course.js','contest-venue.js',
           'flight-scenery.js','game.js'
         ]);
+        if (token !== ticket) return;
         // GitHub Pages cannot run the PHP ranking API. Use its local records.
         if (window.FlightRankingManager) window.FlightRankingManager.endpoint = null;
         if (!window.tobitoGame && window.TobitoFlightSimulator3D)
@@ -82,11 +112,21 @@
         if (rankingNote) rankingNote.textContent = 'この端末内の記録（サーバー共有なし）';
       }
       if (token !== ticket) return;
+      const instance = mode === 'wind' ? window.tbtWindTunnel : mode === 'flight' ? window.tobitoGame : window.yakitoriGame;
+      if (!instance) throw new Error('ゲームエンジンの初期化に失敗しました');
+      initialized.add(mode);
+      loadingMode = null;
       if (ready) ready.hidden = true;
-      notifyParent({type:'ready',mode});
-      window.setTimeout(() => {window.dispatchEvent(new Event('resize'));reportHeight();},300);
+      // Wait one frame so the active canvas is laid out before focus.
+      window.requestAnimationFrame(() => {
+        if (selected === mode) focusGame(mode);
+        notifyParent({type:'ready',mode});
+        window.dispatchEvent(new Event('resize'));
+        reportHeight();
+      });
     } catch (err) {
       if (token !== ticket) return;
+      loadingMode = null;
       setStatus('起動できませんでした。通信環境をご確認ください。'+(err?.message || ''));
       notifyParent({type:'error',mode,message:String(err?.message || err)});
     }
@@ -97,9 +137,19 @@
     void launch(mode);
   };
   window.addEventListener('message', event => {
-    if (event.origin !== window.location.origin) return;
-    if (event.data?.type === 'tbt:arcade:switch' && valid.includes(event.data.mode))
+    if (event.origin !== window.location.origin || event.source !== window.parent) return;
+    if (event.data?.type === 'tbt:arcade:switch' && valid.includes(event.data.mode)) {
       void launch(event.data.mode);
+    }
+    if (event.data?.type === 'tbt:arcade:focus' && valid.includes(event.data.mode)) {
+      if (initialized.has(event.data.mode)) focusGame(event.data.mode);
+    }
+  });
+  // Allow control keys to reach the original engine after clicking the
+  // visible game chrome, without changing the game's source files.
+  document.getElementById('arcade-content')?.addEventListener('pointerdown',event=>{
+    if (event.target.closest('button,input,select,textarea,a,[contenteditable]')) return;
+    if (selected !== 'wind') window.requestAnimationFrame(() => focusGame(selected));
   });
   document.addEventListener('visibilitychange',() => {
     // The original simulators already suspend rendering on hidden documents.
