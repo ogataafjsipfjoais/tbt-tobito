@@ -39,8 +39,8 @@
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 40);
-        camera.position.set(0, 0.23, 6.45);
-        camera.lookAt(0, 0.20, 0);
+        camera.position.set(0, 0.27, 7.6);
+        camera.lookAt(0, 0.28, 0);
         const ambient = new THREE.HemisphereLight(0xffffff, 0xb7d7e7, 1.05);
         const key = new THREE.DirectionalLight(0xfff2df, 1.7);
         key.position.set(-3, 6, 7);
@@ -48,19 +48,22 @@
         rim.position.set(4, 2, -4);
         scene.add(ambient, key, rim);
 
-        const material = (color, roughness = 0.65, metalness = 0) =>
-            new THREE.MeshStandardMaterial({ color, roughness, metalness });
-        const white = material(0xfffcf5, 0.85);
-        const wingWhite = material(0xf3f9fc, 0.78);
-        const belly = material(0xf0f8fa, 0.95);
-        const red = material(0xd83d3a, 0.6);
-        const orange = material(0xef9d24, 0.73);
-        const yellow = material(0xfbc745, 0.55);
-        const ink = material(0x182c40, 0.38);
-        const lens = material(0x4fb4d9, 0.18, 0.12);
-        const sparkle = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        const blush = new THREE.MeshBasicMaterial({ color: 0xf1afb0, transparent: true, opacity: 0.6 });
-        const sphere = new THREE.SphereGeometry(1, 28, 20);
+        // Model art direction: the actual provided Tobito drawings, NOT a round bird.
+        // Tobito has a flat square white head, two-part red comb, sleepy eyes,
+        // tiny yellow beak, and a cobalt blue work suit with outstretched sleeves.
+        const material = (color, roughness = 0.76) =>
+            new THREE.MeshStandardMaterial({ color, roughness, metalness: 0 });
+        const white = material(0xfffdf7);
+        const ice = material(0xf3f8fb);
+        const blue = material(0x24499f);
+        const blueLight = material(0x3768bc);
+        const darkBlue = material(0x1c367d);
+        const red = material(0xe22c2d);
+        const yellow = material(0xffdc45);
+        const black = material(0x17181a);
+        const shoe = material(0x121316);
+        const eyeShine = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const sphere = new THREE.SphereGeometry(1, 24, 18);
 
         const root = new THREE.Group();
         scene.add(root);
@@ -68,102 +71,162 @@
         root.add(model);
 
         function oval(parent, name, mat, x, y, z, sx, sy, sz, rz = 0) {
-            const mesh = new THREE.Mesh(sphere, mat);
+            const item = new THREE.Mesh(sphere, mat);
+            item.name = name;
+            item.position.set(x, y, z);
+            item.scale.set(sx, sy, sz);
+            item.rotation.z = rz;
+            parent.add(item);
+            return item;
+        }
+
+        function shapeMesh(parent, name, shape, mat, depth, x, y, z) {
+            const mesh = new THREE.Mesh(new THREE.ExtrudeGeometry(shape, {
+                depth, bevelEnabled: true, bevelThickness: 0.012,
+                bevelSize: 0.012, bevelSegments: 2, curveSegments: 12
+            }), mat);
             mesh.name = name;
             mesh.position.set(x, y, z);
-            mesh.scale.set(sx, sy, sz);
-            mesh.rotation.z = rz;
             parent.add(mesh);
             return mesh;
         }
 
-        // Rounded chicken silhouette, matching the established Tobito illustrations.
-        oval(model, 'body', white, 0, -0.08, 0, 0.94, 1.08, 0.77);
-        oval(model, 'head', white, 0, 0.67, 0.05, 0.78, 0.69, 0.68);
-        oval(model, 'belly', belly, 0, -0.34, 0.71, 0.55, 0.56, 0.095);
-
-        // Comb: soft, sculpted red lobes. The goggles sit above the eyes.
-        oval(model, 'comb-left', red, -0.24, 1.36, -0.07, 0.20, 0.34, 0.17, 0.28);
-        oval(model, 'comb-center', red, 0, 1.48, -0.02, 0.22, 0.39, 0.18);
-        oval(model, 'comb-right', red, 0.25, 1.34, -0.09, 0.19, 0.29, 0.17, -0.28);
-
-        const strap = new THREE.Mesh(
-            new THREE.TorusGeometry(0.68, 0.042, 8, 60),
-            ink
-        );
-        strap.rotation.x = Math.PI / 2;
-        strap.position.set(0, 1.09, 0.08);
-        model.add(strap);
-
-        [-1, 1].forEach(side => {
-            const x = side * 0.34;
-            oval(model, 'goggle-lens', lens, x, 1.08, 0.662, 0.205, 0.205, 0.07);
-            const rimMesh = new THREE.Mesh(new THREE.TorusGeometry(0.215, 0.047, 10, 40), ink);
-            rimMesh.position.set(x, 1.08, 0.725);
-            model.add(rimMesh);
-            oval(model, 'goggle-glint', sparkle, x - 0.065, 1.15, 0.736, 0.053, 0.024, 0.007, 0.45);
-            oval(model, 'eye', ink, side * 0.32, 0.52, 0.723, 0.106, 0.124, 0.05);
-            oval(model, 'eye-highlight', sparkle, side * 0.32 - 0.035, 0.565, 0.764, 0.032, 0.034, 0.014);
-            oval(model, 'cheek', blush, side * 0.55, 0.31, 0.637, 0.125, 0.074, 0.018);
-        });
-
-        // Triangular yellow beak and paired red wattles.
-        const beak = new THREE.Mesh(new THREE.ConeGeometry(0.238, 0.43, 3), yellow);
-        beak.position.set(0, 0.30, 0.88);
-        beak.rotation.x = Math.PI / 2;
-        beak.rotation.z = Math.PI;
-        model.add(beak);
-        oval(model, 'beak-lower', orange, 0, 0.17, 0.816, 0.15, 0.047, 0.13);
-        oval(model, 'wattle-left', red, -0.075, 0.04, 0.77, 0.080, 0.13, 0.072, -0.1);
-        oval(model, 'wattle-right', red, 0.075, 0.04, 0.77, 0.080, 0.13, 0.072, 0.1);
-
-        function makeWing(side) {
-            const pivot = new THREE.Group();
-            pivot.name = side < 0 ? 'wing-left' : 'wing-right';
-            pivot.position.set(side * 0.77, 0.13, -0.08);
-            model.add(pivot);
-            oval(pivot, 'upper-feather', wingWhite, side * 0.37, -0.07, 0, 0.49, 0.28, 0.22, side * -0.2);
-            for (let i = 0; i < 3; i++) {
-                oval(pivot, 'feather-' + i, white,
-                    side * (0.59 + i * 0.08), -0.18 - i * 0.10, 0.04,
-                    0.27, 0.105, 0.12, side * (0.24 + i * 0.10));
-            }
-            return pivot;
-        }
-        const wingLeft = makeWing(-1);
-        const wingRight = makeWing(1);
-
-        [-1, 1].forEach(side => {
-            oval(model, 'leg', orange, side * 0.36, -1.04, 0.07, 0.092, 0.28, 0.089);
-            oval(model, 'foot', orange, side * 0.36, -1.26, 0.27, 0.29, 0.105, 0.36);
-            for (let i = -1; i <= 1; i++) {
-                oval(model, 'toe', yellow, side * 0.36 + i * 0.135, -1.28, 0.45, 0.092, 0.075, 0.24);
-            }
-        });
-
-        for (let i = -1; i <= 1; i++) {
-            oval(model, 'tail-feather', wingWhite, i * 0.22, -0.13 + Math.abs(i) * 0.12, -0.68,
-                0.21, 0.34, 0.14, -i * 0.24);
+        function polygon(vertices) {
+            const shape = new THREE.Shape();
+            vertices.forEach((p, i) => i ? shape.lineTo(p[0], p[1]) : shape.moveTo(p[0], p[1]));
+            shape.closePath();
+            return shape;
         }
 
-        // Depth cues: a delicate flight trajectory and distant airy objects.
+        function block(parent, name, color, x, y, z, width, height, depth, rotation = 0) {
+            const group = new THREE.Group();
+            group.name = name;
+            group.position.set(x, y, z);
+            group.rotation.z = rotation;
+            const outline = new THREE.Mesh(
+                new THREE.BoxGeometry(width + 0.08, height + 0.08, depth + 0.07), black
+            );
+            const fill = new THREE.Mesh(new THREE.BoxGeometry(width, height, depth), color);
+            fill.position.z = 0.035;
+            group.add(outline, fill);
+            parent.add(group);
+            return group;
+        }
+
+        function segment(parent, name, color, x1, y1, x2, y2, width, depth, z) {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            return block(parent, name, color, (x1 + x2) / 2, (y1 + y2) / 2, z,
+                width, Math.hypot(dx, dy), depth, -Math.atan2(dx, dy));
+        }
+
+        // Blue workwear torso, zipper and collar, matching the supplied poses.
+        block(model, 'blue-workwear', blue, 0, -0.03, -0.12, 1.23, 1.10, 0.60);
+        block(model, 'zipper', black, 0.035, -0.01, 0.255, 0.025, 0.85, 0.012);
+        block(model, 'name-patch-outline', black, 0.35, 0.12, 0.276, 0.31, 0.17, 0.022);
+        block(model, 'name-patch', white, 0.35, 0.12, 0.303, 0.245, 0.105, 0.021);
+        const lapelLeft = polygon([[-0.57, 0.54], [-0.04, 0.35], [-0.27, 0.19], [-0.47, 0.40]]);
+        const lapelRight = polygon([[0.04, 0.35], [0.54, 0.54], [0.44, 0.40], [0.27, 0.19]]);
+        shapeMesh(model, 'collar-left-edge', lapelLeft, black, 0.07, 0, 0, 0.25);
+        shapeMesh(model, 'collar-right-edge', lapelRight, black, 0.07, 0, 0, 0.25);
+        const lapelLeftFill = polygon([[-0.47, 0.47], [-0.09, 0.34], [-0.28, 0.25], [-0.43, 0.41]]);
+        const lapelRightFill = polygon([[0.09, 0.34], [0.47, 0.47], [0.43, 0.41], [0.28, 0.25]]);
+        shapeMesh(model, 'collar-left', lapelLeftFill, blueLight, 0.072, 0, 0, 0.29);
+        shapeMesh(model, 'collar-right', lapelRightFill, blueLight, 0.072, 0, 0, 0.29);
+
+        // Two hovering arms form Tobito's characteristic airplane pose.
+        function makeArm(side) {
+            const arm = new THREE.Group();
+            arm.name = side < 0 ? 'wing-left' : 'wing-right';
+            arm.position.set(side * 0.56, 0.37, -0.06);
+            model.add(arm);
+            segment(arm, 'sleeve', blue, 0, 0, side * 1.13, 0.03, 0.33, 0.36, 0);
+            block(arm, 'cuff', darkBlue, side * 1.13, 0.03, 0.06, 0.13, 0.36, 0.39);
+            oval(arm, 'white-hand-outline', black, side * 1.37, 0.04, 0.03,
+                0.26, 0.135, 0.19, side * 0.07);
+            oval(arm, 'white-hand', white, side * 1.37, 0.055, 0.082,
+                0.225, 0.103, 0.16, side * 0.07);
+            for (let i = 0; i < 2; i++) {
+                oval(arm, 'feather-finger', white, side * (1.54 + i * 0.07),
+                    0.10 - i * 0.13, 0.096, 0.18, 0.047, 0.055, -side * 0.12);
+            }
+            return arm;
+        }
+        const wingLeft = makeArm(-1);
+        const wingRight = makeArm(1);
+
+        // One standing leg and one kicking-out leg, black shoes as in the original.
+        segment(model, 'standing-leg', blue, -0.35, -0.47, -0.39, -1.54, 0.39, 0.52, -0.07);
+        segment(model, 'raised-thigh', blue, 0.27, -0.46, 0.82, -1.06, 0.41, 0.52, -0.08);
+        segment(model, 'raised-shin', blue, 0.82, -1.06, 1.38, -1.14, 0.38, 0.48, -0.08);
+        oval(model, 'standing-shoe', shoe, -0.53, -1.76, 0.08, 0.39, 0.18, 0.32, 0.06);
+        oval(model, 'raised-shoe', shoe, 1.59, -1.13, 0.07, 0.24, 0.30, 0.29, -0.45);
+
+        // Tall square head: white trapezoid, thick hand-drawn dark border,
+        // and genuine depth on the sides, not an image stuck on a plane.
+        const headBack = polygon([
+            [-0.80, 0.0], [0.80, 0.0], [0.85, 1.24], [-0.85, 1.24]
+        ]);
+        const headFace = polygon([
+            [-0.744, 0.060], [0.744, 0.060], [0.791, 1.185], [-0.791, 1.185]
+        ]);
+        shapeMesh(model, 'head-ink-outline', headBack, black, 0.75, 0, 0.55, -0.375);
+        shapeMesh(model, 'square-white-head', headFace, white, 0.72, 0, 0.55, -0.337);
+
+        // Red two-lobed comb rising above the angular white head.
+        const combShape = new THREE.Shape();
+        combShape.moveTo(-0.14, 0);
+        combShape.bezierCurveTo(-0.27, 0.28, -0.08, 0.55, 0.20, 0.78);
+        combShape.bezierCurveTo(0.45, 0.96, 0.59, 0.84, 0.48, 0.61);
+        combShape.bezierCurveTo(0.42, 0.48, 0.25, 0.40, 0.43, 0.34);
+        combShape.bezierCurveTo(0.65, 0.28, 0.62, 0.15, 0.42, 0.08);
+        combShape.bezierCurveTo(0.18, -0.02, 0.01, -0.03, -0.14, 0);
+        const combOutline = shapeMesh(model, 'comb-outline', combShape, black, 0.22, -0.04, 1.74, -0.15);
+        const combFill = shapeMesh(model, 'red-comb', combShape, red, 0.228, -0.04, 1.74, -0.137);
+        combFill.scale.set(0.91, 0.91, 1);
+        combFill.position.x += 0.024;
+        combFill.position.y += 0.035;
+
+        // Slightly sleepy eyes: black curved eyebrows and vertical ink pupils.
+        function eyebrow(points) {
+            const curve = new THREE.CatmullRomCurve3(points.map(p => new THREE.Vector3(p[0], p[1], 0.438)));
+            model.add(new THREE.Mesh(new THREE.TubeGeometry(curve, 16, 0.033, 6, false), black));
+        }
+        eyebrow([[-0.63, 1.35], [-0.48, 1.47], [-0.31, 1.48], [-0.20, 1.42]]);
+        eyebrow([[0.20, 1.42], [0.31, 1.48], [0.48, 1.47], [0.63, 1.35]]);
+        [-1, 1].forEach(side => {
+            oval(model, 'sleepy-eye', black, side * 0.36, 1.18, 0.449,
+                0.075, 0.172, 0.032);
+            oval(model, 'eye-glint', eyeShine, side * 0.36 - 0.022, 1.145, 0.483,
+                0.021, 0.038, 0.01);
+        });
+
+        // The actual beak is a small rounded yellow squiggle, not a large triangle.
+        oval(model, 'beak-outline', black, 0.015, 0.92, 0.443, 0.166, 0.139, 0.055, 0.10);
+        oval(model, 'yellow-beak', yellow, -0.002, 0.93, 0.486, 0.13, 0.098, 0.042, 0.08);
+        oval(model, 'beak-lower-outline', black, 0.047, 0.845, 0.479,
+            0.10, 0.064, 0.038, -0.32);
+        oval(model, 'beak-lower', yellow, 0.044, 0.852, 0.506,
+            0.082, 0.045, 0.031, -0.32);
+
+        // Light, measured spatial cues: depth without unrelated neon decoration.
         const orbitMaterial = new THREE.MeshBasicMaterial({
-            color: 0x77c6e2, transparent: true, opacity: 0.25, depthWrite: false
+            color: 0x7dacc2, transparent: true, opacity: 0.19, depthWrite: false
         });
-        const orbit = new THREE.Mesh(new THREE.TorusGeometry(2.12, 0.012, 6, 100), orbitMaterial);
-        orbit.rotation.x = 1.1;
-        orbit.rotation.y = 0.16;
-        orbit.position.y = 0.06;
+        const orbit = new THREE.Mesh(new THREE.TorusGeometry(2.35, 0.012, 6, 100), orbitMaterial);
+        orbit.rotation.x = 1.20;
+        orbit.rotation.y = 0.10;
+        orbit.position.y = 0.1;
         root.add(orbit);
 
         const specks = [];
-        const speckMaterial = new THREE.MeshBasicMaterial({ color: 0xbdddeb, transparent: true, opacity: 0.75 });
-        const speckGeometry = new THREE.SphereGeometry(0.026, 6, 6);
-        for (let i = 0; i < 18; i++) {
+        const speckMaterial = new THREE.MeshBasicMaterial({ color: 0xb6ceda, transparent: true, opacity: 0.62 });
+        const speckGeometry = new THREE.SphereGeometry(0.022, 6, 6);
+        for (let i = 0; i < 14; i++) {
             const angle = i * 2.39996;
-            const radius = 1.75 + (i % 5) * 0.16;
+            const radius = 2.35 + (i % 4) * 0.14;
             const mesh = new THREE.Mesh(speckGeometry, speckMaterial);
-            mesh.position.set(Math.cos(angle) * radius, Math.sin(angle * 1.4) * 1.05, -0.65 - (i % 4) * 0.33);
+            mesh.position.set(Math.cos(angle) * radius, Math.sin(angle * 1.4) * 1.30, -0.95 - (i % 4) * 0.28);
             root.add(mesh);
             specks.push(mesh);
         }
@@ -194,7 +257,7 @@
             const width = Math.max(1, stage.clientWidth);
             const height = Math.max(1, stage.clientHeight);
             camera.aspect = width / height;
-            camera.position.z = width < 380 ? 7.1 : 6.45;
+            camera.position.z = width < 380 ? 8.2 : 7.6;
             camera.updateProjectionMatrix();
             renderer.setSize(width, height, false);
             renderOnce();
