@@ -1,8 +1,16 @@
-name: Tobito 3D site build and Pages preview
+name: Deploy Tobito 3D page to GitHub Pages
 
 on:
   push:
     branches: [main]
+    paths:
+      - '3d/**'
+      - 'assets/**'
+      - 'index.php'
+      - 'data.php'
+      - 'includes/**'
+      - 'tests/tobito-3d*.test.cjs'
+      - '.github/workflows/pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -15,39 +23,51 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - uses: shivammathur/setup-php@v2
+      - name: Set up PHP for static export
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           extensions: mbstring
           coverage: none
-      - name: Validate and build static preview
-        run: bash scripts/build.sh
-      - name: Prepare GitHub Pages artifact
+      - name: Validate 3D page
+        run: |
+          node --check assets/js/tobito-3d-world.js
+          node --check assets/js/s320-model.js
+          node --check 3d/studio.js
+          node --test tests/tobito-3d.test.cjs tests/tobito-3d-page.test.cjs
+          php -l index.php
+          php -l data.php
+      - name: Export static pages
         run: |
           mkdir -p _site
-          cp index.html _site/index.html
+          php index.php > _site/index.html
           cp -R assets _site/assets
           cp -R 3d _site/3d
           touch _site/.nojekyll
           test -s _site/index.html
-          test -s _site/assets/js/tobito-3d-world.js
           test -s _site/3d/index.html
           test -s _site/3d/studio.css
           test -s _site/3d/studio.js
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+          test -s _site/assets/js/tobito-3d-world.js
+          test -s _site/assets/models/body.glb
+      - name: Set up GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
         with:
           path: _site
-      - name: Deploy preview
+      - name: Deploy website
         id: deployment
         uses: actions/deploy-pages@v4
