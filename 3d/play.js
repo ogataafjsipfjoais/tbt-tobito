@@ -111,6 +111,10 @@
     target.textContent = kind === 'turbulence' ? '乱気流' : kind === 'bonus' ? '金色の風' : '追い風';
     target.setAttribute('aria-label', target.textContent + (kind === 'turbulence' ? '、押すと減点' : '、押すと得点'));
     target.style.top = String(14 + Math.random() * 60) + '%';
+    if (reducedMotion) {
+      target.style.left = String(37 + Math.random() * 46) + '%';
+      target.style.right = 'auto';
+    }
     target.style.setProperty('--wind-track', String(Math.max(320, arena.clientWidth + 145)) + 'px');
     const lifetime = reducedMotion ? 4100 : Math.max(2100, 3100 - elapsed / 35);
     target.style.animationDuration = String(lifetime) + 'ms';
