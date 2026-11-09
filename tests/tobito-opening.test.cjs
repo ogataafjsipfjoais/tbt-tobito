@@ -53,3 +53,13 @@ test('hero overlays retreat to reveal the continuous WebGL world after scrolling
   }
   assert.match(read('legacy.html'), /id="tobito-game-canvas"/);
 });
+
+test('the invisible WebGL world does not keep drawing behind the opening sequence',()=>{
+  const opening=read('3d/opening.js');
+  const world=read('3d/world.js');
+  assert.match(opening,/tbt:opening:progress/);
+  assert.match(world,/openingPaused/);
+  assert.match(world,/!arcadePaused && !openingPaused/);
+  assert.match(world,/window\.addEventListener\('tbt:opening:progress'/);
+  assert.doesNotThrow(()=>new vm.Script(world));
+});
