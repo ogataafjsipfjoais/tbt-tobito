@@ -18,17 +18,20 @@
   <link rel="stylesheet" href="./play.css">
   <link rel="stylesheet" href="./journey.css">
   <link rel="stylesheet" href="./chaos.css">
+  <link rel="stylesheet" href="./cinematic.css">
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
   <script defer src="../assets/js/s320-model.js"></script>
-  <script defer src="../assets/js/tobito-3d-world.js"></script>
+  <script defer src="./world.js"></script>
   <script defer src="./studio.js"></script>
   <script defer src="./play.js"></script>
   <script defer src="./journey.js"></script>
   <script defer src="./chaos.js"></script>
 </head>
 <body>
+  <div id="journey-world" class="journey-world" aria-hidden="true"></div>
+  <div id="world-hud" class="world-hud" aria-hidden="true"><span class="hud-recording-dot"></span><b id="world-chapter-name">BASE / 合流地点</b><span>FOLLOW TOBITO</span></div>
   <a class="skip" href="#main">本文へスキップ</a>
   <div class="site-progress" aria-hidden="true"><span id="reading-progress"></span></div>
   <header class="site-header" id="top">
@@ -45,6 +48,10 @@
       <a href="#hangar">格納庫</a>
       <a href="#takeoff">ゴール</a>
     </nav>
+    <div class="world-actions" role="group" aria-label="3D演出と音の設定">
+      <button id="world-motion" type="button" aria-pressed="true">動きを止める</button>
+      <button id="world-sound" type="button" aria-pressed="false">音を鳴らす</button>
+    </div>
     <a class="header-back" href="../legacy.html#flight">フライトゲーム <span aria-hidden="true">↗</span></a>
   </header>
 
@@ -94,7 +101,7 @@
           <span class="hero-scroll-hint">SCROLL TO WALK TOGETHER</span>
         </div>
       </div>
-      <div class="hero-stage" aria-label="3Dとびとくんの展示">
+      <div class="hero-stage" aria-label="画面いっぱいに広がる、とびとくんの3D旅の出発地点">
         <div class="hero-stage-circle" aria-hidden="true"></div>
         <span class="hero-stage-number" aria-hidden="true">01<span> / 04</span></span>
         <div id="prologue-giant-wrap">
@@ -109,7 +116,7 @@
           <button class="tobito-3d-tool" id="tobito-3d-reset" type="button" aria-label="とびとくんを正面に戻す"><span aria-hidden="true">⌂</span> <span class="tobito-3d-tool-label">正面</span></button>
         </div>
         <p id="tobito-3d-notice" class="tobito-3d-status" role="status" aria-live="polite"></p>
-        <span class="hero-stage-label" aria-hidden="true">DRAG TO TURN / CLICK TO FLAP</span>
+        <span class="hero-stage-label" aria-hidden="true">SCROLL TO TRAVEL / CLICK TO FLAP</span>
       </div>
       <div class="hero-bottomline">
         <span><span class="red-dot"></span> START / ひみつ基地で合流</span>
