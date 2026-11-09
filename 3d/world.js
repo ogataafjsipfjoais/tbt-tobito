@@ -152,8 +152,10 @@
   for(let i=0;i<7;i++){
     const z=12-i*6;
     box(roof,30,.28,.35,beamMat,0,9,z);
-    const lamp=new THREE.PointLight(0xffd5a2,1.3,20,2);
-    lamp.position.set(0,8.1,z);roof.add(lamp);
+    if(i===1 || i===4){
+      const lamp=new THREE.PointLight(0xffd5a2,1.3,20,2);
+      lamp.position.set(0,8.1,z);roof.add(lamp);
+    }
     ball(roof,0,8.1,z,[.48,.13,.48],mat(0xffd6a9,.3));
   }
   const sign=textSign('とびとくん基地','#19334b','#ffe4a0');
@@ -184,7 +186,7 @@
   }
   for(let i=0;i<10;i++)sillyProp(i);
 
-  // The hangar contains a symbolic 42m-scale wing; the original GLB is in the clickable viewer.
+  // The hangar contains a symbolic 40m-scale wing; the original GLB is in the clickable viewer.
   const hangar=new THREE.Group();hangar.position.z=-155;scene.add(hangar);
   const hangarFloor=new THREE.Mesh(new THREE.PlaneGeometry(66,64),mat(0x445564,.85));
   hangarFloor.rotation.x=-Math.PI/2;hangarFloor.position.y=-.14;hangar.add(hangarFloor);
@@ -194,7 +196,7 @@
   });
   box(hangar,63,.8,.8,beamMat,0,18,-5);box(hangar,63,.8,.8,beamMat,0,18,14);
   for(let i=0;i<6;i++)box(hangar,63,.18,.15,aluminum,0,17.5,-12+i*6);
-  const wing=box(hangar,42,.19,2.3,mat(0xe5e7e4,.46,.25),0,6,-16);
+  const wing=box(hangar,40,.19,2.3,mat(0xe5e7e4,.46,.25),0,6,-16);
   box(hangar,1.0,1.1,18,aluminum,0,4.9,-17);
   box(hangar,8,.08,.6,aluminum,0,5,-23);
   box(hangar,.15,3,.8,aluminum,0,6.1,-23.5);
@@ -203,7 +205,7 @@
   const wingSign=textSign('S-320 / ちょっと点検','#19334b','#dbecf4');
   wingSign.position.set(-15,11,13);hangar.add(wingSign);
   const hangarLamps=[];
-  [-22,-10,10,22].forEach(x=>{
+  [-16,16].forEach(x=>{
     const lamp=new THREE.PointLight(0xd7edff,1.1,38,2);lamp.position.set(x,15,0);
     hangar.add(lamp);hangarLamps.push(lamp);
   });
