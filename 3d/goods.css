@@ -9,14 +9,14 @@
 .goods-intro h2 em{font-style:normal;color:#d85147}
 .goods-intro>p{grid-column:1/-1;justify-self:end;margin:0;max-width:570px;font-size:clamp(13px,1.3vw,17px);line-height:2;font-weight:700;color:#496471}
 .goods-hero-showroom{position:relative;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,.7fr);gap:0;border-radius:clamp(32px,5vw,84px);overflow:hidden;min-height:550px;background:#153e59;box-shadow:0 35px 90px #17405330}
-.goods-hero-visual{position:relative;min-height:clamp(390px,50vw,680px);display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 47% 48%,#e9f7d9,#a3d4ce 67%,#80b5b7);perspective:1200px;--goods-x:0;--goods-y:0}
+.goods-hero-visual{position:relative;min-height:clamp(390px,50vw,680px);display:grid;place-items:center;overflow:hidden;background:radial-gradient(ellipse at 47% 48%,#e9f7d9,#a3d4ce 67%,#80b5b7);perspective:1200px;--goods-x:0deg;--goods-y:0deg}
 .goods-orbit{position:absolute;pointer-events:none;aspect-ratio:1;border:3px solid #fff8e660;border-radius:50%;width:88%;left:6%;top:6%;box-shadow:0 0 0 30px #d7faff11,0 0 0 95px #d7faff0a}
 .goods-orbit-b{width:56%;left:22%;top:22%;border-style:dashed;animation:goods-orbit 24s linear infinite}
 @keyframes goods-orbit{to{transform:rotate(360deg)}}
 .goods-floating-label{position:absolute;z-index:3;font:900 10px 'DM Sans',sans-serif;letter-spacing:.12em;padding:10px 15px;background:#fff8e3;color:#2a5c6d;border-radius:999px;box-shadow:0 10px 20px #164b5440}
 .goods-floating-label-a{left:8%;top:15%;transform:rotate(-9deg)}
 .goods-floating-label-b{right:9%;bottom:21%;transform:rotate(8deg)}
-.goods-mug-model{position:relative;width:clamp(200px,28vw,370px);height:clamp(250px,31vw,415px);transform-style:preserve-3d;transform:rotateX(calc(-7deg + var(--goods-y)*.09deg)) rotateY(calc(-17deg + var(--goods-x)*.14deg)) rotateZ(2deg);transition:transform .16s ease-out;filter:drop-shadow(18px 42px 30px #18576954);z-index:2}
+.goods-mug-model{position:relative;width:clamp(200px,28vw,370px);height:clamp(250px,31vw,415px);transform-style:preserve-3d;transform:rotateX(calc(-7deg + var(--goods-y))) rotateY(calc(-17deg + var(--goods-x))) rotateZ(2deg);transition:transform .16s ease-out;filter:drop-shadow(18px 42px 30px #18576954);z-index:2}
 .goods-mug-body{position:absolute;inset:12% 18% 3% 3%;background:linear-gradient(90deg,#afbec3 0%,#f8f6eb 13%,#ffffff 47%,#d2e4e5 93%,#94a9a9 100%);border-radius:5% 5% 22% 22% / 3% 3% 13% 13%;box-shadow:inset -20px 0 24px #55808c33,inset 0 18px 14px #8098a745;transform:rotateY(0);display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
 .goods-mug-body img{width:64%;max-height:62%;object-fit:contain;filter:drop-shadow(0 4px 2px #728e9740)}
 .goods-mug-body span{position:relative;z-index:2;font:900 clamp(11px,1.3vw,18px) 'Noto Sans JP',sans-serif;letter-spacing:-.05em;color:#173c50;white-space:nowrap}
