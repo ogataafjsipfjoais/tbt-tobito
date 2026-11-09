@@ -37,6 +37,12 @@
       lines: ['見て、ぼくたちの翼だよ！', '40メートル！近くで見ると、やっぱり大きいね。']
     },
     {
+      id: 'goods',
+      anchor: 'goods',
+      name: 'BONUS / グッズ研究所',
+      lines: ['ぼくのマグカップ、ちゃんと飛べるかな？', 'なんでタオルが設計図なんだろうね？']
+    },
+    {
       id: 'takeoff',
       anchor: 'takeoff',
       name: 'GOAL / テイクオフ',
