@@ -37,7 +37,9 @@ jobs:
           node --check 3d/studio.js
           node --check 3d/play.js
           node --check 3d/journey.js
-          node --test tests/tobito-3d.test.cjs tests/tobito-3d-page.test.cjs tests/tobito-journey.test.cjs
+          node --check 3d/chaos.js
+          node --check 3d/world.js
+          node --test tests/tobito-3d.test.cjs tests/tobito-3d-page.test.cjs tests/tobito-journey.test.cjs tests/tobito-cinematic.test.cjs
           php -l index.php
           php -l data.php
       - name: Generate the playable original site
@@ -49,6 +51,10 @@ jobs:
           test -s 3d/journey.js
           test -s 3d/play.css
           test -s 3d/play.js
+          test -s 3d/chaos.js
+          test -s 3d/chaos.css
+          test -s 3d/world.js
+          test -s 3d/cinematic.css
           test -s assets/models/body.glb
       - name: Commit the generated preview for GitHub Pages branch publishing
         run: |
