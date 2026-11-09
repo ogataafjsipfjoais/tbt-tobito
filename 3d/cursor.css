@@ -2,7 +2,7 @@
 .tobito-cursor{position:fixed;z-index:190;left:0;top:0;pointer-events:none;width:74px;height:74px;transform:translate3d(-150px,-150px,0);opacity:0;contain:layout style;will-change:transform}
 .tobito-cursor.is-visible{opacity:1}
 .tobito-cursor-ring{position:absolute;inset:7px;border:1.5px solid #f0d5a0c9;border-radius:50%;box-shadow:0 0 0 2px #123e5545,0 0 24px 4px #80d9e748;transition:transform .2s ease,background .2s}
-.tobito-cursor-eye{position:absolute;top:20px;left:19px;width:36px;height:35px;background:#fffbee;border-radius:38% 38% 50% 50%;border:1px solid #1b455b;box-shadow:0 4px 9px #1b455b44;display:flex;justify-content:center;align-items:center;gap:6px;transform:translate3d(calc(var(--cursor-eye-x,0)*3px),calc(var(--cursor-eye-y,0)*3px),0)}
+.tobito-cursor-eye{position:absolute;top:20px;left:19px;width:36px;height:35px;background:#fffbee;border-radius:38% 38% 50% 50%;border:1px solid #1b455b;box-shadow:0 4px 9px #1b455b44;display:flex;justify-content:center;align-items:center;gap:6px;transform:translate3d(var(--cursor-eye-x,0px),var(--cursor-eye-y,0px),0)}
 .tobito-cursor-eye:before,.tobito-cursor-eye:after{content:"";height:8px;width:4px;border-radius:50%;background:#182f43}
 .tobito-cursor-beak{position:absolute;top:43px;left:31px;width:13px;height:10px;background:#f4c658;clip-path:polygon(0 0,100% 0,50% 100%)}
 .tobito-cursor-comb{position:absolute;left:32px;top:11px;background:#d74537;width:15px;height:14px;border-radius:60% 80% 30% 40%;transform:rotate(-24deg)}
