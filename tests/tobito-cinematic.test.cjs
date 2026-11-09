@@ -52,7 +52,7 @@ test('chaos playground is complete and hidden-object game has six unique finds',
   const targetSection=js.slice(js.indexOf('const targets = ['),js.indexOf('  ];',js.indexOf('const targets = [')));
   assert.equal((targetSection.match(/id:'/g)||[]).length,6);
   assert.match(js,/navigator\.share/);
-  assert.match(js,/role/); // Controls use semantic roles or accessible labels.
+  assert.match(js,/aria-label/); // Targets are named for assistive technologies.
   assert.match(css,/\.find-hit:focus-visible/);
   assert.match(css,/prefers-reduced-motion/);
   assert.doesNotThrow(()=>new vm.Script(js));
