@@ -34,6 +34,7 @@
     const fraction = Math.min(1,Math.max(0,-section.getBoundingClientRect().top/progressRange));
     opening.style.setProperty('--opening-progress',String(fraction.toFixed(3)));
     document.documentElement.classList.toggle('opening-at-top',fraction < .82);
+    window.dispatchEvent(new CustomEvent('tbt:opening:progress',{detail:{progress:fraction}}));
     // Never keep a visible decorative message over the game area.
     if(fraction >= .82 && speech) speech.textContent='ついてきて！';
   }
