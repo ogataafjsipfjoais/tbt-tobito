@@ -48,13 +48,13 @@ test('Pages workflow includes 3D directory and generated preview', () => {
   assert.match(workflow, /php index\.php > legacy\.html/);
 });
 
-test('site root restores the original playable page while preserving 3D entry', () => {
+test('site root launches the cinematic world while keeping the original playable page', () => {
   const entry = get('index.html');
   const workflow = get('.github/workflows/pages.yml');
   const build = get('scripts/build.sh');
-  assert.match(entry, /url=\.\/legacy\.html/);
+  assert.match(entry, /url=\.\/3d\//);
   assert.match(entry, /href="\.\/legacy\.html#flight/);
-  assert.match(entry, /href="\.\/3d\/#play/);
+  assert.match(entry, /href="\.\/3d\//);
   assert.match(workflow, /git add -- legacy\.html/);
   assert.match(workflow, /php index\.php > legacy\.html/);
   assert.match(build, /preview\.html/);
