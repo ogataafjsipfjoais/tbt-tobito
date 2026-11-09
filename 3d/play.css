@@ -1,0 +1,75 @@
+/* TOBITO 3D / PLAYROOM
+   Dedicated interaction layer, styled as a playful flight-testing station. */
+
+.play-room{position:relative;isolation:isolate;background:#f0ecdf;color:#13253f;border-top:3px solid #e33832;overflow:hidden}
+.play-room:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(12.5% - 1px),rgba(33,66,92,.055) calc(12.5% - 1px),rgba(33,66,92,.055) 12.5%);z-index:-1}
+.play-room-inner{max-width:1700px;margin:auto;padding:85px clamp(22px,5.5vw,100px) 100px}
+.play-room .section-label{border-color:#c5c8c5;color:#506b7b;margin-bottom:40px}
+.play-intro{display:flex;justify-content:space-between;align-items:end;gap:30px;margin-bottom:40px}
+.play-intro h2{font-size:clamp(44px,6.7vw,98px);line-height:1.19;letter-spacing:-.07em;font-weight:900;margin:0}
+.play-intro h2 span{color:#d33a35}
+.play-intro>p{max-width:350px;font-weight:600;line-height:2;color:#526579;font-size:14px}
+.play-layout{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(290px,.8fr);gap:18px;align-items:stretch}
+.wind-game{background:#fdfbf4;box-shadow:0 2px 0 #13253f;border:2px solid #13253f;min-width:0}
+.wind-game-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 25px 13px}
+.game-overline{font:800 10px/1.3 'DM Sans',sans-serif;letter-spacing:.17em;color:#c73736}
+.wind-game-header h3{font-size:clamp(26px,3vw,44px);font-weight:900;line-height:1.2;letter-spacing:-.06em;margin:8px 0 0}
+.game-duration{align-self:center;flex:none;border:1px solid #14243a;padding:8px 12px;font:800 12px/1 'DM Sans',sans-serif;letter-spacing:.04em}
+.wind-instructions{margin:0;padding:0 25px 22px;color:#596574;font-size:12px;line-height:1.9}
+.wind-hud{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:#13253f;color:white;border-top:1px solid #13253f}
+.wind-hud>div{padding:13px 16px;display:flex;flex-direction:column;gap:1px;border-right:1px solid #4a647c}
+.wind-hud>div:last-child{border-right:0}
+.wind-hud>div>span{font-size:10px;font-weight:700;color:#bacbd9}
+.wind-hud strong{font:800 clamp(22px,2.7vw,37px)/1.2 'DM Sans',sans-serif;font-variant-numeric:tabular-nums}
+.wind-hud small{font-size:12px;margin-left:3px}
+.wind-arena{position:relative;min-height:340px;height:clamp(330px,35vw,445px);background:#c2dbe0;overflow:hidden;isolation:isolate}
+.wind-arena:before{position:absolute;content:"";inset:0;z-index:-2;background:linear-gradient(175deg,#b0d3e2 0%,#dfedec 50%,#e8debb 100%)}
+.wind-arena:after{position:absolute;content:"";height:60%;width:60%;border-radius:50%;left:30%;top:10%;background:rgba(255,255,255,.22);z-index:-1;pointer-events:none}
+.wind-speed-lines{position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(168deg,transparent 0,transparent 51px,rgba(30,94,115,.11) 52px,transparent 54px);z-index:1}
+.wind-landscape{position:absolute;bottom:-19%;display:block;height:44%;width:80%;border-radius:50% 50% 0 0;transform:rotate(5deg);background:rgba(55,125,132,.18);pointer-events:none}
+.wind-landscape-a{left:-26%}.wind-landscape-b{right:-31%;height:35%;transform:rotate(-9deg);background:rgba(34,101,117,.13)}
+#wind-tobito{position:absolute;z-index:2;left:7%;bottom:7%;height:53%;max-width:42%;object-fit:contain;filter:drop-shadow(0 12px 14px rgba(24,45,64,.17));pointer-events:none;transform:rotate(-5deg);transform-origin:55% 80%}
+#wind-tobito.wind-cheer{animation:wind-mascot-cheer .44s cubic-bezier(.2,.8,.25,1.1) both}
+@keyframes wind-mascot-cheer{0%,100%{transform:translateY(0) rotate(-5deg)}48%{transform:translateY(-23px) rotate(9deg)}}
+.wind-target-layer{position:absolute;inset:0;z-index:6;pointer-events:none}
+.gust-target{position:absolute;right:-115px;top:40%;min-width:85px;min-height:48px;padding:12px 14px;background:#fff;box-shadow:4px 5px 0 rgba(20,45,65,.15);border:2px solid #115c88;color:#114d74;font-size:13px;font-weight:900;cursor:pointer;white-space:nowrap;pointer-events:auto;animation:gust-cross linear forwards}
+.gust-target:before{content:"◁";margin-right:7px;font-size:16px}
+.gust-target:hover,.gust-target:focus-visible{animation-play-state:paused;outline:3px solid #122c44;outline-offset:4px}
+.gust-bonus{background:#ffe49b;border-color:#a8750e;color:#604909}
+.gust-turbulence{background:#f7bbb4;border-color:#aa332a;color:#83231c}
+@keyframes gust-cross{from{transform:translateX(0)}to{transform:translateX(calc(-1 * var(--wind-track, 700px)))}}
+.wind-paused .gust-target{animation-play-state:paused}
+.wind-overlay{position:absolute;z-index:10;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;padding:30px 16px;text-align:center;background:rgba(237,245,240,.93);color:#15293d}
+.wind-overlay[hidden]{display:none!important}
+.wind-large-number{color:rgba(32,92,113,.15);font:900 clamp(67px,9vw,120px)/.9 'DM Sans',sans-serif;letter-spacing:-.07em}
+.wind-overlay h4{font-size:clamp(22px,3vw,35px);font-weight:900;letter-spacing:-.06em;margin:9px 0}
+.wind-overlay p{font-size:13px;line-height:1.8;max-width:340px;color:#4b6572;margin:5px 0 18px}
+.wind-action{border:2px solid #122439;background:#122439;color:white;padding:13px 22px;font-size:13px;font-weight:800;cursor:pointer;min-height:48px}
+.wind-action:hover{background:#174f78}
+.wind-feedback{position:absolute;z-index:5;bottom:10px;right:14px;left:14px;max-width:440px;margin:0 auto;padding:7px 12px;background:rgba(255,255,255,.82);color:#294c5c;border:1px solid rgba(35,110,138,.27);text-align:center;font-weight:800;font-size:11px;pointer-events:none}
+.wind-hit{box-shadow:inset 0 0 0 5px rgba(67,152,110,.6)}
+.wind-hazard-hit{box-shadow:inset 0 0 0 5px rgba(216,57,50,.65)}
+.wind-foot{display:flex;align-items:center;gap:14px;padding:14px 20px;font:800 10px/1.4 'DM Sans',sans-serif;letter-spacing:.09em}
+.wind-foot b{color:#d43c35}
+.wind-goal-track{height:6px;background:#cbd2d2;flex:1;overflow:hidden}
+.wind-goal-track>span{height:100%;display:block;width:0;background:#e33832;transition:width .2s ease-out}
+.game-doors{display:flex;flex-direction:column;min-height:100%;gap:14px}
+.game-door{position:relative;overflow:hidden;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;flex:1;min-height:208px;padding:20px 23px 19px;background:#223d66;color:white;text-decoration:none;border:2px solid #223d66;transition:transform .2s ease,border-color .2s}
+.game-door:after{position:absolute;right:-43px;bottom:-56px;width:190px;height:190px;border-radius:50%;border:26px solid rgba(255,255,255,.06);content:"";z-index:-1}
+.game-door:hover{transform:translateX(-4px);border-color:#e1d7b8}
+.door-yakitori{background:#a34133;border-color:#a34133}
+.door-top,.door-bottom{display:flex;justify-content:space-between;align-items:center;gap:14px}
+.door-top{font:800 10px/1 'DM Sans';letter-spacing:.15em;color:rgba(255,255,255,.78)}
+.door-top>span{font-size:27px;color:white}
+.door-icon{display:inline-block;font-size:28px;line-height:1;margin:6px 0}
+.game-door h3{margin:0 0 6px;font-size:clamp(23px,2.3vw,33px);font-weight:900;letter-spacing:-.045em}
+.game-door p{margin:0;font-size:11px;line-height:1.8;color:rgba(255,255,255,.84)}
+.door-bottom{margin-top:12px;padding-top:11px;border-top:1px solid rgba(255,255,255,.28);font:800 10px/1.3 'DM Sans';letter-spacing:.08em;color:rgba(255,255,255,.8)}
+.door-bottom>b{color:#fff;font-size:11px}
+.game-lab-link{min-height:58px;padding:10px 18px;background:transparent;border:1px solid #85949d;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;text-decoration:none;font-size:11px;color:#405362}
+.game-lab-link>b{color:#164d81;font-size:12px}
+.game-lab-link:hover{background:rgba(255,255,255,.6)}
+.play-clarification{margin:18px 0 0;font-size:11px;line-height:1.8;color:#566774}
+@media(max-width:1000px){.play-layout{grid-template-columns:minmax(0,1fr)}.game-doors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.game-lab-link{grid-column:1/-1}.game-door{min-height:230px}.play-intro h2{font-size:clamp(44px,9vw,80px)}}
+@media(max-width:600px){.play-room-inner{padding:65px 20px 70px}.play-intro{display:block}.play-intro>p{margin-top:20px;font-size:13px}.wind-game-header{padding:18px 15px 11px}.wind-instructions{padding:0 15px 14px}.wind-game-header h3{font-size:27px}.wind-hud>div{padding:10px 8px}.wind-hud strong{font-size:24px}.wind-hud>div>span{font-size:9px}.wind-arena{height:325px;min-height:325px}#wind-tobito{height:45%;left:1%;bottom:8%}.gust-target{min-width:76px;min-height:50px;padding:11px;font-size:11px}.game-doors{display:flex}.game-door{min-height:230px}.game-lab-link{display:flex}.wind-overlay h4{font-size:25px}.wind-feedback{font-size:10px}.wind-foot{padding:12px 13px;gap:9px}}
+@media(prefers-reduced-motion:reduce){.gust-target{animation:none!important;right:10%;position:absolute}.wind-goal-track>span{transition:none!important}}
