@@ -22,7 +22,11 @@
       el.src = path;
       el.async = false;
       el.onload = resolve;
-      el.onerror = () => reject(new Error(path + ' を読み込めませんでした'));
+      el.onerror = () => {
+        loaded.delete(path); // Retry after transient CDN/network failures.
+        el.remove();
+        reject(new Error(path + ' を読み込めませんでした'));
+      };
       document.head.appendChild(el);
     });
     loaded.set(path, promise);
