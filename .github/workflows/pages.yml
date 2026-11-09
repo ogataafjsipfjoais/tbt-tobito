@@ -68,6 +68,7 @@ jobs:
           test -s 3d/goods.css
           test -s 3d/cursor.js
           test -s 3d/cursor.css
+          test -s 3d/polish.css
           test -s assets/models/body.glb
       - name: Commit the generated preview for GitHub Pages branch publishing
         run: |
