@@ -47,3 +47,15 @@ test('Pages workflow includes 3D directory and generated preview', () => {
   assert.match(workflow, /cp -R 3d _site\/3d/);
   assert.match(workflow, /test -s _site\/3d\/index\.html/);
 });
+
+test('site root always links to the 3D page under branch and Actions Pages deployments', () => {
+  const entry = get('index.html');
+  const workflow = get('.github/workflows/pages.yml');
+  const build = get('scripts/build.sh');
+  assert.match(entry, /url=\.\/3d\//);
+  assert.match(entry, /href="\.\/3d\//);
+  assert.match(workflow, /cp index\.html _site\/index\.html/);
+  assert.match(workflow, /php index\.php > _site\/legacy\.html/);
+  assert.match(build, /preview\.html/);
+  assert.doesNotMatch(build, /mv "\$preview_file" index\.html/);
+});
