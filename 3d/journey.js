@@ -25,6 +25,12 @@
       lines: ['こんな練習もしたよね。次はもっと高く跳べるかな？', '寄り道して、風をつかむ特訓もしよう！']
     },
     {
+      id: 'oddities',
+      anchor: 'oddities',
+      name: 'SECRET / 迷子の格納庫',
+      lines: ['……ぼくを探してる？ ここだよ！', '冷蔵庫に翼が生えてる。理由は誰にもわからない。']
+    },
+    {
       id: 'hangar',
       anchor: 'hangar',
       name: 'WAYPOINT 02 / 格納庫',
