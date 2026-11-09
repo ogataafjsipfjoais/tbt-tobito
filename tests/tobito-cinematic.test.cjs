@@ -34,8 +34,8 @@ test('travelling character, real physics game links and cinematic worlds are ret
     assert.ok(js.toLowerCase().includes(name));
   }
   assert.match(html,/href="\.\.\/legacy\.html#flight"/);
-  assert.match(html,/href="\.\.\/legacy\.html\?game=yakitori#flight"/);
-  assert.match(html,/href="\.\.\/legacy\.html#aerolab"/);
+  assert.match(html,/data-arcade-mode="yakitori"/);
+  assert.match(html,/data-arcade-host="wind"/);
   assert.match(html,/src="\.\/play\.js"/);
 });
 
@@ -104,5 +104,5 @@ test('the large search game and the absurd wind lab remain playable in the journ
   assert.match(js,/pointerdown/);
   assert.match(js,/navigator\.share/);
   assert.match(js,/prefers-reduced-motion/);
-  assert.match(html,/href="\.\.\/legacy\.html#aerolab"/);
+  assert.match(html,/data-arcade-host="wind"/);
 });
