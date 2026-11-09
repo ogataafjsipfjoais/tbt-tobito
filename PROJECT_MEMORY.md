@@ -43,3 +43,9 @@ GitHub PagesはPHP・POST保存・APIを実行できない。Pagesプレビュ�
 - .github/workflows/pages.yml に3dディレクトリ配信を追加。
 - `tests/tobito-3d-page.test.cjs` に独立ページ検証を追加。
 - 公開URLはGitHub Pagesの有効化・Actions完了を検証するまで未確定。
+
+## 2026-11-09 404対応
+- GitHub Pagesの404報告を受けてデプロイパイプラインを修正。旧サイト全体のビルドと切り離し、3Dページ専用テストとPHP静的書き出しのみでデプロイ可能にした。
+- `.github/workflows/pages.yml` は3Dページ、assets、既存PHPの静的プレビューを配置してPagesへアップロード。
+- GitHub Pages管理設定の有効化や実際の配信ステータスは接続されたGitHubツールで確認・変更できない。Settings > Pages > Source = GitHub Actionsの一度限りの設定と、Actionsの成功確認が残る。
+- 404解消は未確認。公開成功を主張しない。
