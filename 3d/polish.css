@@ -63,3 +63,21 @@
 .world-active #main .oddities-section{background:rgba(255,222,149,.95)!important}
 @media(max-width:720px){.chaos-toolbar{bottom:7px!important;left:7px!important}.journey-buddy .buddy-balloon{border-radius:18px!important}#main .oddities-board-top{padding:8px 13px}#main .find-list{padding:10px 16px}#main .wind-lab-layout{gap:16px}#main .boarding-zone{border-radius:27px!important}}
 @media(prefers-reduced-motion:reduce){.chaos-toolbar button,.site-nav a{transition:none!important}}
+
+
+/* First-frame art direction: protect contrast without bleaching the world. */
+.world-active #prologue-section{isolation:isolate}
+.world-active #prologue-section:before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(95deg,rgba(9,24,40,.72) 0%,rgba(13,31,47,.40) 26%,rgba(16,34,50,.10) 58%,transparent 77%),
+    linear-gradient(0deg,rgba(7,23,36,.35) 0%,transparent 40%);
+}
+.world-active #prologue-section .hero-content{position:relative;z-index:4}
+.world-active #prologue-section .hero-description{max-width:450px;filter:drop-shadow(0 5px 15px rgba(9,19,31,.28))}
+.world-active #prologue-section .hero h1{line-height:1.16}
+.world-active #prologue-section .hero-stage{z-index:2}
+.world-active #prologue-section .hero-bottomline{position:relative;z-index:5}
+@media(max-width:700px){
+  .world-active #prologue-section:before{background:linear-gradient(180deg,rgba(9,24,40,.66) 0%,rgba(13,31,47,.24) 48%,transparent 72%),linear-gradient(90deg,rgba(9,24,40,.20),transparent 80%)}
+  .world-active #prologue-section .hero-description{max-width:90%}
+}
