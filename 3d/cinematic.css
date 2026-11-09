@@ -232,3 +232,9 @@ html.world-fallback .journey-world{display:none!important}
  html.world-active{scroll-behavior:auto}
  .world-hud .hud-recording-dot{animation:none}
 }
+
+/* Prevent visual flash of the former support-chat mascot and inspector controls
+   before Three.js has finished loading. The 3D companion lives in the world. */
+#journey-buddy{display:none!important}
+#tobito-3d-controls{display:none!important}
+html.world-active #prologue-giant-wrap{display:none!important}
