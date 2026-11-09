@@ -38,7 +38,9 @@ jobs:
           node --check assets/js/tobito-3d-world.js
           node --check assets/js/s320-model.js
           node --check 3d/studio.js
-          node --test tests/tobito-3d.test.cjs tests/tobito-3d-page.test.cjs
+          node --check 3d/play.js
+          node --check 3d/journey.js
+          node --test tests/tobito-3d.test.cjs tests/tobito-3d-page.test.cjs tests/tobito-journey.test.cjs
           php -l index.php
           php -l data.php
       - name: Export static pages
@@ -53,6 +55,10 @@ jobs:
           test -s _site/3d/index.html
           test -s _site/3d/studio.css
           test -s _site/3d/studio.js
+          test -s _site/3d/journey.js
+          test -s _site/3d/journey.css
+          test -s _site/3d/play.js
+          test -s _site/3d/play.css
           test -s _site/assets/js/tobito-3d-world.js
           test -s _site/assets/models/body.glb
       - name: Set up GitHub Pages
