@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="./goods.css">
   <link rel="stylesheet" href="./cursor.css">
   <link rel="stylesheet" href="./polish.css">
+  <link rel="stylesheet" href="./opening.css">
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
@@ -36,6 +37,7 @@
   <script defer src="./gameport.js"></script>
   <script defer src="./goods.js"></script>
   <script defer src="./cursor.js"></script>
+  <script defer src="./opening.js"></script>
 </head>
 <body>
   <div id="journey-world" class="journey-world" aria-hidden="true"></div>
@@ -96,42 +98,66 @@
   </aside>
 
   <main id="main">
-    <section id="prologue-section" data-journey-step="start" class="hero" aria-labelledby="hero-title">
-      <div class="hero-grid" aria-hidden="true"></div>
-      <div class="hero-sun" aria-hidden="true"></div>
-      <div class="hero-edge hero-edge-a" aria-hidden="true"></div>
-      <div class="hero-edge hero-edge-b" aria-hidden="true"></div>
-      <div class="hero-content">
-        <p class="eyebrow"><span class="eyebrow-rule"></span> TBT OFFICIAL MASCOT <span class="eyebrow-index">/ OUR FLIGHT LOG</span></p>
-        <h1 id="hero-title"><span>あ、来た。</span><span class="outlined-word">こっち。</span></h1>
-        <p class="hero-description"><strong>ギィ……格納庫のシャッターが開く。</strong><br>奥から工具の音と、誰かの足音がする。</p>
-        <div class="hero-cta-row">
-          <a class="primary-link" href="#about">中に入る <span aria-hidden="true">↘</span></a>
-          <a class="journey-quickplay" href="#play">ゲームから始める ↗</a>
-          <span class="hero-scroll-hint">SCROLL TO WALK TOGETHER</span>
+    <section id="prologue-section" data-journey-step="start" class="hero hero-opening-scene" aria-labelledby="hero-title">
+      <div class="opening-sticky" id="opening-sticky">
+        <div class="opening-environment" aria-hidden="true">
+          <div class="opening-ceiling"></div>
+          <div class="opening-depth opening-depth-back"></div>
+          <div class="opening-depth opening-depth-front"></div>
+          <div class="opening-runway"><span></span><span></span><span></span></div>
+          <div class="opening-portal-light"></div>
+          <div class="opening-shutter opening-shutter-left"></div>
+          <div class="opening-shutter opening-shutter-right"></div>
+          <div class="opening-grain"></div>
         </div>
+        <div class="opening-topline" aria-hidden="true">
+          <span><b>AUTHORIZED PERSONNEL?</b> いいえ、誰でもどうぞ。</span>
+          <span>TEAM BIRDMAN TRIAL <i>/</i> SECRET HANGAR</span>
+        </div>
+        <div class="hero-content opening-copy">
+          <p class="eyebrow opening-eyebrow"><span class="eyebrow-rule"></span> TBT OFFICIAL MASCOT <span class="eyebrow-index">/ やたら秘密の基地</span></p>
+          <h1 id="hero-title">
+            <span class="opening-title-lead">飛べない鳥の、</span>
+            <span class="opening-title-core">ひみつ<span class="opening-title-accent">基地</span><span class="opening-title-stop">。</span></span>
+            <span class="opening-title-scribble">なのに、空を目指してる。</span>
+          </h1>
+          <p class="hero-description opening-description"><strong>ギィ……格納庫のシャッターが開く。</strong><br>とびと君と、ちょっと変な空の世界へ。<br>風洞にはラーメン。格納庫では誰かが迷子。</p>
+          <div class="hero-cta-row opening-actions">
+            <a class="primary-link opening-main-action" href="#about"><span class="action-label"><small>ENTER THE HANGAR</small>基地に潜入する</span><span class="action-arrow" aria-hidden="true">↗</span></a>
+            <a class="journey-quickplay opening-secondary-action" href="#play"><span aria-hidden="true">▶</span> ゲームから始める</a>
+          </div>
+          <div class="opening-handwritten" aria-hidden="true"><span>← ここ、意外と危険。</span><span class="opening-sketch-arrow">↗</span></div>
+        </div>
+        <button class="opening-tobito" id="opening-tobito" type="button" aria-label="とびと君に話しかける。押すと秘密基地で事件が起こります">
+          <span class="opening-tobito-backdrop" aria-hidden="true"></span>
+          <span class="opening-tobito-orbit opening-tobito-orbit-a" aria-hidden="true"></span>
+          <span class="opening-tobito-orbit opening-tobito-orbit-b" aria-hidden="true"></span>
+          <img src="../assets/images/tobito_pose_airplane.png" alt="両腕を広げて飛ぶ気満々のとびと君。白い四角い顔、赤いトサカ、青いつなぎ姿。" width="720" height="720" decoding="async" fetchpriority="high">
+          <span class="opening-tobito-speech" id="opening-tobito-speech" aria-hidden="true">見つかっちゃった！</span>
+        </button>
+        <div class="opening-strange-label" aria-hidden="true"><span>研究所からのお知らせ</span><strong>風洞にラーメンを<br>入れないで！</strong><span>※ すでに手遅れです</span></div>
+        <div class="opening-vertical-serial" aria-hidden="true">TOBITO / FLIGHT LOG / 001</div>
+        <button type="button" class="opening-secret" id="opening-secret" aria-label="隠しネジを拾う"><span aria-hidden="true">✳</span><small>ひろう？</small></button>
+        <div class="opening-footer">
+          <span class="opening-footer-status"><span class="opening-live" aria-hidden="true"></span> ひみつ基地、ただいま開放中</span>
+          <span class="opening-footer-direction"><span aria-hidden="true">SCROLL TO ENTER</span><span class="opening-scroll-arrow" aria-hidden="true">↓</span></span>
+          <span class="opening-footer-coordinates" aria-hidden="true">35°15′ N / 136°08′ E</span>
+        </div>
+        <div class="opening-screen-reader" id="opening-secret-status" role="status" aria-live="polite"></div>
       </div>
-      <div class="hero-stage" aria-label="画面いっぱいに広がる、とびとくんの3D旅の出発地点">
-        <div class="hero-stage-circle" aria-hidden="true"></div>
-        <span class="hero-stage-number" aria-hidden="true">01<span> / 04</span></span>
+      <div class="opening-transition" aria-hidden="true"><span>ここから先は、戻れません。</span><span>↓</span></div>
+      <div class="hero-stage opening-legacy-stage" aria-hidden="true">
         <div id="prologue-giant-wrap">
-          <img id="prologue-giant-tobito" src="../assets/images/tobito_pose_airplane.png" alt="青いつなぎを着て飛行機ポーズをする、四角い頭のとびとくん" width="680" height="680">
+          <img id="prologue-giant-tobito" src="../assets/images/tobito_pose_airplane.png" alt="" width="680" height="680">
           <div id="tobito-3d-stage"></div>
         </div>
-        <div class="hero-floor" aria-hidden="true"></div>
         <div id="tobito-3d-controls" class="studio-controls" role="group" aria-label="とびとくん3D操作">
-          <span class="tobito-3d-eyebrow" aria-hidden="true">さわってみてね</span>
-          <button class="tobito-3d-tool" id="tobito-3d-rotate" type="button" aria-label="とびとくんを90度回す"><span aria-hidden="true">↻</span> <span class="tobito-3d-tool-label">回す</span></button>
-          <button class="tobito-3d-tool" id="tobito-3d-flap" type="button" data-emphasis="true" aria-label="とびとくんを羽ばたかせる"><span aria-hidden="true">✳</span> <span class="tobito-3d-tool-label">羽ばたく</span></button>
-          <button class="tobito-3d-tool" id="tobito-3d-reset" type="button" aria-label="とびとくんを正面に戻す"><span aria-hidden="true">⌂</span> <span class="tobito-3d-tool-label">正面</span></button>
+          <span class="tobito-3d-eyebrow" aria-hidden="true">3Dであそぶ</span>
+          <button class="tobito-3d-tool" id="tobito-3d-rotate" type="button" aria-label="とびとくんを90度回す"><span aria-hidden="true">↻</span><span class="tobito-3d-tool-label">回す</span></button>
+          <button class="tobito-3d-tool" id="tobito-3d-flap" type="button" aria-label="とびとくんを羽ばたかせる"><span aria-hidden="true">✳</span><span class="tobito-3d-tool-label">羽ばたく</span></button>
+          <button class="tobito-3d-tool" id="tobito-3d-reset" type="button" aria-label="とびとくんを正面に戻す"><span aria-hidden="true">⌂</span><span class="tobito-3d-tool-label">正面</span></button>
         </div>
         <p id="tobito-3d-notice" class="tobito-3d-status" role="status" aria-live="polite"></p>
-        <span class="hero-stage-label" aria-hidden="true">SCROLL TO TRAVEL / CLICK TO FLAP</span>
-      </div>
-      <div class="hero-bottomline">
-        <span><span class="red-dot"></span> START / ひみつ基地で合流</span>
-        <span>床の線に沿って進んでみよう。</span>
-        <a href="#about" aria-label="とびとくんと出発する">↓</a>
       </div>
     </section>
 
