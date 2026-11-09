@@ -96,3 +96,139 @@
 @media(prefers-reduced-motion:reduce){
   .hud-recording-dot,.chaos-dashboard .chaos-marquee span{animation:none!important}
 }
+
+
+/* V2: The stage IS the site. The document scrolls, but its screen is an open
+   camera view. Written panels appear as location props, not independent LP pages. */
+html.world-active,html.world-active body{background:#152b3e!important;color:#fff8eb}
+html.world-active .site-header{position:fixed!important;inset:0 0 auto 0;min-height:58px!important;height:58px!important;padding:0 clamp(11px,2vw,28px)!important;background:linear-gradient(#081e2bee,#152d3dbb)!important;border-bottom:1px solid #e4f6fd33;color:#fff!important;backdrop-filter:blur(9px)}
+html.world-active .site-header .brand-symbol{width:34px;height:34px;background:#e2e9e6;border-color:#849fac}
+html.world-active .site-header .brand-words strong{font-size:11px;color:#fff}
+html.world-active .site-header .brand-words small{font-size:8px;color:#aec4d4}
+html.world-active .site-nav{display:none!important}
+html.world-active .header-back{border:1px solid #aac8d47d;background:#18394c88;color:#fff;font-size:10px;padding:7px 10px}
+html.world-active .world-actions button{min-height:33px;padding:5px 10px;font-size:10px;background:#142c3aa6;color:#f8f1dd;border:1px solid #aec4d16e}
+html.world-active .world-actions button[aria-pressed=false]{color:#ffdaae;border-color:#e1b897}
+html.world-active .world-hud{z-index:80;top:70px;left:clamp(16px,3.2vw,58px);padding:6px 18px 6px 0;display:flex;color:#fff;background:linear-gradient(90deg,#0e293b77,transparent);font-size:9px}
+html.world-active .journey-rail,html.world-active #journey-buddy{display:none!important}
+html.world-active #main{position:relative;z-index:2;background:transparent!important;overflow:clip}
+html.world-active #prologue-section{position:relative;display:block;min-height:147svh!important;background:transparent!important;border:0!important;overflow:visible}
+html.world-active #prologue-section .hero-content{position:sticky;top:22vh;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-height:70vh;height:auto;padding:10vh clamp(20px,6vw,100px);max-width:100%;width:max-content;z-index:5}
+html.world-active .hero-grid,html.world-active .hero-sun,html.world-active .hero-edge{display:none}
+html.world-active #prologue-section .hero-stage{display:none!important}
+html.world-active #prologue-section .hero-bottomline{display:none!important}
+html.world-active #prologue-section .hero h1{font-size:clamp(44px,8.2vw,122px);color:#fffbe8;line-height:1.23;text-shadow:0 5px 38px #061628b0}
+html.world-active #prologue-section .hero h1 .outlined-word{color:#ffd59d}
+html.world-active #prologue-section .eyebrow{color:#f7dba7;text-shadow:0 3px 8px #172b3c;margin-bottom:18px}
+html.world-active #prologue-section .hero-description,html.world-active #prologue-section .hero-description strong{color:#f6f5e9;text-shadow:0 3px 15px #0b2137;font-size:clamp(13px,1.25vw,17px)}
+html.world-active #prologue-section .hero-cta-row{margin-top:6px}
+html.world-active .journey-quickplay{color:#ffe4b4}
+html.world-active #about,html.world-active #poses,html.world-active #play,html.world-active #hangar,html.world-active #takeoff,html.world-active .interlude{background:transparent!important;border:0!important;position:relative;isolation:isolate;backdrop-filter:none!important}
+html.world-active #about{padding:64vh clamp(18px,5vw,85px) 13vh;min-height:136svh}
+html.world-active #about .section-label{display:none}
+html.world-active #about .about-layout{max-width:900px;margin-left:auto;display:grid;grid-template-columns:1fr minmax(150px,.48fr);gap:20px;align-items:end}
+html.world-active #about .about-title{background:linear-gradient(105deg,#0a2638cc,#172f4188)!important;border-left:3px solid #f5c187;padding:25px 28px;box-shadow:none!important;backdrop-filter:blur(4px)}
+html.world-active #about .about-title h2{color:#fff7e2;font-size:clamp(34px,4.8vw,68px)}
+html.world-active #about .about-title h2 span{color:#ffd59d}
+html.world-active #about .about-title p{color:#f6e8da;font-size:12px;line-height:2}
+html.world-active #about .about-portrait{background:#decdb3!important;max-width:240px;min-height:265px;border:10px solid #efe6cd;transform:rotate(5deg);box-shadow:10px 14px 0 #081b2d88!important}
+html.world-active #about .about-facts{display:none!important}
+html.world-active .interlude{min-height:123svh!important}
+html.world-active .interlude-inner{min-height:123svh!important;display:flex;justify-content:flex-end;align-items:flex-start;padding:0 clamp(23px,8vw,130px) 23vh}
+html.world-active .interlude-inner:after,html.world-active .interlude-track,html.world-active .interlude img{display:none!important}
+html.world-active .interlude h2{font-size:clamp(59px,11vw,162px);color:#f9f6e9;text-shadow:0 8px 39px #0a1d30;line-height:1.17}
+html.world-active .interlude-meta{color:#f5d5a9;text-shadow:0 3px 20px #0b2538}
+html.world-active #poses{min-height:175svh;padding:61vh clamp(18px,5vw,86px) 11vh}
+html.world-active #poses .section-label{color:#f0e8db;border-bottom:1px solid #dfe3e388}
+html.world-active #poses .poses-head{background:transparent!important;backdrop-filter:none!important;max-width:1020px;padding:0}
+html.world-active #poses .poses-head h2{font-size:clamp(43px,6vw,91px);color:#fff8e9;text-shadow:0 8px 29px #0c2034}
+html.world-active #poses .poses-head p{color:#eae7db;text-shadow:0 3px 18px #0b1d32}
+html.world-active #poses .pose-stage{max-width:1050px;grid-template-columns:minmax(0,1.2fr) minmax(210px,.8fr);background:transparent;border:0;box-shadow:none!important}
+html.world-active #poses .pose-art{background:#dfd1af!important;border:11px solid #fff1d6;transform:rotate(-3deg);min-height:400px;box-shadow:15px 16px 0 #0a1b2cbb}
+html.world-active #poses .pose-copy{background:#08263cb5;padding:28px 22px 28px 55px}
+html.world-active #poses .pose-copy h3{color:#fff4dd}
+html.world-active #poses .pose-copy p{color:#dee8e9}
+html.world-active #poses .pose-controls button{border-color:#e8e4cf;color:#fff}
+html.world-active #poses .pose-controls button:hover{background:#f0dfbc;color:#142b41}
+html.world-active #play{min-height:163svh!important;border:0!important}
+html.world-active #play .play-room-inner{padding:59vh clamp(15px,4vw,75px) 13vh}
+html.world-active #play .section-label{color:#e9ded0;border-color:#f2e5d38c}
+html.world-active #play .play-intro h2{color:#fff2e4;text-shadow:0 6px 27px #0d2237}
+html.world-active #play .play-intro p{color:#e9e9df}
+html.world-active #play .play-layout{grid-template-columns:minmax(0,1.25fr) minmax(195px,.5fr)}
+html.world-active #play .wind-game{background:#f5edd6;box-shadow:12px 12px 0 #0b203899}
+html.world-active #play .game-doors{display:flex;gap:10px;flex-direction:column}
+html.world-active #play .game-door{min-height:155px;padding:12px 14px;background:#1d3b4add;border:1px solid #acc4ca}
+html.world-active #play .door-yakitori{background:#873f36dd;border:1px solid #daa38c}
+html.world-active #play .game-door h3{font-size:23px}
+html.world-active #play .game-door p{font-size:10px}
+html.world-active #play .door-icon{font-size:20px}
+html.world-active #play .game-lab-link{background:#0e2939bb;color:#eee5d1;border-color:#d4e1dc88}
+html.world-active #play .game-lab-link>b{color:#ffdc9a}
+html.world-active #play .play-clarification{color:#d5d4c5}
+html.world-active #oddities{background:linear-gradient(180deg,#102f43ed,#315060dc)!important}
+html.world-active #oddities .oddities-intro h2{color:#fff9dd}
+html.world-active #oddities .oddities-overline,html.world-active #oddities .oddities-intro p:not(.absurd-eyebrow),html.world-active #oddities .oddities-warning{color:#f0ece1}
+html.world-active #wind-lab{background:linear-gradient(175deg,#c3a181ec,#d7c19bef)!important}
+html.world-active #hangar{min-height:177svh}
+html.world-active #hangar .hangar-inner{padding:71vh clamp(16px,4vw,78px) 14vh}
+html.world-active #hangar .hangar-intro h2{color:#fff8e8;text-shadow:0 6px 30px #081d31}
+html.world-active #hangar .hangar-intro h2 em{color:#ffdea2}
+html.world-active #hangar .hangar-intro p{color:#e7f1ef}
+html.world-active #hangar .hangar-viewer{background:linear-gradient(140deg,#071c2fce,#173145d4);box-shadow:0 20px 70px #03142099}
+html.world-active #hangar .hangar-spec{color:#ece3d8}
+html.world-active #takeoff{min-height:170svh!important;padding:73vh 15px 11vh;background:transparent!important}
+html.world-active #takeoff:before,html.world-active #takeoff .goal-contrail{display:none!important}
+html.world-active #takeoff>img{height:230px}
+html.world-active #takeoff h2{font-size:clamp(43px,7vw,100px);color:#163c57;text-shadow:0 2px 20px #fff8d69c}
+html.world-active #takeoff h2 span{color:#146da0}
+html.world-active #takeoff>p{color:#234c68}
+html.world-active #takeoff .boarding-zone{background:#fffaeeed;box-shadow:0 20px 65px #123a6255}
+html.world-active .site-footer{position:relative;z-index:5;background:#102b3d;color:#e8f0e9;border:0}
+html.world-active .site-footer a{color:#f8d29a}
+html.world-active .chaos-dashboard{z-index:90}
+html.world-fallback .journey-world{display:none!important}
+@media(max-width:950px){
+ html.world-active #about .about-layout{grid-template-columns:1fr 175px}
+ html.world-active #play .play-layout{grid-template-columns:1fr}
+ html.world-active #play .game-doors{display:grid;grid-template-columns:1fr 1fr}
+ html.world-active #play .game-lab-link{grid-column:1/-1}
+}
+@media(max-width:650px){
+ html.world-active .site-header{height:56px!important;min-height:56px!important;padding:0 8px!important}
+ html.world-active .site-header .brand-words small{display:none}
+ html.world-active .brand-words strong{font-size:10px}
+ html.world-active .site-header .brand-symbol{width:30px;height:30px}
+ html.world-active .world-actions{margin-left:auto}
+ html.world-active .world-actions button{padding:4px 6px;min-height:33px;font-size:9px}
+ html.world-active .header-back{display:none}
+ html.world-active .world-hud{top:62px;left:10px}
+ html.world-active .world-hud>span:last-child{display:none}
+ html.world-active #prologue-section{min-height:130svh!important}
+ html.world-active #prologue-section .hero-content{top:20vh;min-height:63vh;padding:8vh 17px}
+ html.world-active #prologue-section .hero h1{font-size:clamp(43px,11vw,64px)}
+ html.world-active #prologue-section .hero-description{font-size:12px}
+ html.world-active #about{min-height:140svh;padding:77vh 13px 10vh}
+ html.world-active #about .about-layout{grid-template-columns:1fr 108px;gap:8px}
+ html.world-active #about .about-title{padding:13px}
+ html.world-active #about .about-title h2{font-size:31px}
+ html.world-active #about .about-title p{font-size:11px}
+ html.world-active #about .about-portrait{min-height:170px;border-width:7px}
+ html.world-active .interlude,.interlude-inner{min-height:115svh!important}
+ html.world-active .interlude .interlude-inner{min-height:115svh!important;padding:0 18px 13vh}
+ html.world-active .interlude h2{font-size:clamp(57px,13vw,82px)}
+ html.world-active #poses{padding:70vh 12px 12vh}
+ html.world-active #poses .pose-stage{display:block}
+ html.world-active #poses .pose-art{height:330px;min-height:330px}
+ html.world-active #poses .pose-copy{padding:23px 16px}
+ html.world-active #play .play-room-inner{padding:58vh 12px 11vh}
+ html.world-active #play .game-doors{display:block}
+ html.world-active #play .game-door{margin-top:9px;min-height:160px}
+ html.world-active #hangar .hangar-inner{padding:76vh 13px 12vh}
+ html.world-active #takeoff{padding:68vh 11px 10vh}
+ html.world-active #takeoff h2{font-size:45px}
+}
+@media(prefers-reduced-motion:reduce){
+ html.world-active{scroll-behavior:auto}
+ .world-hud .hud-recording-dot{animation:none}
+}
