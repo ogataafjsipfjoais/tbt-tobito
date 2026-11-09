@@ -78,3 +78,31 @@ test('all newly added standalone scripts, css and public assets exist',()=>{
   assert.match(read('legacy.html'),/id="tobito-game-canvas"/);
   assert.match(read('legacy.html'),/id="yakitori-game-canvas"/);
 });
+
+
+test('the WebGL scene, not marketing blocks, occupies the visible journey',()=>{
+  const css=read('3d/cinematic.css');
+  const html=read('3d/index.html');
+  assert.match(css,/\.journey-world\{position:fixed;inset:0/);
+  assert.match(css,/html\.world-active #about\{min-height:/);
+  assert.match(css,/html\.world-active #poses\{min-height:/);
+  assert.match(css,/html\.world-active #hangar\{min-height:/);
+  assert.match(css,/#journey-buddy\{display:none!important\}/);
+  assert.match(css,/#tobito-3d-controls\{display:none!important\}/);
+  assert.match(css,/html\.world-active #prologue-section \.hero-stage\{display:none!important\}/);
+  assert.match(css,/@media\(max-width:650px\)/);
+  assert.match(html,/ギィ……格納庫のシャッターが開く/);
+  assert.doesNotMatch(html,/これは、とびとくんとあなたの空を目指す旅/);
+});
+
+test('the large search game and the absurd wind lab remain playable in the journey',()=>{
+  const html=read('3d/index.html');
+  const js=read('3d/chaos.js');
+  for(const id of ['find-viewport','find-hits','find-list','find-zoom-in','find-hint','find-restart','find-share','wind-object-choices','absurd-speed','absurd-fire','absurd-reset']){
+    assert.match(html,new RegExp('id="'+id+'"'));
+  }
+  assert.match(js,/pointerdown/);
+  assert.match(js,/navigator\.share/);
+  assert.match(js,/prefers-reduced-motion/);
+  assert.match(html,/href="\.\.\/legacy\.html#aerolab"/);
+});
