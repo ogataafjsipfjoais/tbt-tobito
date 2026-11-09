@@ -25,5 +25,5 @@ flight-ranking-store.php
 
 # Rebuilt from source by scripts/build.sh
 /wordpress-theme-files/
-/index.html
+/preview.html
 /extensions/tobito-surfing/surf-core.js
