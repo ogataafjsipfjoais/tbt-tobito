@@ -28,6 +28,8 @@ const dialog=document.getElementById('goods-preview-dialog');
 const picture=document.getElementById('goods-preview-img');
 const caption=document.getElementById('goods-preview-caption');
 const close=document.getElementById('goods-preview-close');
+// Escape the scroll section's stacking context so the modal covers the header too.
+if(dialog && dialog.parentElement!==document.body)document.body.appendChild(dialog);
 let previous=null;
 const shut=()=>{
   if(!dialog||dialog.hidden)return;
