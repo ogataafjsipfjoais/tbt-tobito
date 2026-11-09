@@ -44,8 +44,8 @@ test('3D page CSS and JS are valid and accessible', () => {
 
 test('Pages workflow includes 3D directory and generated preview', () => {
   const workflow = get('.github/workflows/pages.yml');
-  assert.match(workflow, /cp -R 3d _site\/3d/);
-  assert.match(workflow, /test -s _site\/3d\/index\.html/);
+  assert.match(workflow, /test -s 3d\/index\.html/);
+  assert.match(workflow, /php index\.php > legacy\.html/);
 });
 
 test('site root restores the original playable page while preserving 3D entry', () => {
@@ -55,8 +55,8 @@ test('site root restores the original playable page while preserving 3D entry', 
   assert.match(entry, /url=\.\/legacy\.html/);
   assert.match(entry, /href="\.\/legacy\.html#flight/);
   assert.match(entry, /href="\.\/3d\/#play/);
-  assert.match(workflow, /cp index\.html _site\/index\.html/);
-  assert.match(workflow, /php index\.php > _site\/legacy\.html/);
+  assert.match(workflow, /git add -- legacy\.html/);
+  assert.match(workflow, /php index\.php > legacy\.html/);
   assert.match(build, /preview\.html/);
   assert.doesNotMatch(build, /mv "\$preview_file" index\.html/);
 });
