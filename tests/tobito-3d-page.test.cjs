@@ -48,14 +48,46 @@ test('Pages workflow includes 3D directory and generated preview', () => {
   assert.match(workflow, /test -s _site\/3d\/index\.html/);
 });
 
-test('site root always links to the 3D page under branch and Actions Pages deployments', () => {
+test('site root restores the original playable page while preserving 3D entry', () => {
   const entry = get('index.html');
   const workflow = get('.github/workflows/pages.yml');
   const build = get('scripts/build.sh');
-  assert.match(entry, /url=\.\/3d\//);
-  assert.match(entry, /href="\.\/3d\//);
+  assert.match(entry, /url=\.\/legacy\.html/);
+  assert.match(entry, /href="\.\/legacy\.html#flight/);
+  assert.match(entry, /href="\.\/3d\/#play/);
   assert.match(workflow, /cp index\.html _site\/index\.html/);
   assert.match(workflow, /php index\.php > _site\/legacy\.html/);
   assert.match(build, /preview\.html/);
   assert.doesNotMatch(build, /mv "\$preview_file" index\.html/);
+});
+
+test('3D world restores old game entries and includes playable challenge', () => {
+  const page = get('3d/index.html');
+  const js = get('3d/play.js');
+  const css = get('3d/play.css');
+  assert.match(page, /id="play"/);
+  assert.match(page, /id="wind-start"/);
+  assert.match(page, /id="wind-result"/);
+  assert.match(page, /href="\.\.\/legacy\.html#flight"/);
+  assert.match(page, /href="\.\.\/legacy\.html\?game=yakitori#flight"/);
+  assert.match(page, /href="\.\.\/legacy\.html#aerolab"/);
+  assert.match(page, /src="\.\/play\.js"/);
+  assert.match(page, /href="\.\/play\.css"/);
+  assert.match(js, /const GOAL = 100/);
+  assert.match(js, /localStorage/);
+  assert.match(js, /gust-turbulence/);
+  assert.match(css, /prefers-reduced-motion/);
+  assert.doesNotThrow(() => new vm.Script(js));
+});
+
+test('Original website keeps both playable games and 3D-world shortcut', () => {
+  const site = get('index.php');
+  const wp = get('page-tobito.php');
+  for (const source of [site, wp]) {
+    assert.match(source, /id="tobito-game-canvas"/);
+    assert.match(source, /id="yakitori-game-canvas"/);
+    assert.match(source, /class="tobito-world-shortcuts"/);
+    assert.match(source, /assets\/js\/tobito-play-links\.js/);
+  }
+  assert.doesNotThrow(() => new vm.Script(get('assets/js/tobito-play-links.js')));
 });
