@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="../assets/css/tobito-3d-world.css">
   <link rel="stylesheet" href="./studio.css">
   <link rel="stylesheet" href="./play.css">
+  <link rel="stylesheet" href="./journey.css">
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
@@ -23,6 +24,7 @@
   <script defer src="../assets/js/tobito-3d-world.js"></script>
   <script defer src="./studio.js"></script>
   <script defer src="./play.js"></script>
+  <script defer src="./journey.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">本文へスキップ</a>
@@ -35,25 +37,45 @@
     <nav class="site-nav" aria-label="メインメニュー">
       <a href="#play">遊ぶ</a>
       <a href="#about">とびとくん</a>
-      <a href="#poses">ポーズ図鑑</a>
-      <a href="#hangar">機体を見る</a>
+      <a href="#poses">旅の記録</a>
+      <a href="#hangar">格納庫</a>
+      <a href="#takeoff">ゴール</a>
     </nav>
     <a class="header-back" href="../legacy.html#flight">フライトゲーム <span aria-hidden="true">↗</span></a>
   </header>
 
+  <nav class="journey-rail" aria-label="とびとくんとの旅のチェックポイント">
+    <a href="#prologue-section" data-rail-step="start" aria-current="step"><b>00</b><span>合流</span></a>
+    <a href="#poses" data-rail-step="practice"><b>01</b><span>特訓</span></a>
+    <a href="#hangar" data-rail-step="hangar"><b>02</b><span>格納庫</span></a>
+    <a href="#takeoff" data-rail-step="takeoff"><b>GOAL</b><span>離陸</span></a>
+  </nav>
+  <div id="journey-buddy" class="journey-buddy" data-stage="start">
+    <div class="buddy-balloon" id="buddy-balloon">
+      <span id="buddy-chapter">START / ひみつ基地</span>
+      <p id="buddy-message">やあ、待ってたよ。一緒に行こう！</p>
+    </div>
+    <button type="button" id="buddy-hello" class="buddy-hello" aria-label="とびとくんに話しかける">
+      <img src="../assets/images/tobito_pose_airplane.png" alt="" aria-hidden="true" width="120" height="120">
+      <span class="buddy-footsteps" aria-hidden="true">·· ··</span>
+    </button>
+    <span id="buddy-live" class="journey-visually-hidden" role="status" aria-live="polite"></span>
+  </div>
+
   <main id="main">
-    <section id="prologue-section" class="hero" aria-labelledby="hero-title">
+    <section id="prologue-section" data-journey-step="start" class="hero" aria-labelledby="hero-title">
       <div class="hero-grid" aria-hidden="true"></div>
       <div class="hero-sun" aria-hidden="true"></div>
       <div class="hero-edge hero-edge-a" aria-hidden="true"></div>
       <div class="hero-edge hero-edge-b" aria-hidden="true"></div>
       <div class="hero-content">
-        <p class="eyebrow"><span class="eyebrow-rule"></span> TBT OFFICIAL MASCOT <span class="eyebrow-index">/ 3D EXPERIENCE</span></p>
+        <p class="eyebrow"><span class="eyebrow-rule"></span> TBT OFFICIAL MASCOT <span class="eyebrow-index">/ OUR FLIGHT LOG</span></p>
         <h1 id="hero-title"><span>飛べない鳥が、</span><span class="outlined-word">空を目指す。</span></h1>
-        <p class="hero-description">こんにちは、とびとくんです。<br>今日はぼくの世界を、ちょっとのぞいていかない？</p>
+        <p class="hero-description"><strong>「やあ、待ってたよ。一緒に行こう！」</strong><br>これは、とびとくんとあなたの空を目指す旅。</p>
         <div class="hero-cta-row">
-          <a class="primary-link" href="#play">とびとくんと遊ぶ <span aria-hidden="true">↘</span></a>
-          <span class="hero-scroll-hint">SCROLL TO EXPLORE</span>
+          <a class="primary-link" href="#about">一緒に出発する <span aria-hidden="true">↘</span></a>
+          <a class="journey-quickplay" href="#play">ゲームから始める ↗</a>
+          <span class="hero-scroll-hint">SCROLL TO WALK TOGETHER</span>
         </div>
       </div>
       <div class="hero-stage" aria-label="3Dとびとくんの展示">
@@ -74,18 +96,78 @@
         <span class="hero-stage-label" aria-hidden="true">DRAG TO TURN / CLICK TO FLAP</span>
       </div>
       <div class="hero-bottomline">
-        <span><span class="red-dot"></span> とびとくん、出動中。</span>
-        <span>ILLUSTRATION → DIGITAL FORM</span>
-        <a href="#play" aria-label="遊びのエリアへ">↓</a>
+        <span><span class="red-dot"></span> START / ひみつ基地で合流</span>
+        <span>旅の相棒は、とびとくん。</span>
+        <a href="#about" aria-label="とびとくんと出発する">↓</a>
+      </div>
+    </section>
+
+    <section id="about" class="about section-wrap" aria-labelledby="about-heading">
+      <div class="section-label"><span>START / FLIGHT LOG 00</span><span>出発前に、相棒を紹介。</span></div>
+      <div class="about-layout">
+        <div class="about-title" data-reveal>
+          <p class="section-small">まずは、きみとぼく。</p>
+          <h2 id="about-heading">一緒に行くのは、<br><span>ぼく。</span></h2>
+          <p>「ぼくはニワトリだけど、空を飛ぶのを諦めたこと、一度もないんだ。<br>きみも、一緒に空を見に行かない？」</p>
+        </div>
+        <div class="about-portrait tilt-surface" data-reveal>
+          <span class="image-number">PROFILE PHOTO / 001</span>
+          <img src="../assets/images/tobito_pose_crossed_arms.png" alt="青いつなぎ姿で腕組みをするとびとくん" loading="lazy">
+          <span class="portrait-tag">TOBITO-KUN</span>
+        </div>
+        <div class="about-facts" data-reveal>
+          <div><span>NAME</span><strong>とびとくん</strong></div>
+          <div><span>HOME</span><strong>Team Birdman Trial</strong></div>
+          <div><span>STYLE</span><strong>四角い顔と赤いトサカ。青いつなぎがトレードマーク。</strong></div>
+          <div><span>DREAM</span><strong>みんなと一緒に、空を飛ぶこと。</strong></div>
+          <p class="fact-note">※ このページの性格・物語の描写はサイト内のキャラクター設定を含みます。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="interlude" aria-labelledby="interlude-heading">
+      <div class="interlude-track" aria-hidden="true">DESIGN. BUILD. FLY.　DESIGN. BUILD. FLY.　DESIGN. BUILD. FLY.</div>
+      <div class="interlude-inner">
+        <span class="interlude-meta">ふたりで歩くと、空が少し近くなる。</span>
+        <h2 id="interlude-heading">飛ぶことは、<br>あきらめない。</h2>
+        <img src="../assets/images/tobito_pose_airplane.png" alt="" loading="lazy">
+      </div>
+    </section>
+
+    <section id="poses" data-journey-step="practice" class="poses section-wrap" aria-labelledby="poses-heading">
+      <div class="section-label"><span>WAYPOINT 01 / TRAINING LOG</span><span>ふたりの特訓記録</span></div>
+      <div class="poses-head" data-reveal>
+        <div>
+          <p class="section-small">旅の途中に撮った、スナップ写真。</p>
+          <h2 id="poses-heading">ぼくらの、<br>練習記録<span class="title-punctuation">。</span></h2>
+        </div>
+        <p>「こんな練習もしたよね。<br>次はもっと高く跳べるかな？」<br>矢印で、思い出の1ページをめくろう。</p>
+      </div>
+      <div class="pose-stage" id="pose-stage" data-pose="0">
+        <div class="pose-art" aria-live="polite">
+          <img id="pose-image" src="../assets/images/tobito_pose_airplane.png" alt="飛行機ポーズのとびとくん" loading="lazy">
+          <span class="pose-index" id="pose-index">01 / 03</span>
+          <span class="pose-decoration" aria-hidden="true">TOBITO</span>
+        </div>
+        <div class="pose-copy">
+          <span id="pose-kicker">POSE 001</span>
+          <h3 id="pose-title">飛行機ポーズ</h3>
+          <p id="pose-description">両腕をいっぱいに広げて、飛行機みたいに。空への憧れをそのままポーズにしました。</p>
+          <div class="pose-controls" role="group" aria-label="ポーズの切り替え">
+            <button type="button" id="pose-prev" aria-label="前のポーズ">←</button>
+            <button type="button" id="pose-next" aria-label="次のポーズ">→</button>
+            <span id="pose-progress" aria-hidden="true"><i></i></span>
+          </div>
+        </div>
       </div>
     </section>
 
     <section id="play" class="play-room" aria-labelledby="play-title">
       <div class="play-room-inner">
-        <div class="section-label label-on-dark"><span>01 / PLAY ROOM</span><span>まずは、遊んでいこう。</span></div>
+        <div class="section-label label-on-dark"><span>FIELD TEST / BONUS MISSION</span><span>途中でちょっと、寄り道。</span></div>
         <div class="play-intro" data-reveal>
           <div>
-            <p class="section-small">この世界は、見るだけじゃない。</p>
+            <p class="section-small">「いったん特訓しない？」</p>
             <h2 id="play-title">とびとくんと、<br><span>遊ぼう。</span></h2>
           </div>
           <p>飛ぶ。逃げる。風をつかまえる。<br>気になったところから、好きに遊んでね。</p>
@@ -145,75 +227,15 @@
       </div>
     </section>
 
-    <section id="about" class="about section-wrap" aria-labelledby="about-heading">
-      <div class="section-label"><span>02 / ABOUT</span><span>ぼくのこと</span></div>
-      <div class="about-layout">
-        <div class="about-title" data-reveal>
-          <p class="section-small">はじめまして。</p>
-          <h2 id="about-heading">とびとくん<br>って、<span>だれ？</span></h2>
-          <p>Team Birdman Trialの公式マスコット。<br>空を目指す、ちょっと不思議なニワトリ。</p>
-        </div>
-        <div class="about-portrait tilt-surface" data-reveal>
-          <span class="image-number">PROFILE PHOTO / 001</span>
-          <img src="../assets/images/tobito_pose_crossed_arms.png" alt="青いつなぎ姿で腕組みをするとびとくん" loading="lazy">
-          <span class="portrait-tag">TOBITO-KUN</span>
-        </div>
-        <div class="about-facts" data-reveal>
-          <div><span>NAME</span><strong>とびとくん</strong></div>
-          <div><span>HOME</span><strong>Team Birdman Trial</strong></div>
-          <div><span>STYLE</span><strong>四角い顔と赤いトサカ。青いつなぎがトレードマーク。</strong></div>
-          <div><span>DREAM</span><strong>みんなと一緒に、空を飛ぶこと。</strong></div>
-          <p class="fact-note">※ このページの性格・物語の描写はサイト内のキャラクター設定を含みます。</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="interlude" aria-labelledby="interlude-heading">
-      <div class="interlude-track" aria-hidden="true">DESIGN. BUILD. FLY.　DESIGN. BUILD. FLY.　DESIGN. BUILD. FLY.</div>
-      <div class="interlude-inner">
-        <span class="interlude-meta">小さなニワトリの、大きな夢。</span>
-        <h2 id="interlude-heading">飛ぶことは、<br>あきらめない。</h2>
-        <img src="../assets/images/tobito_pose_airplane.png" alt="" loading="lazy">
-      </div>
-    </section>
-
-    <section id="poses" class="poses section-wrap" aria-labelledby="poses-heading">
-      <div class="section-label"><span>03 / POSE ARCHIVE</span><span>とびとくんのいろんな顔</span></div>
-      <div class="poses-head" data-reveal>
-        <div>
-          <p class="section-small">同じとびとくん、ぜんぶちがう。</p>
-          <h2 id="poses-heading">ポーズ図鑑<span class="title-punctuation">。</span></h2>
-        </div>
-        <p>とびとくんは、飛ぶだけじゃない。<br>真剣な顔も、熱い気持ちも、ぜんぶ見ていって。</p>
-      </div>
-      <div class="pose-stage" id="pose-stage" data-pose="0">
-        <div class="pose-art" aria-live="polite">
-          <img id="pose-image" src="../assets/images/tobito_pose_airplane.png" alt="飛行機ポーズのとびとくん" loading="lazy">
-          <span class="pose-index" id="pose-index">01 / 03</span>
-          <span class="pose-decoration" aria-hidden="true">TOBITO</span>
-        </div>
-        <div class="pose-copy">
-          <span id="pose-kicker">POSE 001</span>
-          <h3 id="pose-title">飛行機ポーズ</h3>
-          <p id="pose-description">両腕をいっぱいに広げて、飛行機みたいに。空への憧れをそのままポーズにしました。</p>
-          <div class="pose-controls" role="group" aria-label="ポーズの切り替え">
-            <button type="button" id="pose-prev" aria-label="前のポーズ">←</button>
-            <button type="button" id="pose-next" aria-label="次のポーズ">→</button>
-            <span id="pose-progress" aria-hidden="true"><i></i></span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="hangar" class="hangar" aria-labelledby="hangar-heading">
+    <section id="hangar" data-journey-step="hangar" class="hangar" aria-labelledby="hangar-heading">
       <div class="hangar-inner">
-        <div class="section-label label-on-dark"><span>04 / HANGAR</span><span>空を目指す仲間たち</span></div>
+        <div class="section-label label-on-dark"><span>WAYPOINT 02 / HANGAR</span><span>大きな翼との対面</span></div>
         <div class="hangar-intro" data-reveal>
           <div>
-            <p class="section-small">とびとくんの大切な仲間。</p>
-            <h2 id="hangar-heading">あの翼を、<br><em>見上げよう。</em></h2>
+            <p class="section-small">「見て、ぼくたちの翼だよ！」</p>
+            <h2 id="hangar-heading">40メートルの、<br><em>翼の下へ。</em></h2>
           </div>
-          <p>Team Birdman Trialが製作した<br>人力プロペラ機 S-320 Element。<br>とびとくんが応援する、本物のものづくり。</p>
+          <p>「近くで見ると、やっぱり大きいね。<br>さあ、飛ぶ前の点検をはじめよう！」<br>ここでS-320 Elementを3Dで調べられるよ。</p>
         </div>
         <div class="hangar-viewer" id="hangar-viewer">
           <div class="hangar-rulers" aria-hidden="true"><span>MODEL / S-320 ELEMENT</span><span>TBT HANGAR VIEW</span></div>
@@ -222,8 +244,8 @@
               <span class="placeholder-graphic" aria-hidden="true">
                 <span class="plane-wing"></span><span class="plane-body"></span><span class="plane-tail"></span>
               </span>
-              <p>3D機体を見てみる？</p>
-              <button id="s320-load" class="load-model" type="button">S-320を読み込む <span aria-hidden="true">↗</span></button>
+              <p>機体を点検してみよう。</p>
+              <button id="s320-load" class="load-model" type="button">3Dで機体を点検する <span aria-hidden="true">↗</span></button>
               <small>約6.7MBの3Dデータを読み込みます。通信状況によって時間がかかります。</small>
             </div>
           </div>
@@ -239,11 +261,49 @@
       </div>
     </section>
 
-    <section class="outro" aria-labelledby="outro-heading">
-      <span class="outro-overline">A LITTLE BIRD WITH A BIG DREAM</span>
+    <section id="takeoff" data-journey-step="takeoff" class="outro journey-goal" aria-labelledby="outro-heading">
+      <span class="outro-overline">GOAL / READY FOR TAKEOFF</span>
+      <span class="goal-contrail" aria-hidden="true"></span>
       <img src="../assets/images/tobito_pose_koi.png" alt="来いポーズのとびとくん" loading="lazy">
-      <h2 id="outro-heading">また、遊びに来てね。</h2>
-      <p>とびとくんは、今日も空を見上げています。</p>
+      <h2 id="outro-heading">風が吹いてきた。<br><span>さあ、飛ぼう！</span></h2>
+      <p>「ここまで一緒に来てくれてありがとう。<br>旅はここで終わりじゃない。ここからが本当のフライトだよ。」</p>
+      <div id="boarding-zone" class="boarding-zone">
+        <div class="boarding-intro">
+          <span>OUR FLIGHT LOG / COMPLETED</span>
+          <h3>ふたりの搭乗証</h3>
+          <p>一緒に歩いた記念に、搭乗証を発行しよう。名前は端末内だけで使われるよ。</p>
+        </div>
+        <form id="boarding-form" class="boarding-form">
+          <label for="crew-name">CREW NAME / 一緒に飛ぶあなたの名前</label>
+          <div class="boarding-fields">
+            <input id="crew-name" name="crewName" type="text" maxlength="20" autocomplete="nickname" placeholder="あなたの名前（任意）">
+            <button type="submit">搭乗証を発行 <span aria-hidden="true">↗</span></button>
+          </div>
+        </form>
+        <div id="boarding-ticket" class="boarding-ticket" role="group" aria-label="旅の記念搭乗証" hidden>
+          <div class="ticket-main">
+            <div class="ticket-brand"><span>TBT / TOBITO AIRWAYS</span><span>FLIGHT LOG 001</span></div>
+            <div class="ticket-title">BOARDING<br>PASS<span>旅の記念搭乗証</span></div>
+            <div class="ticket-data">
+              <div><small>CREW NAME</small><strong id="ticket-name">TRAVELER</strong></div>
+              <div><small>FLIGHT</small><strong>TBT S-320</strong></div>
+              <div><small>DESTINATION</small><strong>THE SKY</strong></div>
+              <div><small>STATUS</small><strong>READY FOR TAKEOFF</strong></div>
+            </div>
+          </div>
+          <div class="ticket-stub">
+            <span>TOBITO × YOU</span>
+            <img src="../assets/images/tobito_face_normal.png" alt="" aria-hidden="true">
+            <strong>LET'S FLY.</strong>
+            <span id="ticket-date">2026</span>
+          </div>
+        </div>
+        <div id="boarding-actions" class="boarding-actions" hidden>
+          <button type="button" id="ticket-download">搭乗証を画像で保存 <span aria-hidden="true">↓</span></button>
+          <span id="boarding-status" role="status" aria-live="polite"></span>
+        </div>
+        <small class="boarding-disclaimer">※ この搭乗証はWebサイトの記念品です。航空機への搭乗券ではありません。</small>
+      </div>
       <div class="outro-links">
         <a class="primary-link" href="../legacy.html#flight">フライトゲームで遊ぶ <span aria-hidden="true">↗</span></a>
         <a class="subtle-link" href="../legacy.html">いつもの「とびとくんの部屋」へ ↗</a>
