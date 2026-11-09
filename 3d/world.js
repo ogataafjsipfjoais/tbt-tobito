@@ -290,6 +290,12 @@
     guideRing.rotation.z=time*.00035;
     // Transform from the garage to sunset, hangar and bright lake.
     const bg=progressPalette(p);
+    const hud=document.getElementById('world-chapter-name');
+    if(hud){
+      const labels=['BASE / 合流地点','出発 / 工房の外へ','TRAINING / 滑走路','FIELD TEST / 追い風','LOST & FOUND / 迷子','WIND LAB / 風洞','HANGAR / 大きな翼','TAKEOFF / 琵琶湖'];
+      const id=Math.min(labels.length-1,Math.floor(p*(labels.length-1)+.02));
+      if(hud.textContent!==labels[id])hud.textContent=labels[id];
+    }
     scene.background.copy(bg);scene.fog.color.copy(bg);
     scene.fog.density=smooth(.008,.0045,ease((p-.7)/.3));
     ambient.intensity=smooth(1.05,2.0,ease((p-.72)/.28));
