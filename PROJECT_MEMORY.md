@@ -37,3 +37,9 @@ https://github.com/ogataafjsipfjoais/tbt-tobito
 
 ## 重要な制約
 GitHub PagesはPHP・POST保存・APIを実行できない。Pagesプレビューを公式WordPress本番と同一機能だと扱わない。既存ファイルを無断で削除・変更しない。
+## 2026-11-09 3D専用ページ
+- 新規 `3d/index.html`, `3d/studio.css`, `3d/studio.js` を追加。
+- 専用3Dサイトでポーズ切替、キャラクター紹介、ユーザー操作によるS-320実機モデル表示を実装。
+- .github/workflows/pages.yml に3dディレクトリ配信を追加。
+- `tests/tobito-3d-page.test.cjs` に独立ページ検証を追加。
+- 公開URLはGitHub Pagesの有効化・Actions完了を検証するまで未確定。
