@@ -21,6 +21,7 @@
   <script defer src="../assets/js/s320-model.js"></script>
   <script defer src="../assets/js/tobito-3d-world.js"></script>
   <script defer src="./studio.js"></script>
+  <script defer src="./play.js"></script>
 </head>
 <body>
   <a class="skip" href="#main">本文へスキップ</a>
@@ -31,11 +32,12 @@
       <span class="brand-words"><strong>とびとくんのひみつ基地</strong><small>TEAM BIRDMAN TRIAL</small></span>
     </a>
     <nav class="site-nav" aria-label="メインメニュー">
+      <a href="#play">遊ぶ</a>
       <a href="#about">とびとくん</a>
       <a href="#poses">ポーズ図鑑</a>
       <a href="#hangar">機体を見る</a>
     </nav>
-    <a class="header-back" href="../">いつもの部屋 <span aria-hidden="true">↗</span></a>
+    <a class="header-back" href="../legacy.html#flight">フライトゲーム <span aria-hidden="true">↗</span></a>
   </header>
 
   <main id="main">
@@ -49,7 +51,7 @@
         <h1 id="hero-title"><span>飛べない鳥が、</span><span class="outlined-word">空を目指す。</span></h1>
         <p class="hero-description">こんにちは、とびとくんです。<br>今日はぼくの世界を、ちょっとのぞいていかない？</p>
         <div class="hero-cta-row">
-          <a class="primary-link" href="#about">ひみつ基地を探検する <span aria-hidden="true">↘</span></a>
+          <a class="primary-link" href="#play">とびとくんと遊ぶ <span aria-hidden="true">↘</span></a>
           <span class="hero-scroll-hint">SCROLL TO EXPLORE</span>
         </div>
       </div>
@@ -73,12 +75,77 @@
       <div class="hero-bottomline">
         <span><span class="red-dot"></span> とびとくん、出動中。</span>
         <span>ILLUSTRATION → DIGITAL FORM</span>
-        <a href="#about" aria-label="次のセクションへ">↓</a>
+        <a href="#play" aria-label="遊びのエリアへ">↓</a>
+      </div>
+    </section>
+
+    <section id="play" class="play-room" aria-labelledby="play-title">
+      <div class="play-room-inner">
+        <div class="section-label label-on-dark"><span>01 / PLAY ROOM</span><span>まずは、遊んでいこう。</span></div>
+        <div class="play-intro" data-reveal>
+          <div>
+            <p class="section-small">この世界は、見るだけじゃない。</p>
+            <h2 id="play-title">とびとくんと、<br><span>遊ぼう。</span></h2>
+          </div>
+          <p>飛ぶ。逃げる。風をつかまえる。<br>気になったところから、好きに遊んでね。</p>
+        </div>
+
+        <div class="play-layout">
+          <div class="wind-game" id="wind-game">
+            <div class="wind-game-header">
+              <div><span class="game-overline">NEW / QUICK CHALLENGE</span><h3>追い風キャッチ！</h3></div>
+              <span class="game-duration">25 SEC</span>
+            </div>
+            <p class="wind-instructions">水色の風をタップして集めよう。金色はボーナス、赤い乱気流には気をつけて。100点以上でクリア！</p>
+            <div class="wind-hud" aria-label="ゲームの進行状況">
+              <div><span>スコア</span><strong id="wind-score">0</strong></div>
+              <div><span>コンボ</span><strong id="wind-combo">0</strong></div>
+              <div><span>のこり</span><strong><span id="wind-timer">25</span><small>秒</small></strong></div>
+              <div><span>ベスト</span><strong id="wind-best">0</strong></div>
+            </div>
+            <div class="wind-arena" id="wind-arena" aria-label="追い風キャッチのプレイフィールド">
+              <div class="wind-speed-lines" aria-hidden="true"></div>
+              <span class="wind-landscape wind-landscape-a" aria-hidden="true"></span>
+              <span class="wind-landscape wind-landscape-b" aria-hidden="true"></span>
+              <img id="wind-tobito" src="../assets/images/tobito_pose_airplane.png" alt="" aria-hidden="true">
+              <div id="wind-targets" class="wind-target-layer"></div>
+              <div id="wind-intro" class="wind-overlay">
+                <span class="wind-large-number">01</span>
+                <h4>追い風、つかめるかな？</h4>
+                <p>タップでもクリックでも遊べます。制限時間は25秒！</p>
+                <button type="button" id="wind-start" class="wind-action">チャレンジ開始 <span aria-hidden="true">↗</span></button>
+              </div>
+              <div id="wind-result" class="wind-overlay" hidden>
+                <span class="wind-large-number">FINISH</span>
+                <h4 id="wind-result-title">結果発表</h4>
+                <p id="wind-result-text"></p>
+                <button type="button" id="wind-retry" class="wind-action">もう一度！ <span aria-hidden="true">↗</span></button>
+              </div>
+              <p id="wind-feedback" class="wind-feedback" role="status" aria-live="polite">とびとくん「がんばるトビ！」</p>
+            </div>
+            <div class="wind-foot"><span>GOAL <b>100 PTS</b></span><div class="wind-goal-track"><span id="wind-progress"></span></div><span>100+</span></div>
+          </div>
+
+          <div class="game-doors" aria-label="元のゲームと実験室">
+            <a class="game-door door-flight" href="../legacy.html#flight">
+              <span class="door-top"><b>ORIGINAL / 01</b><span aria-hidden="true">↗</span></span>
+              <div><span class="door-icon" aria-hidden="true">✈</span><h3>琵琶湖フライト</h3><p>人力飛行機を操縦して、遠くまで飛ぼう。<br>ペダル、操縦桿、着水、ランキング。</p></div>
+              <span class="door-bottom">3D FLIGHT GAME <b>PLAY →</b></span>
+            </a>
+            <a class="game-door door-yakitori" href="../legacy.html?game=yakitori#flight">
+              <span class="door-top"><b>ORIGINAL / 02</b><span aria-hidden="true">↗</span></span>
+              <div><span class="door-icon" aria-hidden="true">♨</span><h3>やきとり脱出</h3><p>逃げ切れるか、とびとくん。<br>あのサバイバルゲームもそのまま復活。</p></div>
+              <span class="door-bottom">SURVIVAL GAME <b>PLAY →</b></span>
+            </a>
+            <a class="game-lab-link" href="../legacy.html#aerolab"><span>風洞シミュレーターも遊べます</span><b>風の実験室へ ↗</b></a>
+          </div>
+        </div>
+        <p class="play-clarification">※ 琵琶湖フライト・やきとり脱出は従来のゲーム画面に移動します。旧版のすべての機能を残したまま、新しい3D体験を追加しています。</p>
       </div>
     </section>
 
     <section id="about" class="about section-wrap" aria-labelledby="about-heading">
-      <div class="section-label"><span>01 / ABOUT</span><span>ぼくのこと</span></div>
+      <div class="section-label"><span>02 / ABOUT</span><span>ぼくのこと</span></div>
       <div class="about-layout">
         <div class="about-title" data-reveal>
           <p class="section-small">はじめまして。</p>
@@ -110,7 +177,7 @@
     </section>
 
     <section id="poses" class="poses section-wrap" aria-labelledby="poses-heading">
-      <div class="section-label"><span>02 / POSE ARCHIVE</span><span>とびとくんのいろんな顔</span></div>
+      <div class="section-label"><span>03 / POSE ARCHIVE</span><span>とびとくんのいろんな顔</span></div>
       <div class="poses-head" data-reveal>
         <div>
           <p class="section-small">同じとびとくん、ぜんぶちがう。</p>
@@ -139,7 +206,7 @@
 
     <section id="hangar" class="hangar" aria-labelledby="hangar-heading">
       <div class="hangar-inner">
-        <div class="section-label label-on-dark"><span>03 / HANGAR</span><span>空を目指す仲間たち</span></div>
+        <div class="section-label label-on-dark"><span>04 / HANGAR</span><span>空を目指す仲間たち</span></div>
         <div class="hangar-intro" data-reveal>
           <div>
             <p class="section-small">とびとくんの大切な仲間。</p>
@@ -177,7 +244,8 @@
       <h2 id="outro-heading">また、遊びに来てね。</h2>
       <p>とびとくんは、今日も空を見上げています。</p>
       <div class="outro-links">
-        <a class="primary-link" href="../">いつもの「とびとくんの部屋」へ <span aria-hidden="true">↗</span></a>
+        <a class="primary-link" href="../legacy.html#flight">フライトゲームで遊ぶ <span aria-hidden="true">↗</span></a>
+        <a class="subtle-link" href="../legacy.html">いつもの「とびとくんの部屋」へ ↗</a>
         <a class="subtle-link" href="https://teambirdmantrial.jp/" target="_blank" rel="noopener noreferrer">TBT公式サイト ↗</a>
       </div>
     </section>
