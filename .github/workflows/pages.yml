@@ -44,7 +44,8 @@ jobs:
       - name: Export static pages
         run: |
           mkdir -p _site
-          php index.php > _site/index.html
+          cp index.html _site/index.html
+          php index.php > _site/legacy.html
           cp -R assets _site/assets
           cp -R 3d _site/3d
           touch _site/.nojekyll
