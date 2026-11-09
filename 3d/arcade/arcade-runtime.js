@@ -103,13 +103,28 @@
         if (!window.yakitoriGame && window.YakitoriGame)
           window.yakitoriGame = new window.YakitoriGame('yakitori-game-canvas');
       } else {
+        // The original ranking manager probes a PHP API at construction.
+        // GitHub Pages cannot serve PHP, so prevent the initial 404 request.
+        // Restore fetch immediately after the ranking module has loaded.
+        if (!window.FlightRankingManager) {
+          const originalFetch = window.fetch;
+          try {
+            window.fetch = undefined;
+            await loadSeries(['flight-ranking.js']);
+          } finally {
+            window.fetch = originalFetch;
+          }
+        }
         await loadSeries([
-          'flight-ranking.js','birdman-course.js','contest-venue.js',
-          'flight-scenery.js','game.js'
+          'birdman-course.js','contest-venue.js','flight-scenery.js','game.js'
         ]);
         if (token !== ticket) return;
-        // GitHub Pages cannot run the PHP ranking API. Use its local records.
-        if (window.FlightRankingManager) window.FlightRankingManager.endpoint = null;
+        // Rankings still persist locally; no false shared-server status.
+        if (window.FlightRankingManager) {
+          window.FlightRankingManager.endpoint = null;
+          window.FlightRankingManager.serverState = 'local';
+          window.FlightRankingManager.renderPageRankingList?.();
+        }
         if (!window.tobitoGame && window.TobitoFlightSimulator3D)
           window.tobitoGame = new window.TobitoFlightSimulator3D('tobito-game-canvas');
         const rankingNote = $('flight-ranking-storage');
