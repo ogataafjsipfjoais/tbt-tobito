@@ -227,7 +227,7 @@
   const milestones=['prologue-section','about','poses','play','oddities','wind-lab','hangar','takeoff'];
   let targetProgress=0,currentProgress=0;
   let lastPosition=0,lastWalkTime=0,flapUntil=0,extraTurn=0,lastFrame=0;
-  let active=true,stopped=false,raf=0,audioOn=false,audioCtx=null,windAudio=null,windGain=null,lastFootstep=0;
+  let active=true,stopped=false,arcadePaused=false,raf=0,audioOn=false,audioCtx=null,windAudio=null,windGain=null,lastFootstep=0;
   const backgrounds=[
     new THREE.Color(0x293748), new THREE.Color(0x4a5c72),
     new THREE.Color(0xc17c6c), new THREE.Color(0xb67f89),
@@ -308,11 +308,15 @@
     // Chase shot initially faces Tobito. The hangar pulls the camera back and up.
     const wingShot=ease((p-.68)/.12);
     const skyShot=ease((p-.86)/.14);
-    const desiredCamX=smooth(.35,2.0,turn)+Math.sin(p*11)*.55;
+    const pointer = window.TobitoPointerState;
+    const cursorX = pointer?.active ? pointer.x : 0;
+    const cursorY = pointer?.active ? pointer.y : 0;
+    const desiredCamX=smooth(.35,2.0,turn)+Math.sin(p*11)*.55+cursorX*.62;
     const desiredCamY=smooth(3.25,5.3,turn)+wingShot*5.5+skyShot*10.5;
     const desiredCamZ=pathZ+smooth(15,18,turn)+wingShot*15+skyShot*12;
     camera.position.lerp(new THREE.Vector3(desiredCamX,desiredCamY,desiredCamZ),Math.min(1,dt*3.4));
-    const desiredLook=new THREE.Vector3(0,1.8+wingShot*5+skyShot*4,pathZ-smooth(0,15,turn)-wingShot*7-skyShot*22);
+    const desiredLook=new THREE.Vector3(cursorX*.48,1.8+wingShot*5+skyShot*4-cursorY*.26,pathZ-smooth(0,15,turn)-wingShot*7-skyShot*22);
+    body.rotation.y = cursorX*.08;
     lookAt.lerp(desiredLook,Math.min(1,dt*3.5));camera.lookAt(lookAt);
     propeller.rotation.z+=dt*2.3;
     props.forEach((g,i)=>{
@@ -328,14 +332,14 @@
     renderer.render(scene,camera);
     raf=requestAnimationFrame(animateScene);
   }
-  function startLoop(){if(!raf && active && !stopped){lastFrame=0;raf=requestAnimationFrame(animateScene);}}
+  function startLoop(){if(!raf && active && !stopped && !arcadePaused){lastFrame=0;raf=requestAnimationFrame(animateScene);}}
   function stopLoop(){if(raf)cancelAnimationFrame(raf);raf=0;}
   function resize(){
     const w=Math.max(1,window.innerWidth),h=Math.max(1,window.innerHeight);
     camera.aspect=w/h;camera.fov=w<680?59:48;camera.updateProjectionMatrix();
     renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,w<760?1.25:1.55));
     renderer.setSize(w,h,false);
-    if(stopped)renderer.render(scene,camera);
+    if(stopped && !arcadePaused)renderer.render(scene,camera);
   }
   function flap(){flapUntil=performance.now()+1600;if(stopped){stopped=false;motionButton?.setAttribute('aria-pressed','true');startLoop();}}
   rotateButton?.addEventListener('click',()=>{extraTurn+=Math.PI/2;flap();});
@@ -382,14 +386,21 @@
     soundButton.setAttribute('aria-pressed',String(audioOn));
     soundButton.textContent=audioOn?'音を消す':'音を鳴らす';
   });
+  window.addEventListener('tbt:arcade:focus',event=>{
+    const pause = !!event.detail?.pause;
+    if(pause===arcadePaused)return;
+    arcadePaused=pause;
+    if(arcadePaused){stopLoop();if(audioOn)audioCtx?.suspend();}
+    else if(!stopped && !document.hidden){startLoop();if(audioOn)audioCtx?.resume();}
+  });
   window.addEventListener('scroll',scrollToProgress,{passive:true});
   window.addEventListener('resize',()=>{scrollToProgress();resize();},{passive:true});
   document.addEventListener('visibilitychange',()=>{
     if(document.hidden){stopLoop();if(audioOn)audioCtx?.suspend();}
-    else if(!stopped){startLoop();if(audioOn)audioCtx?.resume();}
+    else if(!stopped && !arcadePaused){startLoop();if(audioOn)audioCtx?.resume();}
   });
   window.addEventListener('pagehide',()=>{stopLoop();if(audioCtx)audioCtx.suspend();});
-  window.addEventListener('pageshow',()=>{scrollToProgress();if(!stopped)startLoop();});
+  window.addEventListener('pageshow',()=>{scrollToProgress();if(!stopped && !arcadePaused)startLoop();});
   canvas.addEventListener('webglcontextlost',event=>{
     event.preventDefault();active=false;stopLoop();
     document.documentElement.classList.remove('world-active');
