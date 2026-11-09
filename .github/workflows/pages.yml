@@ -1,4 +1,4 @@
-name: Deploy Tobito 3D page to GitHub Pages
+name: Validate Tobito and sync playable site for branch Pages
 
 on:
   push:
@@ -6,34 +6,31 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: tobito-pages
-  cancel-in-progress: true
+  group: tobito-static-export
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Set up PHP for static export
+      - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           extensions: mbstring
           coverage: none
-      - name: Validate 3D page
+      - name: Validate games and two-person journey
         run: |
           node --check assets/js/tobito-3d-world.js
           node --check assets/js/s320-model.js
@@ -43,30 +40,24 @@ jobs:
           node --test tests/tobito-3d.test.cjs tests/tobito-3d-page.test.cjs tests/tobito-journey.test.cjs
           php -l index.php
           php -l data.php
-      - name: Export static pages
+      - name: Generate the playable original site
         run: |
-          mkdir -p _site
-          cp index.html _site/index.html
-          php index.php > _site/legacy.html
-          cp -R assets _site/assets
-          cp -R 3d _site/3d
-          touch _site/.nojekyll
-          test -s _site/index.html
-          test -s _site/3d/index.html
-          test -s _site/3d/studio.css
-          test -s _site/3d/studio.js
-          test -s _site/3d/journey.js
-          test -s _site/3d/journey.css
-          test -s _site/3d/play.js
-          test -s _site/3d/play.css
-          test -s _site/assets/js/tobito-3d-world.js
-          test -s _site/assets/models/body.glb
-      - name: Set up GitHub Pages
-        uses: actions/configure-pages@v5
-      - name: Upload site
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: _site
-      - name: Deploy website
-        id: deployment
-        uses: actions/deploy-pages@v4
+          php index.php > legacy.html
+          test -s legacy.html
+          test -s 3d/index.html
+          test -s 3d/journey.css
+          test -s 3d/journey.js
+          test -s 3d/play.css
+          test -s 3d/play.js
+          test -s assets/models/body.glb
+      - name: Commit the generated preview for GitHub Pages branch publishing
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- legacy.html
+          if git diff --cached --quiet; then
+            echo 'Static preview is already up to date.'
+          else
+            git commit -m 'build: refresh playable Tobito legacy page [skip ci]'
+            git push origin HEAD:main
+          fi
