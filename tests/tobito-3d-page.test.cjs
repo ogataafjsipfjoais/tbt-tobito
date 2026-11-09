@@ -76,7 +76,7 @@ test('3D world restores old game entries and includes playable challenge', () =>
   assert.match(js, /const GOAL = 100/);
   assert.match(js, /localStorage/);
   assert.match(js, /turbulence/);
-  assert.match(css, /\\.gust-turbulence/);
+  assert.match(css, /\.gust-turbulence/);
   assert.match(css, /prefers-reduced-motion/);
   assert.doesNotThrow(() => new vm.Script(js));
 });
