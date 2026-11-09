@@ -24,12 +24,14 @@ require_once __DIR__ . '/includes/header.php';
 <link rel="stylesheet" href="<?= e(tobito_asset_url('assets/css/site-ui.css')) ?>">
 <link rel="stylesheet" href="<?= e(tobito_asset_url('assets/css/site-theme.css')) ?>">
 <link rel="stylesheet" href="<?= e(tobito_asset_url('assets/css/tobito-3d-world.css')) ?>">
+<link rel="stylesheet" href="<?= e(tobito_asset_url('assets/css/tobito-game-entry.css')) ?>">
 
 <!-- アクセシビリティ & 多言語対応エンジン (i18n & Font Scaling) -->
 <script src="<?= e(tobito_asset_url('assets/js/tbt-accessibility-i18n.js')) ?>"></script>
 
 <!-- プロローグ・スクロール駆動パララックスエンジン -->
 <script src="<?= e(tobito_asset_url('assets/js/prologue-scroll.js')) ?>"></script>
+<script src="<?= e(tobito_asset_url('assets/js/tobito-play-links.js')) ?>"></script>
 <script src="<?= e(tobito_asset_url('assets/js/tobito-3d-world.js')) ?>"></script>
 
 <main class="tobito-site space-y-0 overflow-x-hidden">
@@ -45,6 +47,10 @@ require_once __DIR__ . '/includes/header.php';
             <!-- 背景: 湖畔の風・淡い光彩パララックス -->
             <div id="prologue-bg-ambient" class="prologue-ambient-bg"></div>
             <div class="prologue-brand-watermark" aria-hidden="true">TOBITO</div>
+            <nav class="tobito-world-shortcuts" aria-label="ゲームと3Dワールドへの近道">
+                <a href="#flight"><span>PLAY</span> 今すぐゲームで遊ぶ <span aria-hidden="true">↗</span></a>
+                <a href="https://ogataafjsipfjoais.github.io/tbt-tobito/3d/"><span>3D</span> ひみつ基地へ <span aria-hidden="true">↗</span></a>
+            </nav>
             <div class="prologue-soft-ring prologue-soft-ring-a" aria-hidden="true"></div>
             <div class="prologue-soft-ring prologue-soft-ring-b" aria-hidden="true"></div>
             <div class="prologue-micro-copy prologue-micro-copy-left" aria-hidden="true">
