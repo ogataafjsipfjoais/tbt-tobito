@@ -224,7 +224,7 @@
   }
 
   // Long camera choreography: looking back at Tobito -> chase view -> huge wing -> lake.
-  const milestones=['prologue-section','about','poses','play','oddities','wind-lab','hangar','takeoff'];
+  const milestones=['prologue-section','about','poses','play','oddities','wind-lab','hangar','goods','takeoff'];
   let targetProgress=0,currentProgress=0;
   let lastPosition=0,lastWalkTime=0,flapUntil=0,extraTurn=0,lastFrame=0;
   let active=true,stopped=false,arcadePaused=false,raf=0,audioOn=false,audioCtx=null,windAudio=null,windGain=null,lastFootstep=0;
@@ -232,7 +232,7 @@
     new THREE.Color(0x293748), new THREE.Color(0x4a5c72),
     new THREE.Color(0xc17c6c), new THREE.Color(0xb67f89),
     new THREE.Color(0x586a79), new THREE.Color(0x667f87),
-    new THREE.Color(0x556774), new THREE.Color(0x79c5ed)
+    new THREE.Color(0x556774), new THREE.Color(0xc7dfcd), new THREE.Color(0x79c5ed)
   ];
   function smooth(a,b,t){return a+(b-a)*t;}
   function ease(t){t=Math.min(1,Math.max(0,t));return t*t*(3-2*t);}
@@ -294,7 +294,7 @@
     const bg=progressPalette(p);
     const hud=document.getElementById('world-chapter-name');
     if(hud){
-      const labels=['BASE / 合流地点','出発 / 工房の外へ','TRAINING / 滑走路','FIELD TEST / 追い風','LOST & FOUND / 迷子','WIND LAB / 風洞','HANGAR / 大きな翼','TAKEOFF / 琵琶湖'];
+      const labels=['BASE / 合流地点','出発 / 工房の外へ','TRAINING / 滑走路','FIELD TEST / 追い風','LOST & FOUND / 迷子','WIND LAB / 風洞','HANGAR / 大きな翼','GOODS / 研究所','TAKEOFF / 琵琶湖'];
       const id=Math.min(labels.length-1,Math.floor(p*(labels.length-1)+.02));
       if(hud.textContent!==labels[id])hud.textContent=labels[id];
     }
