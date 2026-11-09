@@ -33,6 +33,10 @@ test('3D scene JavaScript parses and has low-motion fallback', () => {
     assert.match(js, /webglcontextlost/);
     assert.match(js, /IntersectionObserver/);
     assert.match(js, /visibilitychange/);
+    assert.match(js, /square-white-head/);
+    assert.match(js, /blue-workwear/);
+    assert.match(js, /red-comb/);
+    assert.doesNotMatch(js, /goggle-lens/);
 });
 
 test('3D CSS does not replace the existing hero or intercept the whole page', () => {
