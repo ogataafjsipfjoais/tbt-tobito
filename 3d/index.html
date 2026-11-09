@@ -20,6 +20,8 @@
   <link rel="stylesheet" href="./chaos.css">
   <link rel="stylesheet" href="./cinematic.css">
   <link rel="stylesheet" href="./gameport.css">
+  <link rel="stylesheet" href="./goods.css">
+  <link rel="stylesheet" href="./cursor.css">
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
@@ -30,6 +32,8 @@
   <script defer src="./journey.js"></script>
   <script defer src="./chaos.js"></script>
   <script defer src="./gameport.js"></script>
+  <script defer src="./goods.js"></script>
+  <script defer src="./cursor.js"></script>
 </head>
 <body>
   <div id="journey-world" class="journey-world" aria-hidden="true"></div>
@@ -48,6 +52,7 @@
       <a href="#oddities">とびとを探せ</a>
       <a href="#wind-lab">風洞</a>
       <a href="#hangar">格納庫</a>
+      <a href="#goods">グッズ</a>
       <a href="#takeoff">ゴール</a>
     </nav>
     <div class="world-actions" role="group" aria-label="3D演出と音の設定">
@@ -62,6 +67,7 @@
     <a href="#poses" data-rail-step="practice"><b>01</b><span>特訓</span></a>
     <a href="#oddities" data-rail-step="oddities"><b>?</b><span>迷子</span></a>
     <a href="#hangar" data-rail-step="hangar"><b>02</b><span>格納庫</span></a>
+    <a href="#goods" data-rail-step="goods"><b>★</b><span>グッズ</span></a>
     <a href="#takeoff" data-rail-step="takeoff"><b>GOAL</b><span>離陸</span></a>
   </nav>
   <div id="journey-buddy" class="journey-buddy" data-stage="start">
@@ -403,6 +409,75 @@
           </div>
         </div>
         <div class="hangar-spec"><span>S-320 ELEMENT</span><span>WING SPAN <strong>40.0m</strong></span><span>YEAR <strong>2026</strong></span><a href="https://teambirdmantrial.jp/history/s-320-element/" target="_blank" rel="noopener noreferrer">機体の公式紹介へ ↗</a></div>
+      </div>
+    </section>
+
+    <section id="goods" data-journey-step="goods" class="goods-workshop" aria-labelledby="goods-title">
+      <div class="goods-sheen" aria-hidden="true"><span>TeamBirdmanTrial</span><span>TOBITO GOODS LAB</span></div>
+      <div class="goods-inner">
+        <div class="goods-intro" data-reveal>
+          <span class="goods-edition">番外編 003 / とびとくん、工場長になる。</span>
+          <h2 id="goods-title">空は飛べない。<br><em>グッズは作れる。</em></h2>
+          <p>いつものとびと君が、いつの間にかグッズ研究所を始めたらしい。既存のイラスト素材と、考え中の企画を並べています。実物の販売ページではありません。</p>
+        </div>
+        <div class="goods-hero-showroom">
+          <div class="goods-hero-visual" id="goods-hero-visual" aria-label="とびとくんグッズの立体風展示">
+            <span class="goods-orbit goods-orbit-a" aria-hidden="true"></span>
+            <span class="goods-orbit goods-orbit-b" aria-hidden="true"></span>
+            <span class="goods-floating-label goods-floating-label-a" aria-hidden="true">NO. 001 / PLANNING</span>
+            <span class="goods-floating-label goods-floating-label-b" aria-hidden="true">NOT FOR FLIGHT</span>
+            <div id="goods-mug-model" class="goods-mug-model" aria-label="とびとくんをプリントしたマグカップのデザイン検討イメージ">
+              <div class="goods-mug-handle"></div>
+              <div class="goods-mug-body">
+                <img id="goods-mug-face" src="../assets/images/tobito_face_smile.png" alt="" aria-hidden="true" loading="lazy">
+                <span>TeamBirdmanTrial</span>
+              </div>
+              <div class="goods-mug-rim"></div>
+            </div>
+            <span class="goods-visual-caption">イメージ図 / 正式な製品写真ではありません</span>
+          </div>
+          <div class="goods-hero-copy">
+            <span>THE TOTALLY UNNECESSARY LAB</span>
+            <h3>とびと君<br>マグカップ案</h3>
+            <p>飛行機の開発中、コーヒーが冷めるという問題だけは解決できなかった。</p>
+            <div class="goods-swatch" role="group" aria-label="マグカップデザインの切り替え">
+              <button type="button" class="goods-swatch-btn is-active" data-goods-face="smile" aria-pressed="true">にっこり顔</button>
+              <button type="button" class="goods-swatch-btn" data-goods-face="angry" aria-pressed="false">真剣な顔</button>
+              <button type="button" class="goods-swatch-btn" data-goods-face="cry" aria-pressed="false">泣き顔</button>
+            </div>
+            <p class="goods-state">企画検討中 / 価格・製造・販売予定は未確定</p>
+          </div>
+        </div>
+        <div class="goods-evidence-head">
+          <div><span>ORIGINAL ARTWORK / EXISTING ASSETS</span><h3>とびと君、<br>いろんな姿。</h3></div>
+          <p>これまでのサイトで使用している画像素材。タップすると大きく表示できます。</p>
+        </div>
+        <div class="goods-filmstrip" role="list" aria-label="既存とびとくん素材">
+          <button class="goods-print" type="button" data-goods-preview="../assets/images/sticker1_p1.png" data-goods-caption="4つの表情 / 既存提供素材" role="listitem">
+            <span class="goods-print-asset"><img src="../assets/images/sticker1_p1.png" alt="とびとくんの4つの表情" loading="lazy"></span><span>01 / 4つの表情</span>
+          </button>
+          <button class="goods-print" type="button" data-goods-preview="../assets/images/sticker2_p1.png" data-goods-caption="追い風を呼ぶ「来い」 / 既存提供素材" role="listitem">
+            <span class="goods-print-asset"><img src="../assets/images/sticker2_p1.png" alt="追い風を呼ぶ「来い」ポーズ" loading="lazy"></span><span>02 / 追い風を呼ぶ「来い」</span>
+          </button>
+          <button class="goods-print" type="button" data-goods-preview="../assets/images/goods3_p1.png" data-goods-caption="翼を広げるとびとくん / 既存提供素材" role="listitem">
+            <span class="goods-print-asset"><img src="../assets/images/goods3_p1.png" alt="翼を広げるとびとくんのイラスト" loading="lazy"></span><span>03 / 空を飛びたい</span>
+          </button>
+          <button class="goods-print" type="button" data-goods-preview="../assets/images/goods4_p1.png" data-goods-caption="腕組みのとびとくん / 既存提供素材" role="listitem">
+            <span class="goods-print-asset"><img src="../assets/images/goods4_p1.png" alt="腕組みをする、とびとくんのイラスト" loading="lazy"></span><span>04 / 腕組み会議</span>
+          </button>
+        </div>
+        <div class="goods-coming">
+          <span>DEVELOPMENT BOARD / PROPOSALS ONLY</span>
+          <div><h3>次の変なグッズ、<br>研究中。</h3><p>マグカップ以外にも、S-320の設計図を使ったタオルや、とびと君の頭をかたどった箸置き、保温バッグなどの企画案があります。実際の製造・販売は未定です。</p></div>
+          <div class="goods-idea-labels"><span>設計図タオル</span><span>とびとくん箸置き</span><span>保温バッグ</span><span>マグネット</span></div>
+        </div>
+      </div>
+      <div id="goods-preview-dialog" class="goods-preview-dialog" role="dialog" aria-modal="true" aria-label="とびとくん素材を拡大表示" hidden>
+        <div class="goods-preview-panel">
+          <button id="goods-preview-close" class="goods-preview-close" type="button" aria-label="拡大表示を閉じる">×</button>
+          <img id="goods-preview-img" src="../assets/images/sticker1_p1.png" alt="とびとくん素材の拡大表示">
+          <p id="goods-preview-caption"></p>
+        </div>
       </div>
     </section>
 
