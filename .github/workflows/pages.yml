@@ -44,7 +44,7 @@ jobs:
           node --check 3d/arcade/arcade-runtime.js
           node --check 3d/goods.js
           node --check 3d/cursor.js
-          node --test tests/tobito-3d.test.cjs tests/tobito-3d-page.test.cjs tests/tobito-journey.test.cjs tests/tobito-cinematic.test.cjs tests/tobito-top.test.cjs tests/tobito-character.test.cjs
+          node --test tests/tobito-3d.test.cjs tests/tobito-3d-page.test.cjs tests/tobito-journey.test.cjs tests/tobito-cinematic.test.cjs tests/tobito-top.test.cjs tests/tobito-character.test.cjs tests/tobito-regressions.test.cjs
           php -l index.php
           php -l data.php
       - name: Generate the playable original site
