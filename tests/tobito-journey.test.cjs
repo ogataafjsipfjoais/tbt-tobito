@@ -24,7 +24,7 @@ test('the two-person journey keeps games accessible without redirecting the 3D p
   const offsets = ['id="poses"', 'id="play"', 'id="hangar"'].map(v => html.indexOf(v));
   assert.ok(offsets[0] < offsets[1] && offsets[1] < offsets[2]);
   assert.match(html, /href="\.\.\/legacy\.html#flight"/);
-  assert.match(html, /href="\.\.\/legacy\.html\?game=yakitori#flight"/);
+  assert.match(html, /data-arcade-mode="yakitori"/);
   assert.match(html, /id="wind-start"/);
 });
 
