@@ -1,0 +1,65 @@
+/*
+ * TOBITO FINAL SHAPE PASS
+ * Deliberately playful and rounded while keeping drawings and controls crisp.
+ * Overrides the early engineering mockup's heavy rectangular frames.
+ */
+:root{--shape-xl:clamp(27px,4vw,65px);--shape-lg:clamp(20px,3vw,42px)}
+#main .oddities-board{border:0!important;border-radius:var(--shape-xl)!important;overflow:hidden;box-shadow:0 24px 85px #19395452;background:#fff9ed}
+#main .find-mission{border:0!important;border-radius:var(--shape-lg)!important;overflow:hidden;box-shadow:0 18px 60px #1939542c;background:#fff9ea}
+#main .find-mission-head{border-bottom:0!important;border-radius:0 0 34px 34px;padding:24px}
+#main .oddities-board-top{border-radius:0;min-height:65px;padding:12px 22px}
+#main .oddities-board-bottom{border-radius:0 0 34px 34px;padding:15px 22px}
+#main .find-list{padding:12px 24px}
+#main .find-result{border-radius:19px;margin:12px 19px;background:#fff1c3;padding:13px 15px}
+#main .find-actions{padding:12px 19px}
+#main .find-actions button{border:0;border-radius:999px;background:#ddebe6;padding:10px 18px}
+#main .find-share{border:0;border-radius:999px;background:#204b6f;color:#fff;min-height:49px;margin:0 19px 21px;width:calc(100% - 38px)}
+#main .find-aside{padding:0 21px 22px}
+#main .find-check{border-radius:50%;border:0;background:#e8d9b0}
+#main .oddities-section{background:radial-gradient(ellipse at 66% 13%,#fff3b7 2%,transparent 49%),linear-gradient(125deg,#f5d76e 12%,#ffe2ac 70%)!important}
+#main .oddities-section:before{height:9px;opacity:.7}
+#main .oddities-intro h2 span{color:#d94040}
+#main .oddities-warning{border-radius:999px;transform:rotate(-1deg)}
+#main .oddities-overline span:first-child{border-radius:16px 3px 17px 3px}
+#main .board-tools button{border-radius:999px;padding:9px 13px;min-height:42px}
+#main .wind-lab-stamp{border-radius:999px;transform:rotate(-3deg)}
+#main .absurd-console{padding:clamp(19px,2.5vw,37px)}
+#main .wind-tunnel-grill{border-radius:0}
+#main .absurd-tunnel,#main .absurd-console{border-radius:clamp(22px,4vw,50px)!important}
+#main .wind-lab-layout{gap:clamp(14px,2.5vw,32px)}
+#main .wind-lab-intro h2 span{color:#26778f}
+#main .wind-tunnel-fan{border-radius:50%}
+#main .wind-object-choices button{border-radius:999px}
+#main .wind-readouts{border-color:#d8e5e1}
+#main .play-room:before{background:none}
+#main .game-overline,#main .arcade-serial{letter-spacing:.16em}
+#main .wind-game-header{gap:20px}
+#main .wind-goal-track{border-radius:999px;overflow:hidden}
+#main .wind-arena{border-radius:0}
+#main .wind-action{border-radius:999px}
+#main .wind-overlay{background:#e3f0e7e9}
+#main .gust-target{border:0;border-radius:999px;box-shadow:0 12px 28px #245c6f44}
+#main .hangar-viewer{border-radius:var(--shape-xl);overflow:hidden;border:1px solid #e4edeb30;box-shadow:0 28px 95px #020f1e69}
+#main .hangar-placeholder .load-model{border-radius:999px}
+#main .hangar-toolbar{border-radius:0 0 var(--shape-xl) var(--shape-xl)}
+#main .poses .pose-controls button{border-radius:50%}
+#main .journey-goal .boarding-zone{border-radius:37px 68px 40px 40px;overflow:hidden;border:0}
+#main .boarding-fields input{border-radius:999px;padding-left:20px}
+#main .boarding-fields button,#main .boarding-actions button{border-radius:999px}
+#main .boarding-ticket{border-radius:23px;overflow:hidden}
+#main .site-footer{border-radius:0}
+.journey-rail{border-radius:999px!important;box-shadow:0 10px 28px #122b4340;border:0!important}
+.journey-rail a b{border-radius:50%!important}
+.journey-buddy .buddy-balloon{border-radius:23px 23px 8px 23px!important;box-shadow:0 11px 26px #102f4b3b}
+.world-actions button{border-radius:999px}
+.chaos-toolbar{border-radius:999px!important;border:1px solid #fad680!important;background:#153f52f2!important;box-shadow:0 11px 25px #15334b5e!important}
+.chaos-toolbar button{border-radius:999px}
+.chaos-notice{border-radius:27px 45px 28px 42px!important}
+.chaos-marquee{border:0!important}
+.site-nav a{border-radius:999px}
+.site-header .header-back{border-radius:999px}
+.world-active #main #play.play-room{background:rgba(220,240,236,.94)!important}
+.world-active #main #wind-lab.wind-lab{background:rgba(179,226,228,.95)!important}
+.world-active #main .oddities-section{background:rgba(255,222,149,.95)!important}
+@media(max-width:720px){.chaos-toolbar{bottom:7px!important;left:7px!important}.journey-buddy .buddy-balloon{border-radius:18px!important}#main .oddities-board-top{padding:8px 13px}#main .find-list{padding:10px 16px}#main .wind-lab-layout{gap:16px}#main .boarding-zone{border-radius:27px!important}}
+@media(prefers-reduced-motion:reduce){.chaos-toolbar button,.site-nav a{transition:none!important}}
