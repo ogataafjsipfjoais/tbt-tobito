@@ -55,6 +55,14 @@
     tellWorld(false);
   }
 
+  function focusActiveGame() {
+    if(!active || active.mode === 'wind' || !active.ready) return;
+    // Browser focus must enter the same-origin iframe, then its canvas.
+    const frame=active.frame;
+    try { frame.contentWindow?.focus(); } catch (_) { /* fallback to message */ }
+    frame.contentWindow?.postMessage({type:'tbt:arcade:focus',mode:active.mode},source.origin);
+  }
+
   function createIframe(host,mode) {
     const wrap=hosts[host];
     if(!wrap)return;
@@ -76,7 +84,8 @@
     status(host,'元のゲームプログラムを読み込んでいます…');
     frame.addEventListener('load',()=>{
       if(!active || active.frame!==frame)return;
-      frame.contentWindow?.postMessage({type:'tbt:arcade:switch',mode:active.mode},source.origin);
+      // The iframe's query string already selects the game. Do NOT
+      // dispatch a second start during load; it duplicates the engine.
       updateFocus();
     });
     frame.addEventListener('error',()=>{
@@ -91,7 +100,12 @@
     const host=mode==='wind'?'wind':'games';
     if(mode!=='wind')displaySelected(mode);
     if(active?.host===host) {
+      if(active.mode===mode && active.ready) {
+        focusActiveGame();
+        return;
+      }
       active.mode=mode;
+      active.ready=false;
       active.frame.title=mode==='yakitori'?'やきとり脱出ゲーム':mode==='flight'?'琵琶湖フライトゲーム':'S-320風洞';
       active.frame.contentWindow?.postMessage({type:'tbt:arcade:switch',mode},source.origin);
       status(host,'切り替えています…');
@@ -106,6 +120,9 @@
   document.querySelectorAll('[data-arcade-launch]').forEach(button=>{
     button.addEventListener('click',()=>open(button.dataset.arcadeLaunch));
   });
+  document.querySelectorAll('[data-arcade-focus]').forEach(button=>{
+    button.addEventListener('click',focusActiveGame);
+  });
   window.addEventListener('message',event=>{
     if(event.origin!==source.origin||!active||event.source!==active.frame.contentWindow)return;
     const data=event.data;
@@ -115,7 +132,11 @@
       if(data.mode===active.mode){
         status(active.host,'');
         updateFocus();
+        focusActiveGame();
       }
+    }
+    if(data.type==='focus'){
+      status(active.host,data.focused?'キーボード操作が有効です。WASD・矢印キー・Spaceを使えます。':'ゲーム画面をクリックして操作を開始してください。');
     }
     if(data.type==='error'){
       status(active.host,'起動できませんでした。通信環境とWebGL対応をご確認ください。');
