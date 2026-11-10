@@ -41,7 +41,12 @@
   function bird(x,y,s=1,real=false) {
     const g=group(x,y,s,real?-5:(rand()-.5)*30);
     const color=real?'#315ca2':choice(['#b17d63','#aebc7c','#7b9894','#a49ac2','#d6a583']);
-    rect(-20,-34,40,42,'#fffbef',g);
+    if(real){
+      // The mascot's outline is intentionally organic rather than box-locked.
+      shape('ellipse',{cx:0,cy:-13,rx:22,ry:24,fill:'#fffbef',stroke:'#24384b','stroke-width':2},g);
+    }else{
+      rect(-20,-34,40,42,'#fffbef',g);
+    }
     circle(-12,-41,7,'#e4423a',g);circle(-3,-47,9,'#e4423a',g);circle(8,-41,7,'#e4423a',g);
     rect(-18,9,36,33,color,g);rect(-29,12,12,22,color,g);rect(17,12,12,22,color,g);
     circle(-8,-16,2,'#182939',g);circle(8,-16,2,'#182939',g);
