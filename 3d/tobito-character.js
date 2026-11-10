@@ -1,8 +1,9 @@
 /**
  * Tobito, character sculpture v2.
  *
- * Keeps the official visual vocabulary: soft square white face, red comb,
- * sleepy dark eyes, small golden beak, blue workwear and black shoes.
+ * Keeps the documented visual vocabulary without treating any particular
+ * head geometry as mandatory: soft white face, red comb, sleepy eyes,
+ * small golden beak, blue workwear and dark shoes.
  * Built as a small rig with smooth bevels, rounded seams and moving joints.
  * No external assets, character-texture network requests, or fake GLB claims.
  */
@@ -65,11 +66,34 @@
       const mesh=new THREE.Mesh(new THREE.TubeGeometry(curve,segments,radius,8,false),material);
       parent.add(mesh);return mesh;
     }
-    // Keep the head recognizably square but sculpt its edges and cheek volume.
-    roundBox(body,1.74,1.56,.92,.41,edge,0,1.22,-.06);
-    roundBox(body,1.66,1.5,.88,.39,skin,0,1.27,.018);
-    oval(body,-.56,.96,.42,.28,.31,.18,skin);
-    oval(body,.56,.96,.42,.28,.31,.18,skin);
+    // Use a continuous organic head silhouette, NOT a predetermined box.
+    // The official 2D artwork is the source of identity; its outline can vary
+    // across poses. A deformable egg/cheek volume reads naturally in 3D.
+    function softHead(parent, width, height, depth, material, centerY, centerZ) {
+      const geometry=new THREE.SphereGeometry(1,56,40);
+      const position=geometry.attributes.position;
+      for(let i=0;i<position.count;i++){
+        const x=position.getX(i), y=position.getY(i), z=position.getZ(i);
+        const cheek=Math.exp(-Math.pow((y+.33)/.34,2));
+        const upper=Math.exp(-Math.pow((y-.78)/.28,2));
+        // Lower cheeks are fuller, forehead is smooth, chin gently tapers.
+        const widthAtY=1+.085*cheek-.08*upper-.025*Math.max(0,-y-.7);
+        const softenedZ=Math.sign(z)*Math.pow(Math.abs(z),.78);
+        position.setXYZ(i,x*width*widthAtY,y*height,softenedZ*depth);
+      }
+      position.needsUpdate=true;
+      geometry.computeVertexNormals();
+      const mesh=new THREE.Mesh(geometry,material);
+      mesh.position.set(0,centerY,centerZ);
+      parent.add(mesh);
+      return mesh;
+    }
+    softHead(body,.90,.81,.49,edge,1.21,-.065);
+    softHead(body,.88,.79,.49,skin,1.25,.005);
+    // Raised soft cheeks merge visually into the head rather than forming
+    // a pair of bolted-on oval blocks.
+    oval(body,-.53,.96,.39,.28,.24,.16,skin);
+    oval(body,.53,.96,.39,.28,.24,.16,skin);
     const face = new THREE.Group();
     face.name='Tobito | face and gaze';
     body.add(face);
