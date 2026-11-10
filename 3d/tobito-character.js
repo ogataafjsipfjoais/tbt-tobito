@@ -66,10 +66,10 @@
       parent.add(mesh);return mesh;
     }
     // Keep the head recognizably square but sculpt its edges and cheek volume.
-    roundBox(body,1.74,1.56,.92,.29,edge,0,1.22,-.06);
-    roundBox(body,1.66,1.5,.88,.27,skin,0,1.27,.018);
-    oval(body,-.58,.93,.42,.25,.31,.17,skin);
-    oval(body,.58,.93,.42,.25,.31,.17,skin);
+    roundBox(body,1.74,1.56,.92,.41,edge,0,1.22,-.06);
+    roundBox(body,1.66,1.5,.88,.39,skin,0,1.27,.018);
+    oval(body,-.56,.96,.42,.28,.31,.18,skin);
+    oval(body,.56,.96,.42,.28,.31,.18,skin);
     const face = new THREE.Group();
     face.name='Tobito | face and gaze';
     body.add(face);
@@ -100,14 +100,14 @@
     oval(comb,.04,-.07,0,.44,.12,.15,combRed);
 
     // Workwear is a rounded fabric-like shape with hand-placed seams.
-    const torso=roundBox(body,1.21,1.11,.8,.26,uniform,0,-.027,-.04);
+    const torso=roundBox(body,1.24,1.13,.82,.39,uniform,0,-.027,-.04);
     oval(body,0,.48,-.06,.47,.19,.32,skin);
-    const bib=roundBox(body,.74,.57,.13,.10,uniform,0,.23,.40);
+    const bib=roundBox(body,.76,.60,.14,.22,uniform,0,.23,.40);
     tube(body,[[-.31,.41,.45],[-.32,.12,.475],[-.29,-.24,.47]],.025,seam,13);
     tube(body,[[.31,.41,.45],[.32,.12,.475],[.29,-.24,.47]],.025,seam,13);
     tube(body,[[-.31,.08,.485],[.0,.03,.485],[.31,.08,.485]],.017,seam,15);
     // Tiny pocket and metallic snap buttons; intentionally restrained detail.
-    roundBox(body,.35,.24,.045,.055,seam,.0,.05,.494);
+    roundBox(body,.35,.24,.045,.11,seam,.0,.05,.494);
     for(const x of [-.31,.31])oval(body,x,.36,.485,.045,.045,.018,metal);
 
     const arms=[],legs=[];
@@ -116,9 +116,9 @@
       arm.position.set(side*.58,.31,-.05);
       arm.name=side<0?'Tobito | left wing':'Tobito | right wing';
       body.add(arm);
-      const upper=oval(arm,side*.36,-.055,0,.48,.175,.27,uniform);
+      const upper=oval(arm,side*.36,-.055,0,.51,.21,.29,uniform);
       upper.rotation.z=-side*.12;
-      oval(arm,side*.74,-.065,.055,.25,.17,.20,skin);
+      oval(arm,side*.75,-.065,.055,.29,.19,.21,skin);
       // Feather-like digits in their proper orientation, not cuboid hands.
       oval(arm,side*.93,-.014,.055,.18,.065,.09,skin).rotation.z=side*.19;
       oval(arm,side*.92,-.12,.065,.15,.052,.086,skin).rotation.z=-side*.10;
