@@ -312,3 +312,119 @@ html.world-active .opening-sticky{box-shadow:0 0 0 1px #071b2b}
   .opening-strange-label,.opening-secret,.opening-live,.opening-scroll-arrow{animation:none!important}
   .opening-tobito,.opening-tobito-speech,.opening-main-action{transition:none!important}
 }
+
+
+/* v3 / SOFT AERODYNAMICS
+ * Curvature belongs to the hangar's structure, not a pile of identical cards.
+ * The mascot keeps its official rounded-square head.
+ */
+html body #prologue-section .opening-environment{
+  background:
+    radial-gradient(ellipse 48% 58% at 75% 48%,rgba(248,181,106,.22) 0%,rgba(131,190,183,.15) 43%,transparent 83%),
+    radial-gradient(ellipse 105% 100% at 63% 109%,rgba(119,158,159,.29) 0%,transparent 71%),
+    linear-gradient(115deg,#071824 8%,#153344 54%,#294d57 85%,#091d2b 100%);
+}
+.opening-ceiling{
+  opacity:.47;
+  border-radius:0 0 48% 48% / 0 0 34% 34%;
+  background:
+    repeating-radial-gradient(ellipse at 50% 120%,transparent 0 47px,#bed1cc31 48px 50px,transparent 52px 95px),
+    linear-gradient(90deg,transparent,#5c8c8b16,transparent);
+  transform:perspective(650px) rotateX(-23deg);
+}
+.opening-depth-back{
+  border:2px solid rgba(243,204,150,.17);
+  border-radius:45% 45% 15% 15% / 41% 41% 11% 11%;
+  box-shadow:0 0 115px rgba(255,180,119,.14),inset 0 0 100px #081824b8;
+  background:radial-gradient(ellipse at 50% 65%,rgba(148,194,183,.11),transparent 68%),
+    repeating-radial-gradient(ellipse at 50% 104%,transparent 0 60px,#bdd4c326 61px 63px,transparent 64px 135px);
+}
+.opening-depth-front{
+  border-top:0;border-left:0;
+  border-radius:45% 45% 0 0 / 33% 33% 0 0;
+  box-shadow:none;
+  background:radial-gradient(ellipse 58% 62% at 55% 50%,transparent 46%,rgba(3,18,28,.28) 94%,rgba(3,18,28,.56));
+  transform:none;
+}
+.opening-depth-front::before{
+  content:"";position:absolute;top:5%;left:9%;right:9%;height:72%;
+  border:clamp(4px,.65vw,10px) solid rgba(135,173,177,.23);
+  border-bottom:0;
+  border-radius:50% 50% 0 0 / 52% 52% 0 0;
+  box-shadow:0 -19px 28px #061d2c3d,inset 0 20px 23px #061d2c2e;
+}
+.opening-runway{
+  border-radius:50% 50% 0 0 / 31% 31% 0 0;
+  overflow:hidden;
+  filter:drop-shadow(0 -8px 25px rgba(251,181,103,.08));
+}
+.opening-runway::before{
+  border-color:rgba(248,189,118,.42);
+  border-radius:44% 44% 0 0 / 29% 29% 0 0;
+}
+.opening-shutter{
+  background:
+    repeating-radial-gradient(ellipse at 50% 0%,transparent 0 53px,rgba(205,222,213,.13) 54px 57px,transparent 59px 108px),
+    linear-gradient(98deg,#0b2231,#1c3d4a);
+  box-shadow:inset 0 0 72px #00111d7d,0 16px 48px #0317218c;
+}
+.opening-shutter-left{
+  border-radius:0 54% 35% 0 / 0 24% 36% 0;
+}
+.opening-shutter-right{
+  border-radius:55% 0 0 37% / 25% 0 0 33%;
+}
+.opening-tobito-backdrop{
+  border-radius:50%;
+  background:radial-gradient(ellipse at 55% 48%,rgba(255,231,172,.31),rgba(111,196,192,.21) 42%,transparent 72%);
+  filter:blur(28px);
+}
+html body #prologue-section .opening-tobito img{
+  filter:drop-shadow(4px 17px 18px rgba(3,18,27,.27));
+}
+.opening-tobito-orbit{
+  border-style:solid;border-width:1px;
+  box-shadow:0 0 18px rgba(255,196,109,.07);
+}
+.opening-title-core::after{
+  height:6px;left:2%;right:18%;bottom:-.095em;
+  border-radius:55% 45% 35% 60% / 100% 100% 60% 60%;
+  transform:rotate(-2.4deg) skewX(-8deg);
+  background:linear-gradient(95deg,#f19375,#f5c877 72%,transparent);
+}
+html body #prologue-section .primary-link.opening-main-action{
+  border-radius:25px 66px 63px 26px / 27px 64px 66px 23px;
+  background:#ee7856;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.21),0 17px 44px #020b1a45;
+}
+html body #prologue-section .primary-link.opening-main-action:hover{
+  background:#fa9269;
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.28),0 20px 50px #020b1a61;
+}
+.opening-tobito-speech{
+  border-radius:31px 36px 33px 11px / 34px 36px 31px 17px;
+  padding:14px 20px;
+  box-shadow:0 10px 32px rgba(2,13,26,.29);
+}
+.opening-strange-label{
+  transform:rotate(5deg);
+  border:1px solid rgba(47,67,58,.25);
+  border-radius:25px 18px 37px 18px / 19px 32px 23px 34px;
+  box-shadow:6px 12px 0 rgba(3,24,37,.48);
+}
+.opening-secret{
+  border-radius:37px 28px 40px 33px / 25px 39px 29px 37px;
+  border:1px solid #ffd59d85;
+}
+html body #prologue-section .opening-footer-direction .opening-scroll-arrow{
+  border-radius:50%;
+}
+@media(max-width:650px){
+  html body #prologue-section .primary-link.opening-main-action{
+    border-radius:18px 40px 40px 17px / 18px 39px 39px 18px;
+  }
+  .opening-depth-front::before{left:3%;right:3%}
+}
+@media(prefers-reduced-motion:reduce){
+  html body #prologue-section .opening-shutter{box-shadow:none}
+}
