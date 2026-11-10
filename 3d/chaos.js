@@ -10,7 +10,7 @@
   const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
   const W = 1440, H = 880, NS = 'http://www.w3.org/2000/svg';
   const targets = [
-    { id:'tobito', name:'本物のとびと君', clue:'青いつなぎと、四角い白い頭。', x:1160, y:505, kind:'bird' },
+    { id:'tobito', name:'本物のとびと君', clue:'青いつなぎ、白い顔、赤いトサカ。', x:1160, y:505, kind:'bird' },
     { id:'ramen', name:'脱走したラーメン', clue:'食品なのに、翼を装備した。', x:296, y:507, kind:'ramen' },
     { id:'fridge', name:'空飛ぶ冷蔵庫', clue:'電気代より航空力学を優先。', x:904, y:412, kind:'fridge' },
     { id:'egg', name:'純金っぽい卵', clue:'金色に光る、正体不明の卵。', x:577, y:693, kind:'egg' },
