@@ -73,18 +73,30 @@
     scene.add(dash);
   }
   const sidePaint=mat(0xf1b45a,.9);
-  [-8.7,8.7].forEach(x=>{
-    const edge=new THREE.Mesh(new THREE.BoxGeometry(.12,.028,265),sidePaint);
-    edge.position.set(x,-.115,-108);scene.add(edge);
-  });
+  // Two gently bending illuminated runway lines, no hard rectangular rails.
+  for(const side of [-1,1]){
+    const points=[];
+    for(let i=0;i<=28;i++){
+      const z=24-i*9.2;
+      points.push(new THREE.Vector3(side*(8.65+.08*Math.sin(i*.32)),-.105,z));
+    }
+    const guide=new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),128,.048,8,false),sidePaint);
+    scene.add(guide);
+  }
 
   function box(parent,w,h,d,material,x=0,y=0,z=0){
     const o=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),material);
     o.position.set(x,y,z);parent.add(o);return o;
   }
   function ball(parent,x,y,z,scale,material){
-    const m=new THREE.Mesh(new THREE.SphereGeometry(1,15,12),material);
+    const m=new THREE.Mesh(new THREE.SphereGeometry(1,24,16),material);
     m.position.set(x,y,z);m.scale.set(...scale);parent.add(m);return m;
+  }
+  function curvedBeam(parent,points,radius,material){
+    const curve=new THREE.CatmullRomCurve3(points.map(v=>new THREE.Vector3(...v)),false,'catmullrom',.35);
+    const mesh=new THREE.Mesh(new THREE.TubeGeometry(curve,42,radius,10,false),material);
+    parent.add(mesh);
+    return mesh;
   }
   function extrude(parent,points,material,depth=.3,z=0){
     const shape=new THREE.Shape();
@@ -139,22 +151,32 @@
   const workshop=new THREE.Group();scene.add(workshop);
   const wallMat=mat(0x3c4859,.88),beamMat=mat(0x25394b,.76,.27);
   [-1,1].forEach(side=>{
-    box(workshop,3.2,9,32,wallMat,side*13,4.35,1);
-    for(let i=0;i<5;i++)box(workshop,.28,10,.35,beamMat,side*11.4,5,-13+i*7);
-    const windowPane=box(workshop,.07,2.4,2.8,glass,side*11.31,5.3,-11);
-    windowPane.rotation.y=0;
+    // Recessed walls retain structural credibility without dominating the arches.
+    box(workshop,1.15,8.9,31,wallMat,side*13,4.35,1);
+    for(let i=0;i<5;i++){
+      const z=-13+i*7;
+      const pillar=new THREE.Mesh(new THREE.CylinderGeometry(.34,.42,8.8,18),beamMat);
+      pillar.position.set(side*11.75,4.4,z);workshop.add(pillar);
+    }
+    const windowFrame=new THREE.Mesh(new THREE.CapsuleGeometry(.52,1.4,6,16),glass);
+    windowFrame.position.set(side*12.4,5.3,-10);
+    windowFrame.rotation.z=Math.PI/2;
+    workshop.add(windowFrame);
   });
   const roof=new THREE.Group();scene.add(roof);
+  const ribMat=mat(0x718f99,.48,.29);
+  const luminousRib=new THREE.MeshBasicMaterial({color:0xe8b67a,transparent:true,opacity:.56});
   for(let i=0;i<7;i++){
     const z=12-i*6;
-    box(roof,30,.28,.35,beamMat,0,9,z);
-    // Warm ceiling strips create depth without adding extra GPU-heavy lights.
-    box(roof,11,.045,.08,mat(0xf2cc91,.35),0,8.91,z);
+    const arch=[[-12,0,z],[-12,5.5,z],[-10,8.6,z],[-6,10.8,z],[0,11.55,z],[6,10.8,z],[10,8.6,z],[12,5.5,z],[12,0,z]];
+    curvedBeam(roof,arch,.16,ribMat);
+    // A finer warm line follows the upper curvature and makes the ceiling readable.
+    curvedBeam(roof,arch.slice(2,7).map(p=>[p[0],p[1]-.22,p[2]-.1]),.035,luminousRib);
     if(i===1 || i===4){
-      const lamp=new THREE.PointLight(0xffd5a2,1.3,20,2);
-      lamp.position.set(0,8.1,z);roof.add(lamp);
+      const lamp=new THREE.PointLight(0xffd5a2,.8,18,2);
+      lamp.position.set(0,9,z);roof.add(lamp);
     }
-    ball(roof,0,8.1,z,[.48,.13,.48],mat(0xffd6a9,.3));
+    ball(roof,0,10.5,z,[.28,.15,.28],mat(0xffd6a9,.3));
   }
   const sign=textSign('とびとくん基地','#19334b','#ffe4a0');
   sign.position.set(0,5,-23);scene.add(sign);
@@ -163,12 +185,16 @@
   for(let z=-24;z<16;z+=4){
     for(const side of [-1,1])box(scene,1.5,.03,.16,floorStripe,side*7.4,-.085,z);
   }
-  const crates=mat(0x977b65,.94);
+  const crates=mat(0x977b65,.84);
   for(const side of [-1,1])for(let i=0;i<3;i++){
-    const unit=new THREE.Group();unit.position.set(side*10.15,-.01,-10+i*6);
-    box(unit,1.9,1.5,1.75,crates,0,.72,0);
-    box(unit,1.95,.10,1.84,beamMat,0,1.1,0);
-    box(unit,.10,1.52,1.84,beamMat,0,.72,0);
+    const unit=new THREE.Group();
+    unit.position.set(side*10.15,-.01,-10+i*6);
+    const barrel=new THREE.Mesh(new THREE.CylinderGeometry(.72,.76,1.45,28,1),crates);
+    barrel.position.y=.76;unit.add(barrel);
+    for(const y of [.2,1.25]){
+      const ring=new THREE.Mesh(new THREE.TorusGeometry(.75,.047,8,32),beamMat);
+      ring.rotation.x=Math.PI/2;ring.position.y=y;unit.add(ring);
+    }
     scene.add(unit);
   }
 
@@ -207,12 +233,29 @@
   });
   box(hangar,63,.8,.8,beamMat,0,18,-5);box(hangar,63,.8,.8,beamMat,0,18,14);
   for(let i=0;i<6;i++)box(hangar,63,.18,.15,aluminum,0,17.5,-12+i*6);
-  const wing=box(hangar,40,.19,2.3,mat(0xe5e7e4,.46,.25),0,6,-16);
-  box(hangar,1.0,1.1,18,aluminum,0,4.9,-17);
-  box(hangar,8,.08,.6,aluminum,0,5,-23);
-  box(hangar,.15,3,.8,aluminum,0,6.1,-23.5);
+  // Airfoil profile instead of a 40-metre rectangular slab. Symbolic, not exact S-320 data.
+  const airfoil=new THREE.Shape();
+  airfoil.moveTo(-1.45,0);
+  airfoil.bezierCurveTo(-1.1,.14,-.45,.22,.12,.16);
+  airfoil.bezierCurveTo(.62,.08,1.1,.045,1.45,0);
+  airfoil.bezierCurveTo(.88,-.085,.2,-.12,-.48,-.07);
+  airfoil.bezierCurveTo(-1.0,-.03,-1.35,-.01,-1.45,0);
+  const airfoilGeometry=new THREE.ExtrudeGeometry(airfoil,{
+    depth:40,steps:1,bevelEnabled:true,bevelThickness:.1,bevelSize:.10,
+    bevelSegments:5,curveSegments:12
+  });
+  airfoilGeometry.translate(0,0,-20);
+  const wing=new THREE.Mesh(airfoilGeometry,mat(0xe5e7e4,.46,.25));
+  wing.rotation.y=Math.PI/2;wing.position.set(0,6,-16);
+  hangar.add(wing);
+  ball(hangar,-20,6,-16,[.85,.14,1.35],aluminum);
+  ball(hangar,20,6,-16,[.85,.14,1.35],aluminum);
+  ball(hangar,0,4.9,-17,[.72,.64,7.1],aluminum);
+  ball(hangar,0,5,-23,[4,.11,.32],aluminum);
+  ball(hangar,0,6.2,-23.5,[.12,1.5,.38],aluminum);
   const propeller=new THREE.Group();propeller.position.set(0,4.9,-7.1);hangar.add(propeller);
-  box(propeller,.22,5.1,.18,aluminum);box(propeller,5.1,.22,.18,aluminum);
+  const bladeA=ball(propeller,0,0,0,[.19,2.6,.13],aluminum);
+  const bladeB=ball(propeller,0,0,0,[2.6,.19,.13],aluminum);
   const wingSign=textSign('S-320 / ちょっと点検','#19334b','#dbecf4');
   wingSign.position.set(-15,11,13);hangar.add(wingSign);
   const hangarLamps=[];
