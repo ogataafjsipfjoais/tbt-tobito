@@ -158,10 +158,8 @@
       const pillar=new THREE.Mesh(new THREE.CylinderGeometry(.34,.42,8.8,18),beamMat);
       pillar.position.set(side*11.75,4.4,z);workshop.add(pillar);
     }
-    const windowFrame=new THREE.Mesh(new THREE.CapsuleGeometry(.52,1.4,6,16),glass);
-    windowFrame.position.set(side*12.4,5.3,-10);
-    windowFrame.rotation.z=Math.PI/2;
-    workshop.add(windowFrame);
+    // Curved porthole window (SphereGeometry is supported by Three.js r128).
+    ball(workshop,side*12.4,5.3,-10,[.16,1.42,.7],glass);
   });
   const roof=new THREE.Group();scene.add(roof);
   const ribMat=mat(0x718f99,.48,.29);
