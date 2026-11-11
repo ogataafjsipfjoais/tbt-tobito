@@ -1,4 +1,6 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
+# The historic `github-pages` deployment environment has a stuck waiting job
+# (run 42669993402). The custom environment below avoids blocking new Pages
+# deployments while preserving the official deploy-pages action.
 name: Deploy Jekyll with GitHub Pages dependencies preinstalled
 
 on:
@@ -18,7 +20,7 @@ permissions:
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
 concurrency:
-  group: "pages"
+  group: "tobito-pages-live-20261111"
   cancel-in-progress: false
 
 jobs:
@@ -36,12 +38,12 @@ jobs:
           source: ./
           destination: ./_site
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
 
   # Deployment job
   deploy:
     environment:
-      name: github-pages
+      name: tobito-live
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
