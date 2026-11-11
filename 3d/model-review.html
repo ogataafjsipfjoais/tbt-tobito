@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#102637">
+<meta name="description" content="とびと君の新しい3Dモデルを360度回して確認。原画と比較できるモデルレビュー。">
+<title>とびとくん 3Dモデルレビュー | Team Birdman Trial</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800;900&family=Noto+Sans+JP:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./model-review.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script defer src="./model-review.js"></script>
+</head>
+<body>
+<a class="skip" href="#review">モデル確認へ移動</a>
+<header class="review-header"><a class="back" href="./#about">← 秘密基地に戻る</a><span>TOBITO <b>/</b> 3D STUDIO</span><small>MODEL REVIEW / v3</small></header>
+<main id="review">
+  <div class="intro"><p class="eyebrow"><span></span> SCULPTURE STUDY 003</p><h1>とびと君を、<br><em>360°見る。</em></h1><p>横からも、後ろからも見てみよう。3Dを「なんとなく似ている」で終わらせないための確認室です。</p></div>
+  <div class="compare">
+    <section class="model-pane" aria-labelledby="three-heading">
+      <div class="pane-head"><h2 id="three-heading">3D MODEL</h2><span class="pane-chip">GLB / REAL GEOMETRY</span></div>
+      <div id="model-stage" class="model-stage" role="region" aria-label="とびと君の3Dモデル。ドラッグまたは左右キーで回転できます。" tabindex="0">
+        <div class="scene-light"></div>
+        <div id="model-status" class="model-status" role="status" aria-live="polite">3Dモデルを読み込んでいます…</div>
+      </div>
+      <div class="model-controls"><button type="button" id="rotate-left" aria-label="左へ回す">↶ <span>LEFT</span></button><button type="button" id="toggle-spin" aria-pressed="false">自動回転する</button><button type="button" id="reset-view">正面に戻す</button><button type="button" id="rotate-right" aria-label="右へ回す"><span>RIGHT</span> ↷</button></div>
+    </section>
+    <aside class="reference-pane" aria-labelledby="reference-heading">
+      <div class="pane-head"><h2 id="reference-heading">ORIGINAL ART</h2><span class="pane-chip ref-chip">ILLUSTRATION</span></div>
+      <div class="reference-paper"><img src="../assets/images/tobito_pose_airplane.png" alt="両腕を広げたとびと君の既存イラスト。3Dモデルの形を比較するための参考画像" width="720" height="720"><p>REFERENCE / 飛行機ポーズ</p></div>
+      <div class="reference-note"><b>比較するポイント</b><p>頭の輪郭、頬、目とくちばしの距離、トサカ、つなぎ、羽の付け根。角度を変えても違和感がないか、見比べてください。</p></div>
+    </aside>
+  </div>
+  <div class="review-meta"><p>このモデルは制作途中の造形検討版です。公式イラストとの完全一致を保証するものではありません。従来のサイトとゲームには変更を加えていません。</p><a href="./models/tobito-v3.glb">GLBファイルを開く ↗</a></div>
+</main>
+</body></html>
