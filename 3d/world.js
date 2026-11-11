@@ -118,15 +118,72 @@
   }
 
   // Sculpted, smoothly beveled official-shape companion with an animation rig.
-  const sculpture = window.TobitoCharacter?.create(THREE);
+  let sculpture = window.TobitoCharacter?.create(THREE);
   if (!sculpture) {
     renderer.dispose();
     host.removeChild(canvas);
     document.documentElement.classList.add('world-fallback');
     return;
   }
-  const {walker,body,face,comb,arms,legs,guideRing} = sculpture;
+  const {walker,guideRing} = sculpture;
+  let {body,face,comb,arms,legs} = sculpture;
   scene.add(walker);
+
+  // Load a genuinely independent, sculpted GLB asset, not more inline ellipsoids.
+  // The procedural rig stays as an immediate no-network fallback. The model
+  // is imported only when the visitor approaches the actual 3D experience.
+  let modelRequested=false;
+  let actualModel=null;
+  function loadSculptedGLB() {
+    if(modelRequested || typeof THREE.GLTFLoader!=='function') return;
+    modelRequested=true;
+    const loader=new THREE.GLTFLoader();
+    loader.load('./models/tobito-v3.glb', gltf=>{
+      if(!active || !gltf?.scene)return;
+      const imported=gltf.scene;
+      const rig=imported.getObjectByName('Body_Rig');
+      const importedFace=imported.getObjectByName('Face_Gaze');
+      const importedComb=imported.getObjectByName('Comb_Sway');
+      const wings=[imported.getObjectByName('Wing_Left_Pivot'),imported.getObjectByName('Wing_Right_Pivot')];
+      const feet=[imported.getObjectByName('Leg_Left_Pivot'),imported.getObjectByName('Leg_Right_Pivot')];
+      const eyes=[imported.getObjectByName('Eye_Left_Blink'),imported.getObjectByName('Eye_Right_Blink')];
+      if(!rig || !importedFace || !importedComb || [...wings,...feet,...eyes].every(Boolean)===false)return;
+      imported.traverse(obj=>{
+        if(obj.isMesh){obj.castShadow=renderer.shadowMap.enabled;obj.receiveShadow=renderer.shadowMap.enabled;}
+      });
+      const previousBody=body;
+      walker.add(imported);
+      walker.remove(previousBody);
+      body=rig;face=importedFace;comb=importedComb;
+      arms=wings.map((group,i)=>({group,side:i===0?-1:1}));
+      legs=feet.map((group,i)=>({group,side:i===0?-1:1}));
+      const gaitBase=rig.position.y;
+      sculpture.gesture=(time,walking,flying)=>{
+        const phase=time*.009,weight=walking?1:0;
+        legs.forEach(({group,side})=>group.rotation.x=Math.sin(phase+side*Math.PI*.5)*.52*weight);
+        arms.forEach(({group,side})=>{
+          group.rotation.x=walking?Math.sin(phase+side*Math.PI*.5)*.32:Math.sin(time*.0018+side)*.04;
+          group.rotation.z=side*(flying?.36+Math.sin(phase*1.2)*.20:.12+Math.abs(Math.sin(phase))*.12*weight);
+        });
+        body.rotation.z=walking?Math.sin(phase)*.047:Math.sin(time*.001)*.012;
+        body.position.y=gaitBase+(walking?Math.abs(Math.sin(phase))*.085:Math.sin(time*.0015)*.032);
+        const blink=(time*.00107+1.9)%5.6;
+        for(const eye of eyes)eye.scale.y=blink<.13?Math.max(.12,Math.abs(blink-.065)/.065):1;
+        comb.rotation.z=Math.sin(phase*.6)*.045;
+      };
+      actualModel=imported;
+      host.dataset.model='glb-v3';
+      renderer.render(scene,camera);
+    },undefined,error=>{
+      host.dataset.model='procedural-fallback';
+      // No exception in the animation loop: the visitor still sees Tobito.
+      console.warn('Tobito GLB unavailable, using existing character rig.',error);
+    });
+  }
+  window.addEventListener('tbt:opening:progress',event=>{
+    if(Number(event.detail?.progress)>.22)loadSculptedGLB();
+  });
+  if(window.location.hash && window.location.hash!=='#top')loadSculptedGLB();
   // A restrained contact shadow anchors Tobito even on low-end GPUs.
   const shadowCanvas=document.createElement('canvas');
   shadowCanvas.width=128;shadowCanvas.height=128;
