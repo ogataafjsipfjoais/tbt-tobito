@@ -11,8 +11,11 @@ test('review studio loads same standalone GLB as the main world',()=>{
  assert.match(html,/id="model-stage"/);
  assert.match(html,/id="model-status"/);
  assert.match(html,/assets\/images\/tobito_pose_airplane\.png/);
+ assert.match(js,/models\/tobito-v4\.glb/);
  assert.match(js,/models\/tobito-v3\.glb/);
- assert.match(world,/models\/tobito-v3\.glb/);
+ assert.match(html,/data-model-version="v4"/);
+ assert.match(html,/data-model-version="v3"/);
+ assert.match(world,/models\/tobito-v4\.glb/);
  assert.ok(fs.statSync(path.join(root,'3d/models/tobito-v3.glb')).size>100000);
  assert.doesNotThrow(()=>new vm.Script(js));
 });

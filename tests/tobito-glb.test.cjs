@@ -36,11 +36,11 @@ test('a real self-contained GLB exists instead of an image posing as a 3D model'
 
 test('GLB is the primary character asset while legacy geometry remains an offline fallback',()=>{
   assert.match(world,/new THREE\.GLTFLoader/);
-  assert.match(world,/\.\/models\/tobito-v3\.glb/);
+  assert.match(world,/\.\/models\/tobito-v4\.glb/);
   assert.match(world,/sculpture\.gesture=/);
   assert.match(world,/tbt:opening:progress/);
   assert.match(world,/host\.dataset\.model='procedural-fallback'/);
-  assert.match(world,/host\.dataset\.model='glb-v3'/);
+  assert.match(world,/host\.dataset\.model='glb-v4'/);
   assert.match(world,/Rig/);
   assert.match(world,/requestAnimationFrame/);
 });

@@ -26,6 +26,9 @@
   ground.rotation.x=-Math.PI/2;ground.position.y=-.02;scene.add(ground);
   const loader=new THREE.GLTFLoader();
   let model=null,yaw=0,targetYaw=0,zoom=7.6,drag=false,lastX=0,pointer=0,spinning=false,frame=0,last=0,visible=true;
+  const models={v4:'./models/tobito-v4.glb',v3:'./models/tobito-v3.glb'};
+  const cache=new Map();
+  let modelRequest=0;
   const animate=(time)=>{
     frame=0;if(document.hidden||!visible)return;
     if(time-last>=20){
@@ -43,12 +46,35 @@
     camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);
     renderer.render(scene,camera);
   }
-  loader.load('./models/tobito-v3.glb',gltf=>{
-    if(!gltf?.scene){status.textContent='モデルを読み込めませんでした。';return;}
-    model=gltf.scene;root.add(model);
-    status.textContent='ドラッグ・矢印キーで360°確認できます。';
-    resize();start();
-  },undefined,()=>{status.textContent='GLBの読み込みに失敗しました。通信環境をご確認ください。';});
+  function showVersion(version) {
+    if(!Object.prototype.hasOwnProperty.call(models,version))return;
+    const request=++modelRequest;
+    document.querySelectorAll('[data-model-version]').forEach(button=>{
+      button.setAttribute('aria-pressed',String(button.dataset.modelVersion===version));
+    });
+    status.textContent=version==='v4'?'新しいv4モデルを読み込み中…':'以前のv3モデルを読み込み中…';
+    function present(sceneObject){
+      if(request!==modelRequest)return;
+      if(model)root.remove(model);
+      model=sceneObject;root.add(model);
+      targetYaw=0;yaw=0;
+      status.textContent=(version==='v4'?'NEW v4':'OLD v3')+'：ドラッグ・左右キーで360°確認できます。';
+      resize();start();
+    }
+    if(cache.has(version)){present(cache.get(version));return;}
+    loader.load(models[version],gltf=>{
+      if(!gltf?.scene){if(request===modelRequest)status.textContent='モデルが空でした。';return;}
+      cache.set(version,gltf.scene);
+      present(gltf.scene);
+    },undefined,()=>{
+      if(request===modelRequest)status.textContent='GLBを読み込めませんでした。通信環境をご確認ください。';
+    });
+  }
+  document.querySelectorAll('[data-model-version]').forEach(button=>{
+    button.addEventListener('click',()=>showVersion(button.dataset.modelVersion));
+  });
+  const requestedVersion=new URLSearchParams(window.location.search).get('model');
+  showVersion(Object.prototype.hasOwnProperty.call(models,requestedVersion)?requestedVersion:'v4');
   stage.addEventListener('pointerdown',e=>{if(e.button!==0)return;drag=true;pointer=e.pointerId;lastX=e.clientX;stage.setPointerCapture?.(pointer);stage.focus({preventScroll:true});});
   stage.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==pointer)return;targetYaw+=(e.clientX-lastX)*.012;lastX=e.clientX;});
   const release=()=>{drag=false;pointer=0;};

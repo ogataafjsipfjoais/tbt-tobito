@@ -129,7 +129,7 @@
   let {body,face,comb,arms,legs} = sculpture;
   scene.add(walker);
 
-  // Load a genuinely independent, sculpted GLB asset, not more inline ellipsoids.
+  // Load the newly authored v4 mesh from a reproducible GLB generator, not the old round-cheek v3.
   // The procedural rig stays as an immediate no-network fallback. The model
   // is imported only when the visitor approaches the actual 3D experience.
   let modelRequested=false;
@@ -138,7 +138,7 @@
     if(modelRequested || typeof THREE.GLTFLoader!=='function') return;
     modelRequested=true;
     const loader=new THREE.GLTFLoader();
-    loader.load('./models/tobito-v3.glb', gltf=>{
+    loader.load('./models/tobito-v4.glb', gltf=>{
       if(!active || !gltf?.scene)return;
       const imported=gltf.scene;
       const rig=imported.getObjectByName('Body_Rig');
@@ -172,7 +172,7 @@
         comb.rotation.z=Math.sin(phase*.6)*.045;
       };
       actualModel=imported;
-      host.dataset.model='glb-v3';
+      host.dataset.model='glb-v4';
       renderer.render(scene,camera);
     },undefined,error=>{
       host.dataset.model='procedural-fallback';
