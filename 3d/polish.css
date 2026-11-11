@@ -81,3 +81,6 @@
   .world-active #prologue-section:before{background:linear-gradient(180deg,rgba(9,24,40,.66) 0%,rgba(13,31,47,.24) 48%,transparent 72%),linear-gradient(90deg,rgba(9,24,40,.20),transparent 80%)}
   .world-active #prologue-section .hero-description{max-width:90%}
 }
+
+/* A direct route to inspect the actual GLB from every angle. */
+.model-review-link{display:inline-flex;align-items:center;gap:12px;margin-top:15px;padding:13px 19px;border-radius:999px;color:#153c55!important;background:#dcebe7;border:1px solid #8bb9b0;font-size:12px;font-weight:900;text-decoration:none;transition:transform .18s,background .18s}.model-review-link:hover{background:#c5e0d6;transform:translateY(-2px)}.model-review-link:focus-visible{outline:3px solid #dc804c;outline-offset:3px}
