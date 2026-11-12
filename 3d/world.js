@@ -280,6 +280,30 @@
 
   // The hangar contains a symbolic 40m-scale wing; the original GLB is in the clickable viewer.
   const hangar=new THREE.Group();hangar.position.z=-155;scene.add(hangar);
+  // A traversable vaulted corridor along the same z-axis as the runway.
+  // Entrance at world z=-133, wing at -171, exit at -193. The corridor is
+  // open down the middle so the companion AND camera can pass through.
+  const vault=mat(0x799aa5,.57,.32);
+  const vaultHighlight=new THREE.MeshBasicMaterial({color:0xf5c982,transparent:true,opacity:.42,depthWrite:false});
+  const entranceZ=[22,9,-4,-17,-30,-38];
+  for(const localZ of entranceZ){
+    const arch=[
+      [-27,0,localZ],[-27,12,localZ],[-22,18,localZ],
+      [-13,23,localZ],[0,25.2,localZ],
+      [13,23,localZ],[22,18,localZ],[27,12,localZ],[27,0,localZ]
+    ];
+    curvedBeam(hangar,arch,.33,vault);
+    curvedBeam(hangar,arch.slice(2,7).map(point=>[point[0],point[1]-.32,point[2]-.28]),.07,vaultHighlight);
+  }
+  // Repeating longitudinal rails make approaching architecture visibly move
+  // overhead instead of replacing one flat background with another.
+  for(const side of [-1,1]){
+    curvedBeam(hangar,entranceZ.map(z=>[side*22,18,z]),.11,vault);
+    curvedBeam(hangar,entranceZ.map(z=>[side*13,23,z]),.075,vault);
+  }
+  const entranceSign=textSign('くぐって、空へ','#183c55','#fff0cf');
+  entranceSign.position.set(0,16.5,23.5);
+  hangar.add(entranceSign);
   const hangarFloor=new THREE.Mesh(new THREE.PlaneGeometry(66,64),mat(0x445564,.85));
   hangarFloor.rotation.x=-Math.PI/2;hangarFloor.position.y=-.14;hangar.add(hangarFloor);
   [-30,30].forEach(x=>{
@@ -334,6 +358,13 @@
 
   // Long camera choreography: looking back at Tobito -> chase view -> huge wing -> lake.
   const milestones=['prologue-section','about','poses','play','oddities','wind-lab','hangar','goods','takeoff'];
+  const flightPath=window.TobitoFlightPath;
+  if(!flightPath || typeof flightPath.sample!=='function'){
+    renderer.dispose();
+    host.removeChild(canvas);
+    document.documentElement.classList.add('world-fallback');
+    return;
+  }
   let targetProgress=0,currentProgress=0;
   let lastPosition=0,lastWalkTime=0,flapUntil=0,extraTurn=0,lastFrame=0;
   let active=true,stopped=false,arcadePaused=false,openingPaused=document.documentElement.classList.contains('opening-at-top'),raf=0,audioOn=false,audioCtx=null,windAudio=null,windGain=null,lastFootstep=0;
@@ -377,15 +408,16 @@
     const ratio=stopped?1:Math.min(1,dt*4.8);
     currentProgress=smooth(currentProgress,targetProgress,ratio);
     const p=currentProgress;
-    const pathZ=-173*ease(p);
+    const passage=flightPath.sample(p);
+    const pathZ=passage.z;
     const delta=Math.abs(pathZ-lastPosition);
-    const walking=delta>.045 && p>.02 && p<.85;
+    const walking=delta>.045 && p>.02 && p<.94;
     if(walking)lastWalkTime=time;
     lastPosition=pathZ;
     walker.position.z=pathZ;
     walker.position.x=Math.sin(p*22)*.43;
-    const ending=ease((p-.88)/.12);
-    walker.position.y=ending*9;
+    const ending=passage.lift;
+    walker.position.y=passage.walkerY;
     const turn=ease(p/.105);
     walker.rotation.y=smooth(0,Math.PI,turn)+extraTurn;
     const cycle=time*.009;
@@ -397,27 +429,38 @@
     if(hud){
       const labels=['BASE / 合流地点','出発 / 工房の外へ','TRAINING / 滑走路','FIELD TEST / 追い風','LOST & FOUND / 迷子','WIND LAB / 風洞','HANGAR / 大きな翼','GOODS / 研究所','TAKEOFF / 琵琶湖'];
       const id=Math.min(labels.length-1,Math.floor(p*(labels.length-1)+.02));
-      if(hud.textContent!==labels[id])hud.textContent=labels[id];
+      let message=labels[id];
+      // Human-readable location updates on actually crossing the structures.
+      const cameraRoute=flightPath.sample(p).cameraZ;
+      if(cameraRoute < flightPath.landmarks.entrance && cameraRoute > flightPath.landmarks.wing)message='HANGAR / 中へ進む';
+      if(cameraRoute <= flightPath.landmarks.wing && cameraRoute > flightPath.landmarks.exit)message='UNDER THE WING / 翼の下';
+      if(cameraRoute <= flightPath.landmarks.exit && p<.94)message='EXIT / 格納庫を抜けた';
+      if(hud.textContent!==message)hud.textContent=message;
     }
     scene.background.copy(bg);scene.fog.color.copy(bg);
-    scene.fog.density=smooth(.008,.0045,ease((p-.7)/.3));
+    // Near the far exit the fog thins out, making the lake visible ahead.
+    scene.fog.density=smooth(.008,.0037,ease((p-.75)/.25));
     ambient.intensity=smooth(.95,1.6,ease((p-.72)/.28));
     const dusk=ease((p-.18)/.2),day=ease((p-.73)/.27);
     sun.color.set(0xffd6a6).lerp(new THREE.Color(0xeaa4ac),dusk).lerp(new THREE.Color(0xffffff),day);
     sun.intensity=smooth(1.35,2.3,day);
     lake.material.color.set(0x2679a8).lerp(new THREE.Color(0x349bcc),day);
-    // Chase shot initially faces Tobito. The hangar pulls the camera back and up.
-    const wingShot=ease((p-.68)/.12);
-    const skyShot=ease((p-.86)/.14);
+    // The camera follows the SAME physical route as Tobito. It crosses
+    // the front vault, passes under the wing, and exits to the lake.
+    // Do not zoom out or lift the camera while inside the hangar.
     const pointer = window.TobitoPointerState;
     const cursorX = pointer?.active ? pointer.x : 0;
     const cursorY = pointer?.active ? pointer.y : 0;
-    const desiredCamX=smooth(.35,2.0,turn)+Math.sin(p*11)*.55+cursorX*.62;
-    const desiredCamY=smooth(3.5,5.3,turn)+wingShot*5.5+skyShot*10.5;
-    const desiredCamZ=pathZ+smooth(7.9,15.5,turn)+wingShot*15+skyShot*12;
+    const desiredCamX=smooth(.38,1.1,turn)+Math.sin(p*10)*.32+cursorX*.36;
+    const desiredCamY=passage.cameraY;
+    const desiredCamZ=passage.cameraZ;
     camera.position.lerp(new THREE.Vector3(desiredCamX,desiredCamY,desiredCamZ),Math.min(1,dt*3.4));
-    const compositionalOffset = window.innerWidth < 700 ? -.55 : -1.45;
-    const desiredLook=new THREE.Vector3(compositionalOffset*(1-turn)+cursorX*.48,1.75+wingShot*5+skyShot*4-cursorY*.26,pathZ-smooth(0,15,turn)-wingShot*7-skyShot*22);
+    const compositionalOffset = window.innerWidth < 700 ? -.55 : -1.1;
+    const desiredLook=new THREE.Vector3(compositionalOffset*(1-turn)+cursorX*.38,passage.lookY-cursorY*.22,passage.lookZ);
+    const passagePhase=desiredCamZ>flightPath.landmarks.entrance?'approach':
+      desiredCamZ>flightPath.landmarks.wing?'inside':
+      desiredCamZ>flightPath.landmarks.exit?'under-wing':'outside';
+    host.dataset.passage=passagePhase;
     body.rotation.y = cursorX*.08;
     face.rotation.y = cursorX*.12;
     face.rotation.x = -cursorY*.09;
@@ -504,7 +547,7 @@
     if(pause===arcadePaused)return;
     arcadePaused=pause;
     if(arcadePaused){stopLoop();if(audioOn)audioCtx?.suspend();}
-    else if(!stopped && !document.hidden){startLoop();if(audioOn)audioCtx?.resume();}
+    else if(!stopped && !openingPaused && !document.hidden){startLoop();if(audioOn)audioCtx?.resume();}
   });
   window.addEventListener('scroll',scrollToProgress,{passive:true});
   window.addEventListener('resize',()=>{scrollToProgress();resize();},{passive:true});
