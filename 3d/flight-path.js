@@ -48,7 +48,8 @@
     // when reaching the wing and no sideways jumps between milestones.
     const tunnel=ease(clamp((p-.65)/.11)) * (1-ease(clamp((p-.88)/.075)));
     const lift=ease(clamp((p-.90)/.10));
-    const offset=lerp(11.5,7.5,tunnel);
+    // Fixed chase distance guarantees the viewer NEVER drifts backward at a seam.
+    const offset=9.5;
     const cameraZ=z+offset;
     const cameraY=lerp(3.8,4.2,tunnel)+11*lift;
     const lookZ=z-lerp(15.0,22.0,tunnel)-12*lift;
