@@ -17,6 +17,8 @@ test('loading overlay remains visible through game and wind model initialization
   assert.match(parent,/if\(data.mode!==active.mode\)return/);
   assert.match(parent,/aria-live/);
   assert.match(parent,/もう一度起動する/);
+  assert.match(parent,/function armTimeout/);
+  assert.match(parent,/35000/);
   assert.match(child,/async function waitForRenderable/);
   assert.match(child,/await waitForRenderable\(mode,instance,token\)/);
   assert.match(child,/\.querySelector\('\.s320-status'\)/);
