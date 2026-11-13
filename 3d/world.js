@@ -305,7 +305,9 @@
   entranceSign.position.set(0,16.5,23.5);
   hangar.add(entranceSign);
   const hangarFloor=new THREE.Mesh(new THREE.PlaneGeometry(66,64),mat(0x445564,.85));
-  hangarFloor.rotation.x=-Math.PI/2;hangarFloor.position.y=-.14;hangar.add(hangarFloor);
+  hangarFloor.rotation.x=-Math.PI/2;hangarFloor.position.y=-.14;
+  hangarFloor.receiveShadow=true;
+  hangar.add(hangarFloor);
   [-30,30].forEach(x=>{
     box(hangar,.85,18,.9,aluminum,x,9,-5);
     box(hangar,.85,18,.9,aluminum,x,9,14);
@@ -338,7 +340,108 @@
   const propeller=new THREE.Group();propeller.position.set(0,4.9,-7.1);placeholderAircraft.add(propeller);
   const bladeA=ball(propeller,0,0,0,[.19,2.6,.13],aluminum);
   const bladeB=ball(propeller,0,0,0,[2.6,.19,.13],aluminum);
-  const wingSign=textSign('S-320 / ちょっと点検','#19334b','#dbecf4');
+
+  // S-320 sits on two real supports, placed to the right of the walking route.
+  // The camera remains in the open centre corridor while passing under the wing.
+  const mounting=window.TobitoAircraftMount;
+  const standX=5.5;
+  const floorHeight=-.14;
+  const maintenanceRigs=new THREE.Group();
+  maintenanceRigs.name='S-320 maintenance cradles';
+  hangar.add(maintenanceRigs);
+  const standSteel=mat(0x587083,.5,.46);
+  const standSteelDark=mat(0x314c5c,.63,.32);
+  const standRubber=mat(0x273744,.91);
+  const safetyYellow=mat(0xf1c266,.83);
+
+  function maintenanceStrut(parent,from,to,radius,material){
+    const start=new THREE.Vector3(...from),end=new THREE.Vector3(...to);
+    const vector=end.clone().sub(start);
+    const length=vector.length();
+    const mesh=new THREE.Mesh(new THREE.CylinderGeometry(radius,radius*1.14,length,12),material);
+    mesh.position.copy(start).add(end).multiplyScalar(.5);
+    mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),vector.normalize());
+    parent.add(mesh);
+  }
+
+  function rebuildMaintenanceCradles(deckY){
+    // Only called on placeholder creation and once after the real S-320 loads.
+    // Dispose old stand geometry without disposing scene-wide shared materials.
+    while(maintenanceRigs.children.length){
+      const old=maintenanceRigs.children[0];
+      maintenanceRigs.remove(old);
+      old.traverse(obj=>{if(obj.isMesh)obj.geometry.dispose();});
+    }
+    for(const z of [-22.3,-9.8]){
+      const cradle=new THREE.Group();
+      cradle.name='Adjustable fuselage maintenance saddle';
+      cradle.position.set(standX,0,z);
+      maintenanceRigs.add(cradle);
+
+      // Floor skids physically rest on the concrete, rather than floating.
+      box(cradle,4.25,.13,1.75,standSteelDark,0,floorHeight+.065,0);
+      box(cradle,3.40,.07,1.14,standSteel,0,floorHeight+.145,0);
+      const mastHeight=Math.max(.22,deckY-floorHeight-.37);
+      for(const side of [-1,1]){
+        const x=side*1.25;
+        box(cradle,.23,mastHeight,.26,standSteel,x,floorHeight+.20+mastHeight/2,0);
+        maintenanceStrut(cradle,
+          [side*1.65,floorHeight+.18,-.62],
+          [side*.88,deckY-.21,0],.09,standSteelDark);
+        maintenanceStrut(cradle,
+          [side*1.65,floorHeight+.18,.62],
+          [side*.88,deckY-.21,0],.09,standSteelDark);
+        ball(cradle,x,floorHeight+.15,-.61,[.21,.13,.17],standSteelDark);
+        ball(cradle,x,floorHeight+.15,.61,[.21,.13,.17],standSteelDark);
+      }
+      // The top of the padded saddle is deckY, equal to the measured hull bottom.
+      box(cradle,3.18,.13,1.23,standSteelDark,0,deckY-.22,0);
+      ball(cradle,0,deckY-.09,0,[1.48,.09,.59],standRubber);
+      for(const side of [-1,1]){
+        box(cradle,.30,.08,1.04,safetyYellow,side*1.35,deckY-.08,0);
+      }
+    }
+  }
+
+  // Soft ground shadow: the long-span wing is supported, not levitating.
+  const contactCanvas=document.createElement('canvas');
+  contactCanvas.width=128;contactCanvas.height=128;
+  const contactContext=contactCanvas.getContext('2d');
+  if(contactContext){
+    const gradient=contactContext.createRadialGradient(64,64,7,64,64,63);
+    gradient.addColorStop(0,'rgba(5,16,27,.43)');
+    gradient.addColorStop(.5,'rgba(5,16,27,.20)');
+    gradient.addColorStop(1,'rgba(5,16,27,0)');
+    contactContext.fillStyle=gradient;contactContext.fillRect(0,0,128,128);
+    const groundContact=new THREE.Mesh(
+      new THREE.PlaneGeometry(28,14),
+      new THREE.MeshBasicMaterial({
+        map:new THREE.CanvasTexture(contactCanvas),transparent:true,depthWrite:false
+      })
+    );
+    groundContact.rotation.x=-Math.PI/2;
+    groundContact.position.set(standX,floorHeight+.011,-16);
+    hangar.add(groundContact);
+  }
+  // Mark the maintenance bay without putting a solid obstacle on the route.
+  for(const side of [-1,1]){
+    box(hangar,.085,.014,26,safetyYellow,standX+side*3.75,floorHeight+.015,-16);
+  }
+  placeholderAircraft.position.x=standX;
+  placeholderAircraft.updateMatrixWorld(true);
+  if(mounting){
+    const fallbackBounds=new THREE.Box3().setFromObject(placeholderAircraft);
+    const fallbackPlan=mounting.planMount({
+      fuselageMinY:fallbackBounds.min.y,aircraftMinY:fallbackBounds.min.y,
+      floorY:floorHeight,preferredDeckY:1.95
+    });
+    placeholderAircraft.position.y+=fallbackPlan.elevation;
+    rebuildMaintenanceCradles(fallbackPlan.deckY);
+  }else{
+    // Still provide a safe resting place if a stale cached HTML lacks the helper.
+    rebuildMaintenanceCradles(1.95);
+  }
+  const wingSign=textSign('S-320 / 整備架台で点検中','#19334b','#dbecf4');
   wingSign.position.set(-15,11,13);hangar.add(wingSign);
   // Actual source-of-truth S-320 parts: body, propeller, elevator, rudder.
   // This is the same asset pipeline as the existing wind tunnel, not a fake wing.
@@ -352,11 +455,25 @@
       if(!active)return;
       const model=result.root;
       model.name='S-320 / actual aircraft model';
-      model.position.set(0,1.15,-16);
+      model.position.set(standX,0,-16);
       model.rotation.y=Math.PI;
       hangar.add(model);
+      model.updateMatrixWorld(true);
+      const fuselage=model.getObjectByName('S-320-body') || model;
+      const fuselageBounds=new THREE.Box3().setFromObject(fuselage);
+      const aircraftBounds=new THREE.Box3().setFromObject(model);
+      const plan=mounting.planMount({
+        fuselageMinY:fuselageBounds.min.y,aircraftMinY:aircraftBounds.min.y,
+        floorY:floorHeight,preferredDeckY:1.95,minClearance:.12
+      });
+      // Ground alignment comes from the actual GLB's measured minimum y.
+      // A fixed y-offset was what previously made the plane appear airborne.
+      model.position.y+=plan.elevation;
+      model.updateMatrixWorld(true);
+      rebuildMaintenanceCradles(plan.deckY);
       placeholderAircraft.visible=false;
       host.dataset.aircraft='s320-original';
+      host.dataset.support='maintenance-stand';
     }).catch(error=>{
       host.dataset.aircraft='fallback-silhouette';
       console.warn('S-320 background could not load; keeping placeholder aircraft.',error);
