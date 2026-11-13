@@ -15,6 +15,39 @@
   let active = null;
   let pageVisible = true;
   let observer = null;
+  const titles = {flight:'琵琶湖フライト',yakitori:'やきとり脱出',wind:'S-320風洞'};
+  function setBusy(host,mode,busy,failed=false) {
+    const wrap=hosts[host];
+    if(!wrap)return;
+    let overlay=wrap.querySelector('.arcade-loading-overlay');
+    if(!overlay){
+      overlay=document.createElement('div');
+      overlay.className='arcade-loading-overlay';
+      overlay.setAttribute('role','status');
+      overlay.setAttribute('aria-live','polite');
+      overlay.setAttribute('aria-atomic','true');
+      wrap.appendChild(overlay);
+    }
+    if(!busy && !failed){overlay.hidden=true;wrap.setAttribute('aria-busy','false');return;}
+    overlay.hidden=false;
+    wrap.setAttribute('aria-busy',String(busy));
+    overlay.replaceChildren();
+    const orb=document.createElement('span');
+    orb.className='arcade-loading-spinner';orb.setAttribute('aria-hidden','true');
+    if(failed)orb.classList.add('is-error');
+    const copy=document.createElement('span');copy.className='arcade-loading-copy';
+    const label=document.createElement('strong');label.textContent=failed?'起動に失敗しました':'起動中…';
+    const sub=document.createElement('small');
+    sub.textContent=failed?titles[mode]+'を読み込めませんでした。':titles[mode]+'を準備しています';
+    copy.append(label,sub);overlay.append(orb,copy);
+    if(failed){
+      const retry=document.createElement('button');
+      retry.type='button';retry.className='arcade-loading-retry';
+      retry.textContent='もう一度起動する';
+      retry.addEventListener('click',()=>createIframe(host,mode));
+      overlay.appendChild(retry);
+    }
+  }
 
   function status(host,copy) {
     const el = document.querySelector('[data-arcade-status="'+host+'"]');
@@ -81,7 +114,8 @@
     frame.src=source.href+'?mode='+encodeURIComponent(mode);
     active={host,mode,frame,ready:false};
     wrap.appendChild(frame);
-    status(host,'元のゲームプログラムを読み込んでいます…');
+    setBusy(host,mode,true);
+    status(host,'起動中：'+titles[mode]+'…');
     frame.addEventListener('load',()=>{
       if(!active || active.frame!==frame)return;
       // The iframe's query string already selects the game. Do NOT
@@ -90,6 +124,7 @@
     });
     frame.addEventListener('error',()=>{
       if(active?.frame!==frame)return;
+      setBusy(host,mode,false,true);
       status(host,'読み込みに失敗しました。もう一度起動してください。');
     });
     updateFocus();
@@ -108,7 +143,8 @@
       active.ready=false;
       active.frame.title=mode==='yakitori'?'やきとり脱出ゲーム':mode==='flight'?'琵琶湖フライトゲーム':'S-320風洞';
       active.frame.contentWindow?.postMessage({type:'tbt:arcade:switch',mode},source.origin);
-      status(host,'切り替えています…');
+      setBusy(host,mode,true);
+      status(host,'起動中：'+titles[mode]+'…');
       return;
     }
     createIframe(host,mode);
@@ -128,7 +164,9 @@
     const data=event.data;
     if(data?.source!=='tbt-arcade')return;
     if(data.type==='ready'){
+      if(data.mode!==active.mode)return;
       active.ready=true;
+      setBusy(active.host,active.mode,false);
       if(data.mode===active.mode){
         status(active.host,'');
         updateFocus();
@@ -139,6 +177,8 @@
       status(active.host,data.focused?'キーボード操作が有効です。WASD・矢印キー・Spaceを使えます。':'ゲーム画面をクリックして操作を開始してください。');
     }
     if(data.type==='error'){
+      if(data.mode!==active.mode)return;
+      setBusy(active.host,active.mode,false,true);
       status(active.host,'起動できませんでした。通信環境とWebGL対応をご確認ください。');
     }
     if(data.type==='height'){
