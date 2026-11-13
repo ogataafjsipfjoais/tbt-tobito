@@ -69,3 +69,18 @@
 .arcade-keyboard-bar button:hover{background:#fff0be}
 .arcade-keyboard-bar button:focus-visible{outline:3px solid #fff;outline-offset:3px}
 @media(max-width:650px){.arcade-keyboard-bar{display:grid;padding:13px 15px;gap:10px}.arcade-keyboard-bar button{width:100%}}
+
+
+/* Visible until the embedded game reports readiness, not a timed fake splash. */
+.arcade-frame-wrap{position:relative}
+.arcade-loading-overlay{position:absolute;inset:0;z-index:20;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;padding:24px;text-align:center;background:radial-gradient(ellipse at 50% 32%,#265877 0%,#102d43 55%,#071b2b 100%);color:#fff6df}
+.arcade-loading-overlay[hidden]{display:none!important}
+.arcade-loading-spinner{display:block;width:70px;height:70px;border-radius:50%;border:5px solid rgba(187,235,225,.22);border-top-color:#ffe0a4;border-right-color:#83dacf;animation:arcade-spin .9s linear infinite}
+.arcade-loading-spinner.is-error{animation:none;border-color:#f0a199}
+@keyframes arcade-spin{to{transform:rotate(360deg)}}
+.arcade-loading-copy{display:grid;gap:10px}
+.arcade-loading-copy strong{font-size:clamp(29px,4vw,51px);font-weight:900;letter-spacing:-.055em}
+.arcade-loading-copy small{font-size:clamp(12px,1.4vw,16px);line-height:1.8;color:#c1e3df}
+.arcade-loading-retry{min-height:48px;padding:12px 24px;border:0;border-radius:999px;background:#f0c58c;color:#16344b;font-size:14px;font-weight:900;cursor:pointer}
+.arcade-loading-retry:focus-visible{outline:3px solid #fff;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.arcade-loading-spinner{animation:none}}
