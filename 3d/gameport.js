@@ -76,8 +76,20 @@
     tellWorld(showing);
   }
 
+  function armTimeout(host,mode) {
+    if(!active)return;
+    window.clearTimeout(active.timeout);
+    const instance=active;
+    active.timeout=window.setTimeout(()=>{
+      if(active!==instance || active.ready || active.mode!==mode)return;
+      setBusy(host,mode,false,true);
+      status(host,'読み込みが完了しませんでした。再試行してください。');
+    },35000);
+  }
+
   function teardown() {
     if(!active)return;
+    window.clearTimeout(active.timeout);
     active.frame.remove();
     const wrap=hosts[active.host];
     if(wrap){wrap.hidden=true;wrap.replaceChildren();}
@@ -112,7 +124,8 @@
     frame.setAttribute('tabindex','0');
     frame.height='900';
     frame.src=source.href+'?mode='+encodeURIComponent(mode);
-    active={host,mode,frame,ready:false};
+    active={host,mode,frame,ready:false,timeout:null};
+    armTimeout(host,mode);
     wrap.appendChild(frame);
     setBusy(host,mode,true);
     status(host,'起動中：'+titles[mode]+'…');
@@ -144,6 +157,7 @@
       active.frame.title=mode==='yakitori'?'やきとり脱出ゲーム':mode==='flight'?'琵琶湖フライトゲーム':'S-320風洞';
       active.frame.contentWindow?.postMessage({type:'tbt:arcade:switch',mode},source.origin);
       setBusy(host,mode,true);
+      armTimeout(host,mode);
       status(host,'起動中：'+titles[mode]+'…');
       return;
     }
@@ -166,6 +180,7 @@
     if(data.type==='ready'){
       if(data.mode!==active.mode)return;
       active.ready=true;
+      window.clearTimeout(active.timeout);
       setBusy(active.host,active.mode,false);
       if(data.mode===active.mode){
         status(active.host,'');
@@ -178,6 +193,7 @@
     }
     if(data.type==='error'){
       if(data.mode!==active.mode)return;
+      window.clearTimeout(active.timeout);
       setBusy(active.host,active.mode,false,true);
       status(active.host,'起動できませんでした。通信環境とWebGL対応をご確認ください。');
     }
