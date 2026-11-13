@@ -312,6 +312,9 @@
   });
   box(hangar,63,.8,.8,beamMat,0,18,-5);box(hangar,63,.8,.8,beamMat,0,18,14);
   for(let i=0;i<6;i++)box(hangar,63,.18,.15,aluminum,0,17.5,-12+i*6);
+  // Temporary silhouette: replaced by the actual S-320 GLB assembly once loaded.
+  const placeholderAircraft=new THREE.Group();
+  hangar.add(placeholderAircraft);
   // Airfoil profile instead of a 40-metre rectangular slab. Symbolic, not exact S-320 data.
   const airfoil=new THREE.Shape();
   airfoil.moveTo(-1.45,0);
@@ -326,17 +329,66 @@
   airfoilGeometry.translate(0,0,-20);
   const wing=new THREE.Mesh(airfoilGeometry,mat(0xe5e7e4,.46,.25));
   wing.rotation.y=Math.PI/2;wing.position.set(0,6,-16);
-  hangar.add(wing);
-  ball(hangar,-20,6,-16,[.85,.14,1.35],aluminum);
-  ball(hangar,20,6,-16,[.85,.14,1.35],aluminum);
-  ball(hangar,0,4.9,-17,[.72,.64,7.1],aluminum);
-  ball(hangar,0,5,-23,[4,.11,.32],aluminum);
-  ball(hangar,0,6.2,-23.5,[.12,1.5,.38],aluminum);
-  const propeller=new THREE.Group();propeller.position.set(0,4.9,-7.1);hangar.add(propeller);
+  placeholderAircraft.add(wing);
+  ball(placeholderAircraft,-20,6,-16,[.85,.14,1.35],aluminum);
+  ball(placeholderAircraft,20,6,-16,[.85,.14,1.35],aluminum);
+  ball(placeholderAircraft,0,4.9,-17,[.72,.64,7.1],aluminum);
+  ball(placeholderAircraft,0,5,-23,[4,.11,.32],aluminum);
+  ball(placeholderAircraft,0,6.2,-23.5,[.12,1.5,.38],aluminum);
+  const propeller=new THREE.Group();propeller.position.set(0,4.9,-7.1);placeholderAircraft.add(propeller);
   const bladeA=ball(propeller,0,0,0,[.19,2.6,.13],aluminum);
   const bladeB=ball(propeller,0,0,0,[2.6,.19,.13],aluminum);
   const wingSign=textSign('S-320 / ちょっと点検','#19334b','#dbecf4');
   wingSign.position.set(-15,11,13);hangar.add(wingSign);
+  // Actual source-of-truth S-320 parts: body, propeller, elevator, rudder.
+  // This is the same asset pipeline as the existing wind tunnel, not a fake wing.
+  let s320Request=null;
+  function requestHangarS320(){
+    if(s320Request || !window.TBTS320?.create)return;
+    host.dataset.aircraft='s320-loading';
+    s320Request=window.TBTS320.create({span:40,groundY:0}).then(result=>{
+      if(!active)return;
+      const model=result.root;
+      model.name='S-320 / actual aircraft model';
+      model.position.set(0,1.15,-16);
+      model.rotation.y=Math.PI;
+      hangar.add(model);
+      placeholderAircraft.visible=false;
+      host.dataset.aircraft='s320-original';
+    }).catch(error=>{
+      host.dataset.aircraft='fallback-silhouette';
+      console.warn('S-320 background could not load; keeping placeholder aircraft.',error);
+      s320Request=null;
+    });
+  }
+
+  // Architectural depth: catwalks, maintenance gantries, ceiling lighting.
+  const catwalk=mat(0x617b88,.72,.26),warning=mat(0xd2ae71,.88);
+  for(const side of [-1,1]){
+    for(const y of [4.8,11.5]){
+      box(hangar,1.35,.16,61,catwalk,side*25,y,-7.5);
+      for(let z=18;z>=-35;z-=7){
+        box(hangar,.07,1.4,.07,aluminum,side*25,y+.75,z);
+      }
+      curvedBeam(hangar,[[side*25,y+1.45,18],[side*25,y+1.45,-9],[side*25,y+1.45,-35]],.05,aluminum);
+    }
+    for(let z=17;z>=-32;z-=11){
+      const trolley=new THREE.Group();
+      trolley.position.set(side*20,0,z);
+      box(trolley,.8,.22,3.1,warning,0,.18,0);
+      for(const dx of [-1.2,1.2]){
+        const wheel=new THREE.Mesh(new THREE.CylinderGeometry(.35,.35,.23,20),ink);
+        wheel.rotation.z=Math.PI/2;wheel.position.set(0,.35,dx);trolley.add(wheel);
+      }
+      hangar.add(trolley);
+    }
+  }
+  for(let i=0;i<9;i++){
+    const z=20-i*6.6;
+    const fixture=new THREE.Mesh(new THREE.CylinderGeometry(.21,.21,1.1,16),aluminum);
+    fixture.position.set(0,24,z);fixture.rotation.x=Math.PI/2;hangar.add(fixture);
+    ball(hangar,0,23.55,z,[1.0,.10,.4],new THREE.MeshBasicMaterial({color:0xffdfb3}));
+  }
   const hangarLamps=[];
   [-16,16].forEach(x=>{
     const lamp=new THREE.PointLight(0xd7edff,1.1,38,2);lamp.position.set(x,15,0);
@@ -409,6 +461,7 @@
     currentProgress=smooth(currentProgress,targetProgress,ratio);
     const p=currentProgress;
     const passage=flightPath.sample(p);
+    if(p>.54 && !s320Request)requestHangarS320();
     const pathZ=passage.z;
     const delta=Math.abs(pathZ-lastPosition);
     const walking=delta>.045 && p>.02 && p<.94;
