@@ -55,6 +55,26 @@
     if (status) status.textContent = names[mode];
     window.history.replaceState(null,'',window.location.pathname+'?mode='+encodeURIComponent(mode));
   }
+  // Do not announce 'ready' merely because the constructor returned.
+  // The S-320 loader has a separate asynchronous geometry/Draco pipeline.
+  async function waitForRenderable(mode,instance,token) {
+    const began=performance.now();
+    while(token===ticket) {
+      const canvas=activeCanvas(mode);
+      const drawn=mode==='yakitori'
+        ? !!(instance.ctx && canvas && canvas.width>0 && canvas.height>0)
+        : !!(instance.renderer && instance.scene && instance.camera && instance.renderer.domElement);
+      const statusNode=(mode==='wind'?$('wind-tunnel-canvas-container'):canvas?.parentElement)?.querySelector('.s320-status');
+      if(statusNode?.querySelector('button'))throw new Error('S-320のモデルを読み込めませんでした');
+      // Wait for the complete airframe, not just an empty WebGL canvas.
+      if(drawn && !statusNode) {
+        await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+        return;
+      }
+      if(performance.now()-began>25000)throw new Error('起動がタイムアウトしました。再試行してください');
+      await new Promise(resolve=>window.setTimeout(resolve,110));
+    }
+  }
   let ticket = 0;
   let loadingMode = null;
   const initialized = new Set();
@@ -133,6 +153,8 @@
       if (token !== ticket) return;
       const instance = mode === 'wind' ? window.tbtWindTunnel : mode === 'flight' ? window.tobitoGame : window.yakitoriGame;
       if (!instance) throw new Error('ゲームエンジンの初期化に失敗しました');
+      await waitForRenderable(mode,instance,token);
+      if(token!==ticket)return;
       initialized.add(mode);
       loadingMode = null;
       if (ready) ready.hidden = true;
