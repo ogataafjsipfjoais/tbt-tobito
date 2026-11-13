@@ -343,8 +343,10 @@
   // Actual source-of-truth S-320 parts: body, propeller, elevator, rudder.
   // This is the same asset pipeline as the existing wind tunnel, not a fake wing.
   let s320Request=null;
+  let s320Attempted=false;
   function requestHangarS320(){
-    if(s320Request || !window.TBTS320?.create)return;
+    if(s320Attempted || !window.TBTS320?.create)return;
+    s320Attempted=true;
     host.dataset.aircraft='s320-loading';
     s320Request=window.TBTS320.create({span:40,groundY:0}).then(result=>{
       if(!active)return;
@@ -358,7 +360,7 @@
     }).catch(error=>{
       host.dataset.aircraft='fallback-silhouette';
       console.warn('S-320 background could not load; keeping placeholder aircraft.',error);
-      s320Request=null;
+      // One failed download must not trigger an infinite request every frame.
     });
   }
 
@@ -461,7 +463,7 @@
     currentProgress=smooth(currentProgress,targetProgress,ratio);
     const p=currentProgress;
     const passage=flightPath.sample(p);
-    if(p>.54 && !s320Request)requestHangarS320();
+    if(p>.54 && !s320Attempted)requestHangarS320();
     const pathZ=passage.z;
     const delta=Math.abs(pathZ-lastPosition);
     const walking=delta>.045 && p>.02 && p<.94;
