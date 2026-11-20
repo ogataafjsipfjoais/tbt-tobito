@@ -238,3 +238,22 @@ html.world-fallback .journey-world{display:none!important}
 #journey-buddy{display:none!important}
 #tobito-3d-controls{display:none!important}
 html.world-active #prologue-giant-wrap{display:none!important}
+
+
+/* Full-screen arrival: let the hangar itself be the visual, not a dark card. */
+.hangar-arrival{display:none}
+html.world-active #hangar .hangar-arrival{
+  display:flex;position:absolute;left:clamp(22px,5vw,86px);top:clamp(12vh,18vh,20vh);
+  z-index:3;align-items:flex-start;flex-direction:column;gap:11px;
+  max-width:75%;pointer-events:none;color:#fff5df;
+  text-shadow:0 2px 22px #071c2b,0 3px 9px #071c2b;
+}
+.hangar-arrival-line{width:45px;height:2px;background:#eacb86;box-shadow:0 0 14px #edbd70}
+.hangar-arrival>span{font-size:11px;font-weight:800;letter-spacing:.18em;color:#f8d79c}
+.hangar-arrival>strong{font-size:clamp(24px,3.8vw,56px);font-weight:900;letter-spacing:-.055em}
+.hangar-arrival>small{font-size:12px;color:#e3e9e4;font-weight:700}
+html.world-active #hangar .hangar-inner{padding-top:96svh}
+@media(max-width:650px){
+  html.world-active #hangar .hangar-arrival{left:20px;top:16vh;max-width:90%}
+  html.world-active #hangar .hangar-inner{padding-top:94svh}
+}

@@ -69,3 +69,22 @@ test('the player passage, 3D gallery and untouched original games remain availab
   assert.match(read('legacy.html'),/id="tobito-game-canvas"/);
   assert.match(read('legacy.html'),/id="yakitori-game-canvas"/);
 });
+
+
+test('the hangar has an enclosed curved shell, textured floor and physical lighting cues',()=>{
+  const world=read('3d/world.js'),html=read('3d/index.html'),css=read('3d/cinematic.css');
+  assert.match(world,/function vaultPanel\(/);
+  assert.match(world,/const roofSections=/);
+  assert.match(world,/roofPanel\.receiveShadow=true/);
+  assert.match(world,/new THREE\.Float32BufferAttribute\(positions,3\)/);
+  assert.match(world,/concreteTexture/);
+  assert.match(world,/windowGlow/);
+  assert.match(world,/lightPoolTex/);
+  assert.match(world,/function probeFuselageContacts/);
+  assert.match(world,/ray\.intersectObject\(fuselage,true\)/);
+  assert.match(world,/rebuildMaintenanceCradles\(plan\.deckY,contacts\)/);
+  assert.doesNotMatch(world,/propeller\.rotation\.z\+=/);
+  assert.match(html,/class="hangar-arrival"/);
+  assert.match(css,/padding-top:96svh/);
+  assert.doesNotThrow(()=>new vm.Script(world));
+});

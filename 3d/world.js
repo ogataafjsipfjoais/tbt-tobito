@@ -1,8 +1,7 @@
 /**
  * Tobito Flight World — one continuous WebGL journey, not a hero widget.
- * Three.js r128; procedural cartoon mascot, runway, hangar, S-320-inspired
- * silhouette (NOT an exact airframe model), lake, whimsical flying debris.
- * Existing exact S-320 GLB viewer remains separate and loads on visitor request.
+ * Three.js r128; mascot, runway, enclosed hangar and original S-320 GLB,
+ * lake and whimsical flying debris. A symbolic fallback is used if S-320 fails.
  */
 (() => {
   'use strict';
@@ -304,10 +303,150 @@
   const entranceSign=textSign('くぐって、空へ','#183c55','#fff0cf');
   entranceSign.position.set(0,16.5,23.5);
   hangar.add(entranceSign);
-  const hangarFloor=new THREE.Mesh(new THREE.PlaneGeometry(66,64),mat(0x445564,.85));
-  hangarFloor.rotation.x=-Math.PI/2;hangarFloor.position.y=-.14;
+  const hangarFloor=new THREE.Mesh(new THREE.PlaneGeometry(66,68),mat(0x445564,.85));
+  hangarFloor.rotation.x=-Math.PI/2;hangarFloor.position.set(0,-.14,-8);
   hangarFloor.receiveShadow=true;
   hangar.add(hangarFloor);
+  // The vault is a real enclosed room, not ribs suspended in the sky.
+  // Open front and back are intentional: the walking route remains continuous.
+  const hallShell=new THREE.Group();
+  hallShell.name='Hangar / vaulted industrial interior';
+  hangar.add(hallShell);
+  function paintedTexture(width,height,paint){
+    const cv=document.createElement('canvas');cv.width=width;cv.height=height;
+    const ctx=cv.getContext('2d');
+    if(!ctx)return null;
+    paint(ctx,width,height);
+    const texture=new THREE.CanvasTexture(cv);
+    texture.encoding=THREE.sRGBEncoding;
+    texture.anisotropy=Math.min(4,renderer.capabilities.getMaxAnisotropy());
+    return texture;
+  }
+  let textureSeed=219320;
+  function grainRandom(){
+    textureSeed=(Math.imul(1664525,textureSeed)+1013904223)>>>0;
+    return textureSeed/4294967296;
+  }
+  const concreteTexture=paintedTexture(1024,1024,(ctx,w,h)=>{
+    ctx.fillStyle='#747f83';ctx.fillRect(0,0,w,h);
+    for(let i=0;i<12500;i++){
+      const x=grainRandom()*w,y=grainRandom()*h;
+      ctx.fillStyle=i%3?'rgba(26,40,45,.055)':'rgba(220,228,222,.10)';
+      ctx.fillRect(x,y,1+grainRandom()*5,1+grainRandom()*3);
+    }
+    for(let i=0;i<170;i++){
+      const x=grainRandom()*w,y=grainRandom()*h,r=10+grainRandom()*80;
+      const gr=ctx.createRadialGradient(x,y,0,x,y,r);
+      gr.addColorStop(0,'rgba(29,38,40,.075)');gr.addColorStop(1,'rgba(29,38,40,0)');
+      ctx.fillStyle=gr;ctx.fillRect(x-r,y-r,r*2,r*2);
+    }
+    ctx.lineWidth=1.4;ctx.strokeStyle='rgba(28,45,52,.5)';
+    for(let i=0;i<=8;i++){
+      const q=i*128;
+      ctx.beginPath();ctx.moveTo(q,0);ctx.lineTo(q,h);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(0,q);ctx.lineTo(w,q);ctx.stroke();
+    }
+    // Used workshop floor: hairline scrub marks, not a stock texture.
+    ctx.lineWidth=1;ctx.strokeStyle='rgba(211,221,216,.16)';
+    for(let i=0;i<95;i++){
+      let x=grainRandom()*w,y=grainRandom()*h;
+      ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+grainRandom()*90,y+grainRandom()*8);ctx.stroke();
+    }
+  });
+  if(concreteTexture){
+    hangarFloor.material.color.set(0xbabfc0);
+    hangarFloor.material.map=concreteTexture;
+    hangarFloor.material.roughness=.91;
+    hangarFloor.material.needsUpdate=true;
+  }
+  // Corrugated acoustic roof; the segmented curved shell has unobstructed portals.
+  const roofTex=paintedTexture(256,256,(ctx,w,h)=>{
+    const gr=ctx.createLinearGradient(0,0,32,0);
+    gr.addColorStop(0,'#3d525f');gr.addColorStop(.25,'#647884');
+    gr.addColorStop(.64,'#50636e');gr.addColorStop(1,'#2e444f');
+    for(let x=0;x<w;x+=32){
+      ctx.save();ctx.translate(x,0);ctx.fillStyle=gr;ctx.fillRect(0,0,32,h);ctx.restore();
+    }
+    ctx.fillStyle='rgba(10,25,33,.25)';
+    for(let y=0;y<h;y+=64)ctx.fillRect(0,y,w,2);
+  });
+  if(roofTex){roofTex.wrapS=roofTex.wrapT=THREE.RepeatWrapping;roofTex.repeat.set(10,6);}
+  const cladding=new THREE.MeshStandardMaterial({color:0x96a7aa,map:roofTex,roughness:.78,metalness:.22,side:THREE.DoubleSide});
+  const glassRoof=new THREE.MeshStandardMaterial({color:0xb0d5db,emissive:0x668a91,emissiveIntensity:.46,roughness:.55,side:THREE.DoubleSide});
+  function vaultPanel(startZ,endZ,material){
+    const geometry=new THREE.BufferGeometry(),positions=[],uv=[],indices=[];
+    const n=48;
+    for(let i=0;i<=n;i++){
+      const a=Math.PI*i/n,x=27.45*Math.cos(a),y=12+13.65*Math.sin(a);
+      positions.push(x,y,startZ,x,y,endZ);uv.push(i/n,0,i/n,1);
+      if(i<n){const k=i*2;indices.push(k,k+1,k+2,k+1,k+3,k+2);}
+    }
+    geometry.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+    geometry.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));
+    geometry.setIndex(indices);geometry.computeVertexNormals();
+    const roofPanel=new THREE.Mesh(geometry,material);
+    roofPanel.receiveShadow=true;hallShell.add(roofPanel);
+  }
+  const roofSections=[[-38,-30],[-30,-21],[-21,-12],[-12,-3],[-3,6],[6,14],[14,22]];
+  roofSections.forEach(([a,b],i)=>vaultPanel(a,b,i===2||i===5?glassRoof:cladding));
+  // Tall side walls with recessed clerestory glazing and lower concrete kickwalls.
+  const concreteWall=mat(0x748389,.9),windowFrame=mat(0x29434f,.67,.33);
+  const windowGlow=new THREE.MeshStandardMaterial({color:0x9ec9cf,emissive:0x567f8a,emissiveIntensity:.38,roughness:.48});
+  const wallPanels=new THREE.MeshStandardMaterial({color:0x8ca0a7,map:roofTex,roughness:.78,metalness:.16});
+  for(const side of [-1,1]){
+    const x=side*27.45;
+    box(hallShell,.4,3.3,60,concreteWall,x,1.51,-8);
+    box(hallShell,.32,5.8,60,wallPanels,x,6.35,-8);
+    box(hallShell,.3,2.7,60,windowFrame,x,10.65,-8);
+    for(let i=0;i<10;i++){
+      const z=19-i*6;
+      box(hallShell,.16,2.08,5.55,windowGlow,x-side*.24,10.71,z);
+      box(hallShell,.21,2.2,.09,windowFrame,x-side*.39,10.71,z);
+    }
+    for(const y of [3.1,9.45,11.95])
+      box(hallShell,.27,.12,60,windowFrame,x-side*.23,y,-8);
+    // Recessed door/building details along the wall, outside the walking lane.
+    for(const z of [13,-14,-30]){
+      box(hallShell,.18,3.4,3.8,windowFrame,x-side*.24,1.7,z);
+      box(hallShell,.16,3.02,3.42,mat(0x45606d,.7,.2),x-side*.35,1.7,z);
+      box(hallShell,.12,.14,.72,aluminum,x-side*.47,1.65,z-.9);
+    }
+  }
+  // Architectural lighting: luminous panels and soft localized pools on concrete.
+  const lightPanel=new THREE.MeshStandardMaterial({color:0xffead3,emissive:0xffd8a4,emissiveIntensity:1.6,roughness:.55});
+  const lightPoolTex=paintedTexture(128,128,(ctx,w,h)=>{
+    const g=ctx.createRadialGradient(64,64,0,64,64,63);
+    g.addColorStop(0,'rgba(255,218,164,.28)');
+    g.addColorStop(.45,'rgba(255,218,164,.13)');
+    g.addColorStop(1,'rgba(255,218,164,0)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,w,h);
+  });
+  const lightPoolMat=new THREE.MeshBasicMaterial({map:lightPoolTex,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,opacity:.7});
+  const poolGeometry=new THREE.PlaneGeometry(15,15);
+  for(const z of [15,1,-13,-27]){
+    for(const side of [-1,1]){
+      const x=side*12.5;
+      box(hallShell,5.1,.26,.7,windowFrame,x,18.9,z);
+      box(hallShell,4.8,.09,.52,lightPanel,x,18.72,z);
+      if(lightPoolTex){
+        const pool=new THREE.Mesh(poolGeometry,lightPoolMat);
+        pool.rotation.x=-Math.PI/2;pool.position.set(x,-.118,z);hallShell.add(pool);
+      }
+    }
+  }
+  // Painted pedestrian lane: the visitor can see where the assembly is safe to walk around.
+  const lanePaint=mat(0xd1bf89,.89);
+  for(const x of [-2.5,2.5])
+    box(hallShell,.075,.009,58,lanePaint,x,-.105,-8);
+  const floorLabelTexture=paintedTexture(512,128,(ctx,w,h)=>{
+    ctx.fillStyle='#d9c9a1';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.font='900 56px sans-serif';ctx.fillText('TBT  /  BAY  01',w/2,h/2);
+  });
+  if(floorLabelTexture){
+    const mark=new THREE.Mesh(new THREE.PlaneGeometry(6,1.5),
+      new THREE.MeshBasicMaterial({map:floorLabelTexture,transparent:true,depthWrite:false,opacity:.78}));
+    mark.rotation.x=-Math.PI/2;mark.position.set(-7,-.105,8);hallShell.add(mark);
+  }
   [-30,30].forEach(x=>{
     box(hangar,.85,18,.9,aluminum,x,9,-5);
     box(hangar,.85,18,.9,aluminum,x,9,14);
@@ -364,7 +503,7 @@
     parent.add(mesh);
   }
 
-  function rebuildMaintenanceCradles(deckY){
+  function rebuildMaintenanceCradles(deckY,contacts=null){
     // Only called on placeholder creation and once after the real S-320 loads.
     // Dispose old stand geometry without disposing scene-wide shared materials.
     while(maintenanceRigs.children.length){
@@ -373,32 +512,34 @@
       old.traverse(obj=>{if(obj.isMesh)obj.geometry.dispose();});
     }
     for(const z of [-22.3,-9.8]){
+      const contact=contacts?.find(item=>item.station===z);
+      const topY=contact?.y ?? deckY;
       const cradle=new THREE.Group();
       cradle.name='Adjustable fuselage maintenance saddle';
-      cradle.position.set(standX,0,z);
+      cradle.position.set(standX,0,contact?.z ?? z);
       maintenanceRigs.add(cradle);
 
       // Floor skids physically rest on the concrete, rather than floating.
       box(cradle,4.25,.13,1.75,standSteelDark,0,floorHeight+.065,0);
       box(cradle,3.40,.07,1.14,standSteel,0,floorHeight+.145,0);
-      const mastHeight=Math.max(.22,deckY-floorHeight-.37);
+      const mastHeight=Math.max(.22,topY-floorHeight-.37);
       for(const side of [-1,1]){
         const x=side*1.25;
         box(cradle,.23,mastHeight,.26,standSteel,x,floorHeight+.20+mastHeight/2,0);
         maintenanceStrut(cradle,
           [side*1.65,floorHeight+.18,-.62],
-          [side*.88,deckY-.21,0],.09,standSteelDark);
+          [side*.88,topY-.21,0],.09,standSteelDark);
         maintenanceStrut(cradle,
           [side*1.65,floorHeight+.18,.62],
-          [side*.88,deckY-.21,0],.09,standSteelDark);
+          [side*.88,topY-.21,0],.09,standSteelDark);
         ball(cradle,x,floorHeight+.15,-.61,[.21,.13,.17],standSteelDark);
         ball(cradle,x,floorHeight+.15,.61,[.21,.13,.17],standSteelDark);
       }
-      // The top of the padded saddle is deckY, equal to the measured hull bottom.
-      box(cradle,3.18,.13,1.23,standSteelDark,0,deckY-.22,0);
-      ball(cradle,0,deckY-.09,0,[1.48,.09,.59],standRubber);
+      // The top of the padded saddle is topY, equal to the measured hull bottom.
+      box(cradle,3.18,.13,1.23,standSteelDark,0,topY-.22,0);
+      ball(cradle,0,topY-.09,0,[1.48,.09,.59],standRubber);
       for(const side of [-1,1]){
-        box(cradle,.30,.08,1.04,safetyYellow,side*1.35,deckY-.08,0);
+        box(cradle,.30,.08,1.04,safetyYellow,side*1.35,topY-.08,0);
       }
     }
   }
@@ -445,6 +586,27 @@
   wingSign.position.set(-15,11,13);hangar.add(wingSign);
   // Actual source-of-truth S-320 parts: body, propeller, elevator, rudder.
   // This is the same asset pipeline as the existing wind tunnel, not a fake wing.
+  // Measure the underside locally, rather than assuming that a global
+  // bounding box touches both widely separated stands.
+  function probeFuselageContacts(fuselage,defaultDeckY){
+    const ray=new THREE.Raycaster();
+    const contacts=[];
+    fuselage.updateMatrixWorld(true);
+    const low=new THREE.Box3().setFromObject(fuselage).min.y-2;
+    const up=new THREE.Vector3(0,1,0);
+    for(const station of [-22.3,-9.8]){
+      let chosen=null;
+      for(const dz of [0,-1.5,1.5,-3,3]){
+        const localZ=station+dz;
+        ray.set(new THREE.Vector3(standX,low,hangar.position.z+localZ),up);
+        const hits=ray.intersectObject(fuselage,true);
+        const hit=hits.find(item=>item.point.y>=floorHeight+.45 && item.point.y<=defaultDeckY+5);
+        if(hit){chosen={station,z:localZ,y:hit.point.y};break;}
+      }
+      if(chosen)contacts.push(chosen);
+    }
+    return contacts;
+  }
   let s320Request=null;
   let s320Attempted=false;
   function requestHangarS320(){
@@ -470,7 +632,9 @@
       // A fixed y-offset was what previously made the plane appear airborne.
       model.position.y+=plan.elevation;
       model.updateMatrixWorld(true);
-      rebuildMaintenanceCradles(plan.deckY);
+      const contacts=probeFuselageContacts(fuselage,plan.deckY);
+      rebuildMaintenanceCradles(plan.deckY,contacts);
+      host.dataset.supportContacts=String(contacts.length);
       placeholderAircraft.visible=false;
       host.dataset.aircraft='s320-original';
       host.dataset.support='maintenance-stand';
@@ -611,11 +775,12 @@
     }
     scene.background.copy(bg);scene.fog.color.copy(bg);
     // Near the far exit the fog thins out, making the lake visible ahead.
-    scene.fog.density=smooth(.008,.0037,ease((p-.75)/.25));
-    ambient.intensity=smooth(.95,1.6,ease((p-.72)/.28));
+    const interior=ease((p-.67)/.08)*(1-ease((p-.85)/.08));
+    scene.fog.density=smooth(smooth(.008,.0037,ease((p-.75)/.25)),.0028,interior);
+    ambient.intensity=smooth(smooth(.95,1.6,ease((p-.72)/.28)),.80,interior);
     const dusk=ease((p-.18)/.2),day=ease((p-.73)/.27);
     sun.color.set(0xffd6a6).lerp(new THREE.Color(0xeaa4ac),dusk).lerp(new THREE.Color(0xffffff),day);
-    sun.intensity=smooth(1.35,2.3,day);
+    sun.intensity=smooth(smooth(1.35,2.3,day),.62,interior);
     lake.material.color.set(0x2679a8).lerp(new THREE.Color(0x349bcc),day);
     // The camera follows the SAME physical route as Tobito. It crosses
     // the front vault, passes under the wing, and exits to the lake.
@@ -628,7 +793,9 @@
     const desiredCamZ=passage.cameraZ;
     camera.position.lerp(new THREE.Vector3(desiredCamX,desiredCamY,desiredCamZ),Math.min(1,dt*3.4));
     const compositionalOffset = window.innerWidth < 700 ? -.55 : -1.1;
-    const desiredLook=new THREE.Vector3(compositionalOffset*(1-turn)+cursorX*.38,passage.lookY-cursorY*.22,passage.lookZ);
+    // A restrained glance at the S-320 while the camera keeps moving forward.
+    const aircraftGlance=ease((p-.72)/.055)*(1-ease((p-.81)/.045));
+    const desiredLook=new THREE.Vector3(compositionalOffset*(1-turn)+cursorX*.38+aircraftGlance*2.8,passage.lookY-cursorY*.22+aircraftGlance*.65,passage.lookZ);
     const passagePhase=desiredCamZ>flightPath.landmarks.entrance?'approach':
       desiredCamZ>flightPath.landmarks.wing?'inside':
       desiredCamZ>flightPath.landmarks.exit?'under-wing':'outside';
@@ -637,7 +804,7 @@
     face.rotation.y = cursorX*.12;
     face.rotation.x = -cursorY*.09;
     lookAt.lerp(desiredLook,Math.min(1,dt*3.5));camera.lookAt(lookAt);
-    propeller.rotation.z+=dt*2.3;
+    // Parked aircraft: propeller is stationary during maintenance.
     props.forEach((g,i)=>{
       g.rotation.z=Math.sin(time*.0007+i)*.11;
       g.rotation.y+=dt*.08*(i%2?1:-1);
