@@ -50,7 +50,7 @@ test('the original S-320 is measured after rotation and grounded on two physical
   assert.match(world,/new THREE\.Box3\(\)\.setFromObject\(model\)/);
   assert.match(world,/mounting\.planMount\(\{/);
   assert.match(world,/model\.position\.y\+=plan\.elevation/);
-  assert.match(world,/rebuildMaintenanceCradles\(plan\.deckY\)/);
+  assert.match(world,/rebuildMaintenanceCradles\(plan\.deckY,contacts\)/);
   assert.match(world,/const z of \[-22\.3,-9\.8\]/);
   assert.match(world,/const standX=5\.5/);
   assert.match(world,/new THREE\.PlaneGeometry\(28,14\)/);
